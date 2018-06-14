@@ -1,2 +1,3 @@
 # bachelor-thesis-template
-Bachelor Thesis Template
+
+Apenas instale o live-tex completo (Com xelatex) e execute o comando `make`.

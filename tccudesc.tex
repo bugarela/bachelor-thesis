@@ -1,0 +1,140 @@
+\NeedsTeXFormat{LaTeX2e}
+
+\documentclass[a4paper,12pt]{pkg/monografia}
+\usepackage[pdfpagelabels]{hyperref}
+\usepackage{amsmath,amsthm,amsfonts,amssymb}
+\usepackage[mathcal]{eucal}
+\usepackage{latexsym}
+%\usepackage[utf8]{inputenc}
+\usepackage[brazil]{babel}
+%\usepackage{bm}
+\usepackage[alf]{pkg/abntex2cite}
+\usepackage{url}
+\usepackage{enumitem}
+\usepackage{graphicx}
+\usepackage{placeins}
+%\usepackage{epstopdf}
+\usepackage{multirow}
+%\usepackage{fancyhdr}
+\usepackage[FIGTOPCAP]{subfigure}
+\usepackage{textcase}
+\usepackage{tabularx}
+\usepackage[table,xcdraw]{xcolor}
+%\usepackage[portuguese,noend,ruled]{algorithm2e}
+\usepackage{listings}
+\usepackage[T1]{fontenc}
+\usepackage{courier}
+\usepackage[printonlyused]{acronym}
+\usepackage{caption}
+\usepackage{adjustbox}
+\usepackage{floatrow}
+\floatsetup[figure]{capposition=top}
+\floatsetup[table]{capposition=top}
+%\captionsetup{labelsep=endash}
+%\usepackage{rotating}
+%\usepackage{rotfloat}
+%\usepackage{placeins}
+\usepackage{fontspec}
+\setmonofont{Inconsolata}
+%\captionsetup[listing]{position=top}
+\usepackage{makecell}
+\usepackage{listings}
+
+%-----------------------------------------------------------
+\begin{document}
+
+%----------------- Título e Dados do Autor -----------------
+\titulo{Análise de arquiteturas de microsserviços empregados a jogos MMORPG voltada a otimização do uso de recursos de gerenciamento de mundos virtuais}
+\autor{Marlon Henry Schweigert}
+\nome{Marlon Henry}
+\ultimonome{Schweigert}
+
+%---------- Informe o Curso e Grau -------------------------
+\bacharelado \curso{Ciência da Computação} \mes{Junho} \ano{2018}
+\data{\today} % Data da aprovação
+\cidade{Joinville}
+
+%---------- Informações sobre a Institução -----------------
+\instituicao{Universidade do Estado de Santa Catarina}
+\sigla{UDESC} \unidadeacademica{Centro de Ciências Tecnológicas}
+
+%-- Nomes do Orientador, 1o. Examinador e 2o. Examinador ---
+\orientador{Charles Christian Miers}
+\examinadorum{Débora Cabral Nazário}
+\examinadordois{Guilherme Piêgas Koslovski}
+%\examinadortres{}
+
+%-- Títulos do Orientador, 1o. Examinador e 2o. Examinador -
+\ttorientador{Doutor}
+\ttexaminadorum{Doutora}
+\ttexaminadordois{Doutor}
+%\ttexaminadortres{}
+
+%---------- Capa -------------------------------------------
+\maketitle
+
+%---------- Agradecimentos----------------------------------
+%\agradecimento{Agradecimentos}
+\input{cap/agradecimentos}
+%\newpage
+
+%---------- Epígrafe ---------------------------------------
+%\begin{epigrafe}
+
+
+
+%\end{epigrafe}
+
+%---------- Resumo -----------------------------------------
+\resumo{Resumo}
+\input{cap/resumo}
+\\
+\noindent \textbf{Palavras-chaves:} Arquitetura de microsserviços, Desenvolvimento de jogos, Rede de jogos,
+Jogos massivos, Otimização de recursos, Nuvens computacionais
+
+%---------- Abstract ---------------------------------------
+\resumo{Abstract}
+\input{cap/abstract}
+\\
+\noindent \textbf{Keywords:} Cloud computing, Traffic characterization, Management network, Traffic monitoring system, Performance analysis, OpenStack.
+
+%-----------------------------------------------------------
+
+% SUMÁRIO, LISTA DE FIGURAS E LISTA DE TABELAS
+%---------- Sumário ----------------------------------------
+\tableofcontents
+\thispagestyle{empty}
+
+%---------- Lista de figuras -------------------------------
+\listoffigures
+\thispagestyle{empty}
+
+%---------- Lista de tabelas -------------------------------
+\listoftables
+\thispagestyle{empty}
+
+%---------- Lista de Abreviaturas --------------------------
+\input{cap/acronimos}
+\thispagestyle{empty}
+
+%---------- Início do Conteúdo -----------------------------
+\pagestyle{ruledheader}
+
+\input{cap/introducao}
+\input{cap/capitulo2}
+\input{cap/capitulo3}
+\input{cap/conclusao}
+
+%\input{cap/agradecimentos}
+
+%---------- Referências ------------------------------------
+\renewcommand{\bibname}{Referências}
+\bibliographystyle{pkg/abnt-alf}
+\bibliography{refsTcc}
+
+%---------- Apêndice ---------------------------------------
+%\appendix
+%\include{cap/apendice-publicacoes}
+
+%-----------------------------------------------------------
+\end{document}

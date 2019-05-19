@@ -1,4 +1,20 @@
 \chapter{Introdução}
 \label{introducao}
 
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+% A linguagem de especificação formal TLA+ (\textit{Temporal Logic of Actions}) foi desenvolvida por Leslie Lamport com o objetivo de escrever provas formais para sistemas concorrentes da maneira mais simples possível~\cite{tlahistory}. Para isso, o \textit{model checker} TLC foi desenvolvido, e mais recentemente o sistema de provas TLAPS (\textit{TLA Proof System}) \cite{tlaps2010}, que permite checar mecanicamente algumas provas e ainda está incompleto.
+
+% Escrever uma especificação nessa linguagem possibilita verificar otmizações e encontrar potenciais problemas, incluindo \textit{bugs} e propiedades não satisfeitas. Esses benefícios foram reportados pela \textit{Amazon Web Services} ~\cite{amazon}, que afirma ter usado TLA+ em 10 sistemas complexos e, para cada um deles, ter encontrado \textit{bugs} ou adiquirido entendimento e confiança para implementar otimizações agressivas.
+
+% As especificações escritas, contudo, não possuem nenhum vínculo com a implementação se não pelo entendimento do programador que as escreveu. Outras linguagens de especificação formal com objetivos semelhantes ao TLA+, como Z, B-Method e ASM, fornecem formas de gerar código a partir do modelo. Contudo, até a data da escrita desse texto, não foram encontrados geradores de código a partir de modelos escritos em TLA+, impossibilitando a conversão das especificações em linguagens de programação com garantia de correspondência.
+
+% Com o programa especificado, validado e traduzido para linguagem de programação, é possível aplicá-lo diretamente em casos reais com a garantia de correspondência e, portanto, das propriedades verificadas; ou então melhorar a implementação para uma versão mais otimizada, mas que parte da mesma base - nesse caso, a garantia é reduzida, já que as mudanças não estavam representadas no modelo original. Observações sobre os benefícios da geração de código a partir de modelos de especificação formal já foram verificadas em trabalhos como o estudo de caso em \cite{Leonard2008}.
+
+\section{Objetivos}
+
+Esse trabalho é feito com a intenção de elaborar um método de tradução, através do mapeamento de estruturas e construtores, de especificações formais descritas em TLA+ para código em linguagem de programação com possibilidade de ser executado e modificado; assim como implementar um tradutor que aplique esse método.
+
+\subsection{Objetivos Específicos}
+\begin{itemize}
+  \item Encontrar mapeamentos entre as estruturas de especificação em TLA+ e estruturas de linguagens de programação
+  \item Implementar um gerador de código Elixir, com capacidade de fazer \textit{parsing} de especificações em TLA+ e aplicar os mapeamentos necessários.
+\end{itemize}

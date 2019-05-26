@@ -831,11 +831,11 @@
 % variables i and t, rather than like the word "it".  The following         %
 % commands tell TeX to use an ordinary italic font instead.                 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% \ifx\documentclass\undefined
-% \else
-%   \DeclareSymbolFont{tlaitalics}{\encodingdefault}{cmr}{m}{it}
-%   \let\itfam\symtlaitalics
-% \fi
+\ifx\documentclass\undefined
+\else
+  \DeclareSymbolFont{tlaitalics}{\encodingdefault}{cmr}{m}{it}
+  \let\itfam\symtlaitalics
+\fi
 
 \makeatletter
 \newcommand{\tlx@c}{\c@tlx@ctr\advance\c@tlx@ctr\@ne}
@@ -934,66 +934,46 @@
 %%%%%%%%%%%%%%%%%%%%%%%% end of tlatex.sty file %%%%%%%%%%%%%%%%%%%%%%%
 % last modified on Fri  3 August 2012 at 14:23:49 PST by lamport
 
-\begin{document}
+% \begin{document}
 \tlatex
 \@x{}\moduleLeftDash\@xx{ {\MODULE} JarrosDeAgua}\moduleRightDash\@xx{}%
 \@x{ {\EXTENDS} Integers}%
-\@pvspace{8.0pt}%
-\@x{ {\VARIABLES} small ,\, big}%
-\@pvspace{8.0pt}%
-\@x{ TypeOK \.{\defeq} \.{\land} small \.{\in} 0 \.{\dotdot} 3}%
-\@x{\@s{56.14} \.{\land} big\@s{10.88} \.{\in} 0 \.{\dotdot} 5}%
-\@pvspace{8.0pt}%
-\@x{ Init \.{\defeq} \.{\land} big\@s{10.88} \.{=} 0}%
-\@x{\@s{35.70} \.{\land} small \.{=} 0}%
-\@pvspace{8.0pt}%
-\@x{ FillSmall \.{\defeq} \.{\land} small \.{'} \.{=} 3}%
-\@x{\@s{59.67} \.{\land} big \.{'}\@s{10.88} \.{=} big}%
-\@pvspace{8.0pt}%
-\@x{ FillBig \.{\defeq} \.{\land} big \.{'}\@s{10.88} \.{=} 5}%
-\@x{\@s{49.69} \.{\land} small \.{'} \.{=} small}%
-\@pvspace{8.0pt}%
-\@x{ EmptySmall \.{\defeq} \.{\land} small \.{'} \.{=} 0}%
-\@x{\@s{72.70} \.{\land} big \.{'}\@s{10.88} \.{=} big}%
-\@pvspace{8.0pt}%
-\@x{ EmptyBig \.{\defeq} \.{\land} big \.{'}\@s{10.88} \.{=} 0}%
-\@x{\@s{62.72} \.{\land} small \.{'} \.{=} small}%
-\@pvspace{8.0pt}%
-\@x{ SmallToBig\@s{0.14} \.{\defeq} {\IF} big \.{+} small \.{\leq} 5}%
-\@x{\@s{74.76} \.{\THEN} \.{\land} big \.{'}\@s{10.88} \.{=} big \.{+} small}%
-\@x{\@s{106.07} \.{\land} small \.{'} \.{=} 0}%
-\@x{\@s{74.76} \.{\ELSE} \.{\land} big \.{'}\@s{10.88} \.{=} 5}%
-\@x{\@s{106.07} \.{\land} small \.{'} \.{=} small \.{-} ( 5 \.{-} big )}%
-\@pvspace{8.0pt}%
-\@x{ BigToSmall \.{\defeq} {\IF} big \.{+} small \.{\leq} 3}%
-\@x{\@s{74.76} \.{\THEN} \.{\land} big \.{'}\@s{10.88} \.{=} 0}%
-\@x{\@s{106.07} \.{\land} small \.{'} \.{=} big \.{+} small}%
- \@x{\@s{74.76} \.{\ELSE} \.{\land} big \.{'}\@s{10.88} \.{=} small \.{-} ( 3
- \.{-} big )}%
-\@x{\@s{106.07} \.{\land} small \.{'} \.{=} 3}%
-\@pvspace{8.0pt}%
-\@x{ Next \.{\defeq} \.{\lor} FillSmall}%
-\@x{\@s{39.83} \.{\lor} FillBig}%
-\@x{\@s{39.83} \.{\lor} EmptySmall}%
-\@x{\@s{39.83} \.{\lor} EmptyBig}%
-\@x{\@s{39.83} \.{\lor} SmallToBig}%
-\@x{\@s{39.83} \.{\lor} BigToSmall}%
-\@pvspace{8.0pt}%
+\@x{ {\VARIABLES} jarro\_pequeno ,\, jarro\_grande}%
+\@x{ TypeOK \.{\defeq} \.{\land} jarro\_pequeno \.{\in} 0 \.{\dotdot} 3}%
+\@x{\@s{56.14} \.{\land} jarro\_grande\@s{8.2} \.{\in} 0 \.{\dotdot} 5}%
+\@x{ Init \.{\defeq} \.{\land} jarro\_grande\@s{8.2} \.{=} 0}%
+\@x{\@s{35.70} \.{\land} jarro\_pequeno \.{=} 0}%
+\@x{ EncheJarroPequeno \.{\defeq} \.{\land} jarro\_pequeno \.{'} \.{=} 3}%
+\@x{\@s{105.80} \.{\land} jarro\_grande \.{'}\@s{8.2} \.{=} jarro\_grande}%
+ \@x{ EncheJarroGrande \.{\defeq} \.{\land} jarro\_grande \.{'}\@s{8.2} \.{=}
+ 5}%
+\@x{\@s{101.63} \.{\land} jarro\_pequeno \.{'} \.{=} jarro\_pequeno}%
+\@x{ EsvaziaJarroPequeno \.{\defeq} \.{\land} jarro\_pequeno \.{'} \.{=} 0}%
+\@x{\@s{111.93} \.{\land} jarro\_grande \.{'}\@s{8.2} \.{=} jarro\_grande}%
+ \@x{ EsvaziaJarroGrande \.{\defeq} \.{\land} jarro\_grande \.{'}\@s{8.2}
+ \.{=} 0}%
+\@x{\@s{107.76} \.{\land} jarro\_pequeno \.{'} \.{=} jarro\_pequeno}%
+ \@x{ JarroPequenoParaJarroGrande \.{\defeq} {\IF} jarro\_grande \.{+}
+ jarro\_pequeno \.{\leq} 5}%
+ \@x{\@s{155.19} \.{\THEN} \.{\land} jarro\_grande \.{'}\@s{8.2} \.{=}
+ jarro\_grande \.{+} jarro\_pequeno}%
+\@x{\@s{186.50} \.{\land} jarro\_pequeno \.{'} \.{=} 0}%
+\@x{\@s{155.19} \.{\ELSE} \.{\land} jarro\_grande \.{'}\@s{8.2} \.{=} 5}%
+ \@x{\@s{186.50} \.{\land} jarro\_pequeno \.{'} \.{=} jarro\_pequeno \.{-} ( 5
+ \.{-} jarro\_grande )}%
+ \@x{ JarroGrandeParaJarroPequeno\@s{0.12} \.{\defeq} {\IF} jarro\_grande
+ \.{+} jarro\_pequeno \.{\leq} 3}%
+\@x{\@s{155.19} \.{\THEN} \.{\land} jarro\_grande \.{'}\@s{8.2} \.{=} 0}%
+ \@x{\@s{186.50} \.{\land} jarro\_pequeno \.{'} \.{=} jarro\_grande \.{+}
+ jarro\_pequeno}%
+ \@x{\@s{155.19} \.{\ELSE} \.{\land} jarro\_grande \.{'}\@s{8.2} \.{=}
+ jarro\_pequeno \.{-} ( 3 \.{-} jarro\_grande )}%
+\@x{\@s{186.50} \.{\land} jarro\_pequeno \.{'} \.{=} 3}%
+\@x{ Next \.{\defeq} \.{\lor} EncheJarroPequeno}%
+\@x{\@s{39.83} \.{\lor} EncheJarroGrande}%
+\@x{\@s{39.83} \.{\lor} EsvaziaJarroPequeno}%
+\@x{\@s{39.83} \.{\lor} EsvaziaJarroGrande}%
+\@x{\@s{39.83} \.{\lor} JarroPequenoParaJarroGrande}%
+\@x{\@s{39.83} \.{\lor} JarroGrandeParaJarroPequeno}%
 \@x{}\bottombar\@xx{}%
-\setboolean{shading}{false}
-\begin{lcom}{0}%
-\begin{cpar}{0}{F}{F}{0}{0}{}%
-\ensuremath{\.{\,\backslash\,}}* Modification History
-\end{cpar}%
-\begin{cpar}{0}{F}{F}{0}{0}{}%
- \ensuremath{\.{\,\backslash\,}}* Last modified Sun May 19 09:36:17
- \ensuremath{BRT} 2019 by \ensuremath{gabriela
-}%
-\end{cpar}%
-\begin{cpar}{0}{F}{F}{0}{0}{}%
- \ensuremath{\.{\,\backslash\,}}* Created Sun May 19 09:35:45 \ensuremath{BRT}
- 2019 by \ensuremath{gabriela
-}%
-\end{cpar}%
-\end{lcom}%
-\end{document}
+% \end{document}

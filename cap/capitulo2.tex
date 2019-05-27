@@ -7,11 +7,11 @@ As especificações são descritas em fórmulas matemáticas, com pequenas adapt
 
 O método de especificação é baseado em máquinas de estados e, sendo assim, a descrição de um modelo é composta por uma condição inicial, que determina os possíveis estados inciais, e por uma relação de transições, que determina os possíveis estados que podem suceder cada estado em uma execução. Dessa forma, o conjunto de comportamentos especificado é composto por todos os comportamentos cujo estado inicial satisfaz a condição inicial e todas as transições fazem parte relação.
 
-Lamport destaca [HYPERBOOK] que as especificações deveriam ser sobre modelos de uma abstração do sistema, e não algo retirado do próprio sistema. Semelhante à planta de um edifício, a especificação pode ser consultada para obter informações sobre o edifício (ou programa) de forma mais conveniente, além de ser capaz de facilitar uma série de verificações e perceber problemas enquanto a mudança ainda não é inviavelmente custosa.
+Lamport destaca \cite{hyperbook} que as especificações deveriam ser sobre modelos de uma abstração do sistema, e não algo retirado do próprio sistema. Semelhante à planta de um edifício, a especificação pode ser consultada para obter informações sobre o edifício (ou programa) de forma mais conveniente, além de ser capaz de facilitar uma série de verificações e perceber problemas enquanto a mudança ainda não é inviavelmente custosa.
 
 Sendo assim, uma especificação em TLA+ pode ser sobre comportamentos do ambiente no qual o programa funciona - como ao especificar um sistema e verificar possíveis comportamentos indesejáveis, entendendo aonde o programa deve atuar - descrevendo as operações existentes daquele sistema. Não limitada isso, uma especificação pode incluir  comportamentos do programa em si, compostas por operações existentes do sistema e novas operações definidas pelo programa.
 
-\section{Exemplo 1}
+\section{Exemplo 1 - Jarros de Água}
 
 Para exemplificar uma especificação de um sistema, é possível definir um problema combinatório simples como o dos jarros de água. Nesse problema, são fornecidos dois jarros, um com capacidade de 3 litros e outro com capacidade de 5 litros, assim como uma fonte inesgotável de água. Sendo assim, é possível despejar a água dos jarros no chão, transferir a água de um jarro ao outro ou encher um jarro com a fonte de água.
 
@@ -19,24 +19,40 @@ O objetivo do problema é ter exatamente 4 litros de água em um dos jarros. Iss
 
 Uma possível especificação em TLA+ para esse sistema se encontra abaixo.
 
-\input{JarrosDeAgua.tex}
+\hspace*{-2in}
+\vspace*{-1in}
+\includegraphics{JarrosDeAgua.pdf}
 
 Entendendo essa especificação no modelo de máquina de estado, é possível observar que as variáveis (\VARIABLES) são propriedades que variam nos estados, de forma que o conjunto com todas as combinações dos valores possíveis para cada uma das variáveis forma o conjunto de estados da máquina. Um estado desse sistema seria \texttt{jarro\_pequeno = 0, jarro\_grande = 1}. Na definição \texttt{Init}, é especificado um estado inicial do qual o sistema executa.
 
-As seis definições seguintes representam as transições. Em cada uma delas, as variáveis com o símbolo de linha representam os valores no estado seguinte, e sempre precisam ser definidas. Na transição \texttt{EncheJarroPequeno}, o valor de \texttt{jarro\_grande} se mantém o mesmo entre os estados atual e seguinte, mas é necessário explicitar isso com \texttt{jarro\_grande' = jarro\_grande}. Essa necessidade vem da aproximação da sintaxe de TLA+ com a matemática, onde não existe efeito colateral e, portanto, o valor da variável \texttt{jarro\_grande} não propagaria de um estado para outro.
+As seis definições seguintes representam as transições. Em cada uma delas, as variáveis com o símbolo de linha representam os valores no estado seguinte, e sempre precisam ser definidas. Na transição \texttt{EnchePequeno}, o valor de \texttt{jarro\_grande} se mantém o mesmo entre os estados atual e seguinte, mas é necessário explicitar isso com \texttt{jarro\_grande' = jarro\_grande}. Essa necessidade vem da aproximação da sintaxe de TLA+ com a matemática, onde não existe efeito colateral e, portanto, o valor da variável \texttt{jarro\_grande} não propagaria de um estado para outro.
 
 É possível, sintaticamente, utilizar a informação das variáveis do estado atual para definir o estado seguinte - não é necessário definir transições para todas as combinações de variáveis. Dessa forma, as transições definidas são genéricas e podem ser aplicadas a qualquer estado do sistema. Cada transição da especificação do problema dos jarros pode ser aplicada nos estados \texttt{(jarro\_pequeno = 0, jarro\_grande = 0), (jarro\_pequeno = 0, jarro\_grande = 1), \dots}.
 
-No sentido de aproveitar informações do estado atual, é possível utilizar condicionais, como nas transições \texttt{JarroPequenoParaJarroGrande} e \texttt{JarroGrandeParaJarroPequeno}. Com isso, é fácil definir transições generalizadas diferentes para conjuntos de estados com propriedades diferentes. Na definição de \texttt{JarroPequenoParaJarroGrande}, os estados que atualmente possuem 5 litros ou menos de água nos jarros em total recebem uma transição para um estado onde o jarro pequeno está vazio. Já os estados que possuem mais de 5 litros de água recebem uma transição para um estado onde o jarro grande está cheio.
+No sentido de aproveitar informações do estado atual, é possível utilizar condicionais, como nas transições \texttt{PequenoParaGrande} e \texttt{GrandeParaPequeno}. Com isso, é fácil definir transições generalizadas diferentes para conjuntos de estados com propriedades diferentes. Na definição de \texttt{PequenoParaGrande}, os estados que atualmente possuem 5 litros ou menos de água nos jarros em total recebem uma transição para um estado onde o jarro pequeno está vazio. Já os estados que possuem mais de 5 litros de água recebem uma transição para um estado onde o jarro grande está cheio.
 
 Ao fim dessa especificação, em \texttt{Next}, é definida a \textit{next state function} (função de próximo estado), na qual são declaradas as transições do sistema, incluindo qualquer composição de transições que possa levar um estado a outro. No caso do problema dos jarros, apenas é definido que qualquer transição pode ser utilizada para obter um novo estado.
 
 As definições \texttt{Init} e \texttt{Next} são buscadas pelo TLC na construção da máquina de estados. É possível renomear essas definições, mas é preciso informar ao TLC os novos nomes para o estado inicial e a \textit{next state function}. A especificação - chamada $Spec$ - é descrita a partir dessas definições com a seguinte fórmula da lógica temporal:
 
-\[Spec \defeq Init \land \box [Next]\]
+\[Spec \defeq Init \land \square [Next]\]
 
 Com essa especificação, o sistema está definido. As operações permitidas e as variáveis relevantes foram descritas e, a partir do estado inicial, cada passo do sistema pode ser executado a partir de uma das seis diferentes transições. Essas informações são suficientes para o TLC fazer verificações sobre o sistema, é apenas necessário definir tais verificações.
 
-A definição \texttt{TypeOK} na especificação apresentada pode ser utilizada para verificar os tipos desse sistema. Ela define que a variável \texttt{jarro\_pequeno} é um inteiro entre 0 e 3, e a variável \texttt{jarro\_grande} é sempre um inteiro entre 0 e 5. Ou seja, \texttt{TypeOK} será verdadeiro se os valores das variáveis estiverem de acordo com essas restrições, e falso caso contrário. Isso não é uma verificação em si, e sim uma definição. Para que essa definição seja verificada em todos os estados alcançáveis pelo sistema, é necessário adicioná-la como uma invariante do modelo. Como uma invariante, o valor dela não deve ser modificado em nenhum estado da execução.  Como o estado inicial faz \texttt{TypeOK} verdadeiro, ao colocar essa invariante, todos os estados devem fazer \texttt{TypeOK} verdadeiro, ou o TLC retornará um erro.
+A definição \texttt{TypeOK} na especificação apresentada pode ser utilizada para verificar os tipos desse sistema. Ela define que a variável \texttt{jarro\_pequeno} é um inteiro entre 0 e 3, e a variável \texttt{jarro\_grande} é sempre um inteiro entre 0 e 5. Ou seja, \texttt{TypeOK} será verdadeiro se os valores das variáveis estiverem de acordo com essas restrições, e falso caso contrário. Isso não é uma verificação em si, e sim uma definição. Para que essa definição seja verificada em todos os estados alcançáveis pelo sistema, é necessário adicioná-la como uma invariante do modelo. Como uma invariante, o valor dela não deve ser modificado em nenhum estado da execução. Como o estado inicial faz \texttt{TypeOK} verdadeiro, ao colocar essa invariante, todos os estados devem fazer \texttt{TypeOK} verdadeiro, ou o TLC retornará um erro. \texttt{TypeOk} pode ser definido como uma invariante através do teorema:
 
-Outra propriedade interessante de ser verificada para esse problema antes da implementação de um programa para resolvê-lo é a possibilidade de resolução, isto é, se é possível alcançar um estado onde onde o jarro maior contém 4 litros de água. Para isso, define-se uma invariante para o predicado \texttt{big \backslash= 4}, que não será satisfeita. Como esse predicado é verdadeiro para o estado inicial, o fato de ele não ser satisfeito significa que, em algum momento da execução, o predicado foi falso, ou seja, \texttt{big = 4}. O TLC, ao encontrar uma execução que insatisfaz a invariante, trás a sequência de transições que levam ao estado onde o predicado é falso, o que, no caso do simples problema dos jarros, é a solução buscada.
+\[\THEOREM Spec \implies \square (TypeOK)\]
+
+Outra propriedade interessante de ser verificada para esse problema antes da implementação de um programa para resolvê-lo é a possibilidade de resolução, isto é, se é possível alcançar um estado onde onde o jarro maior contém 4 litros de água. Para isso, define-se uma invariante para o predicado $jarro\_grande\ \backslash= 4$, que não será satisfeita. Como esse predicado é verdadeiro para o estado inicial, o fato de ele não ser satisfeito significa que, em algum momento da execução, o predicado foi falso, ou seja, $jarro\_grande = 4$. Adicionando essa invariante, um possível teorema seria:
+
+\[\THEOREM Spec \implies \square (TypeOK \land jarro\_grande\ \backslash= 4)\]
+
+O TLC, ao encontrar uma execução que insatisfaz a invariante, traz a sequência de transições que levam ao estado onde o predicado é falso, o que, no caso do simples problema dos jarros, é a solução buscada.
+
+Esse exemplo é apresentado com o intuito de demonstrar a estrutura da especificação de um sistema e o funcionamento das invariantes. A seguir, é proposto um exemplo com especificações de um sistema real e de um programa que atua nele.
+
+\section{Exemplo 2 - Transações de um Banco de Dados}
+
+\hspace*{-1.2in}
+\vspace*{-1in}
+\includegraphics{TransacoesBD.pdf}

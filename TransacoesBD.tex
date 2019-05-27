@@ -936,52 +936,52 @@
 
 \begin{document}
 \tlatex
-\@x{}\moduleLeftDash\@xx{ {\MODULE} JarrosDeAgua}\moduleRightDash\@xx{}%
-\@x{ {\EXTENDS} Integers}%
+\@x{}\moduleLeftDash\@xx{ {\MODULE} TransacoesBD}\moduleRightDash\@xx{}%
+\@x{ {\CONSTANT} GR}%
 \@pvspace{8.0pt}%
-\@x{ {\VARIABLES} jarro\_pequeno ,\, jarro\_grande}%
+\@x{ {\VARIABLE} estadoGR}%
+\@x{}\midbar\@xx{}%
+\@x{ TBDTypeOK \.{\defeq}}%
+ \@x{\@s{8.2} estadoGR \.{\in} [ GR \.{\rightarrow} \{\@w{trabalhando}
+ ,\,\@w{preparado} ,\,\@w{cometido} ,\,\@w{abortado} \} ]}%
 \@pvspace{8.0pt}%
-\@x{ TypeOK \.{\defeq} \.{\land} jarro\_pequeno \.{\in} 0 \.{\dotdot} 3}%
-\@x{\@s{56.14} \.{\land} jarro\_grande\@s{5.11} \.{\in} 0 \.{\dotdot} 5}%
+ \@x{ TBDInit \.{\defeq} estadoGR \.{=} [ g \.{\in} GR
+ \.{\mapsto}\@w{trabalhando} ]}%
 \@pvspace{8.0pt}%
-\@x{ Init \.{\defeq} \.{\land} jarro\_grande\@s{8.2} \.{=} 0}%
-\@x{\@s{35.70} \.{\land} jarro\_pequeno \.{=} 0}%
+ \@x{ podeCometer\@s{0.96} \.{\defeq} \A\, g\@s{10.48} \.{\in} GR \.{:}
+ estadoGR [ g ] \.{\in} \{\@w{preparado} ,\,\@w{cometido} \}}%
 \@pvspace{8.0pt}%
-\@x{ EnchePequeno \.{\defeq} \.{\land} jarro\_pequeno \.{'} \.{=} 3}%
-\@x{\@s{82.40} \.{\land} jarro\_grande \.{'}\@s{5.11} \.{=} jarro\_grande}%
+ \@x{ naoCometido \.{\defeq} \A\, g\@s{10.48} \.{\in} GR \.{:} estadoGR [ g ]
+ \.{\neq}\@w{cometido}}%
 \@pvspace{8.0pt}%
-\@x{ EncheGrande \.{\defeq} \.{\land} jarro\_grande \.{'}\@s{5.11} \.{=} 5}%
-\@x{\@s{78.24} \.{\land} jarro\_pequeno \.{'} \.{=} jarro\_pequeno}%
+\@x{ Prepara ( g ) \.{\defeq} \.{\land} estadoGR [ g ] \.{=}\@w{trabalhando}}%
+ \@x{\@s{66.53} \.{\land} estadoGR \.{'} \.{=} [ estadoGR {\EXCEPT} {\bang} [
+ g ] \.{=}\@w{preparado} ]}%
 \@pvspace{8.0pt}%
-\@x{ EsvaziaPequeno \.{\defeq} \.{\land} jarro\_pequeno \.{'} \.{=} 0}%
-\@x{\@s{88.54} \.{\land} jarro\_grande \.{'}\@s{5.11} \.{=} jarro\_grande}%
+ \@x{ Decide ( g )\@s{4.61} \.{\defeq} \.{\lor} \.{\land} estadoGR [ g ]
+ \.{=}\@w{preparado}}%
+\@x{\@s{77.64} \.{\land} podeCometer}%
+ \@x{\@s{77.64} \.{\land} estadoGR \.{'} \.{=} [ estadoGR {\EXCEPT} {\bang} [
+ g ] \.{=}\@w{cometido} ]}%
+ \@x{\@s{66.53} \.{\lor} \.{\land} estadoGR [ g ] \.{\in} \{\@w{trabalhando}
+ ,\,\@w{preparado} \}}%
+\@x{\@s{77.64} \.{\land} naoCometido}%
+ \@x{\@s{77.64} \.{\land} estadoGR \.{'} \.{=} [ estadoGR {\EXCEPT} {\bang} [
+ g ] \.{=}\@w{abortado} ]}%
 \@pvspace{8.0pt}%
-\@x{ EsvaziaGrande \.{\defeq} \.{\land} jarro\_grande \.{'}\@s{5.11} \.{=} 0}%
-\@x{\@s{84.37} \.{\land} jarro\_pequeno \.{'} \.{=} jarro\_pequeno}%
+ \@x{ TBDNext \.{\defeq} \E\, g \.{\in} GR \.{:} Prepara ( g ) \.{\lor} Decide
+ ( g )}%
+\@x{}\midbar\@xx{}%
+\@x{ TBDConsistente \.{\defeq}}%
+ \@x{\@s{8.2} \A\, r1 ,\, r2 \.{\in} GR \.{:} {\lnot} \.{\land} estadoGR [ r1
+ ] \.{=}\@w{abortado}}%
+\@x{\@s{85.86} \.{\land} estadoGR [ r2 ] \.{=}\@w{cometido}}%
+\@x{}\midbar\@xx{}%
 \@pvspace{8.0pt}%
- \@x{ PequenoParaGrande \.{\defeq} {\IF} jarro\_grande \.{+} jarro\_pequeno
- \.{\leq} 5}%
- \@x{\@s{108.40} \.{\THEN} \.{\land} jarro\_grande \.{'}\@s{5.11} \.{=}
- jarro\_grande \.{+} jarro\_pequeno}%
-\@x{\@s{139.71} \.{\land} jarro\_pequeno \.{'} \.{=} 0}%
-\@x{\@s{108.40} \.{\ELSE} \.{\land} jarro\_grande \.{'}\@s{5.11} \.{=} 5}%
- \@x{\@s{139.71} \.{\land} jarro\_pequeno \.{'} \.{=} jarro\_pequeno \.{-} ( 5
- \.{-} jarro\_grande )}%
+\@x{ TBDSpec \.{\defeq} TBDInit \.{\land} {\Box} [ TBDNext ]_{ estadoGR}}%
 \@pvspace{8.0pt}%
- \@x{ GrandeParaPequeno\@s{0.12} \.{\defeq} {\IF} jarro\_grande \.{+}
- jarro\_pequeno \.{\leq} 3}%
-\@x{\@s{108.40} \.{\THEN} \.{\land} jarro\_grande \.{'}\@s{5.11} \.{=} 0}%
- \@x{\@s{139.71} \.{\land} jarro\_pequeno \.{'} \.{=} jarro\_grande \.{+}
- jarro\_pequeno}%
- \@x{\@s{108.40} \.{\ELSE} \.{\land} jarro\_grande \.{'}\@s{5.11} \.{=}
- jarro\_pequeno \.{-} ( 3 \.{-} jarro\_grande )}%
-\@x{\@s{139.71} \.{\land} jarro\_pequeno \.{'} \.{=} 3}%
+ \@x{ {\THEOREM} TBDSpec \.{\implies} {\Box} ( TBDTypeOK \.{\land}
+ TBDConsistente )}%
 \@pvspace{8.0pt}%
-\@x{ Next \.{\defeq} \.{\lor} EnchePequeno}%
-\@x{\@s{39.83} \.{\lor} EncheGrande}%
-\@x{\@s{39.83} \.{\lor} EsvaziaPequeno}%
-\@x{\@s{39.83} \.{\lor} EsvaziaGrande}%
-\@x{\@s{39.83} \.{\lor} PequenoParaGrande}%
-\@x{\@s{39.83} \.{\lor} GrandeParaPequeno}%
 \@x{}\bottombar\@xx{}%
 \end{document}

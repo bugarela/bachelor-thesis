@@ -41,6 +41,13 @@
 \usepackage{makecell}
 \usepackage{listings}
 
+\usepackage{latexsym}
+\usepackage{ifthen}
+\usepackage{verbatim}
+\usepackage[nottoc]{tocbibind}
+% \usepackage{natbib}
+
+\input{tla.tex}
 %-----------------------------------------------------------
 \begin{document}
 
@@ -125,14 +132,15 @@
 \input{cap/introducao}
 \input{cap/capitulo2}
 \input{cap/capitulo3}
-\input{cap/conclusao}
+% \input{cap/conclusao}
 
 %\input{cap/agradecimentos}
 
 %---------- Referências ------------------------------------
-\renewcommand{\bibname}{Referências}
+% \renewcommand{\bibname}{Referências}
 \bibliographystyle{pkg/abnt-alf}
-\bibliography{refsTcc}
+\nocite{*}
+\bibliography{tccudesc}
 
 %---------- Apêndice ---------------------------------------
 %\appendix

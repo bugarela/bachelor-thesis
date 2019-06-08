@@ -44,6 +44,7 @@ As fórmulas não temporais são chamadas também de fórmulas transicionais. Na
 %% CHOOSE IF CASE EXCEPT
 
 \section{Exemplo 1 - Jarros de Água}
+\label{exemplo1}
 
 Para exemplificar uma especificação de um sistema, é possível definir um problema combinatório simples como o dos jarros de água. Nesse problema, são fornecidos dois jarros inicialmente vazios, um com capacidade de 3 litros e outro com capacidade de 5 litros, assim como uma fonte inesgotável de água. Sendo assim, é possível despejar a água dos jarros no chão, transferir a água de um jarro ao outro ou encher um jarro com a fonte de água.
 
@@ -88,15 +89,31 @@ Esse exemplo é apresentado com o intuito de demonstrar a estrutura da especific
 
 \section{Exemplo 2 - Transações em Bancos de Dados}
 
-Já em um contexto de um problema real de sistemas concorrentes, define-se uma especificação para o problema da consistência das transações em bancos de dados. Esse é um problema clássico onde, dado um conjunto de gerenciadores de recursos fazendo operações sobre um mesmo banco, um gerenciador só pode cometer (fazer a ação \textit{commit}) se todos os outros estiverem preparados para cometer, e se algum gerenciador quiser abortar, então todos devem abortar.
+Já em um contexto de um problema real de sistemas concorrentes, define-se uma especificação para o problema da consistência das transações em bancos de dados. Esse é um problema clássico onde, dado um conjunto de gerenciadores de recursos fazendo operações sobre um mesmo banco, um gerenciador só pode cometer (fazer a ação \textit{commit}) se todos os outros estiverem preparados para cometer, e se algum gerenciador quiser abortar, então todos devem abortar. Ou seja, em nenhum momento pode haver um gerenciador abortado e outro cometido.
+
+\subsection{O sistema}
 
 Na Figura \ref{fig:ex2tla}, encontra-se uma especificação para um sistema de transações consistente. Ela não apresenta uma proposta de solução para o problema, e sim traz uma descrição formal do que significa ser consistente. Uma especificação de uma solução para o problema deve implementar essa especificação.
 
-
-
-\begin{figure}
+\begin{figure}[h]
   \centering
   \includegraphics[width=\textwidth]{TransacoesBD.png}
-  \caption{Especificação do problema das Transações}
+  \caption{Especificação de um sistema de transações em bancos de dados}
 \label{fig:ex2tla}
 \end{figure}
+
+Um gerenciador de recursos pode estar em quatro estados diferentes, como definido em $TBDTypeOK$. Do estado \trabalhando, ele pode ir para o estado \preparado, no sentido de que ele está pronto para cometer, ou então abortar, inso para o estado \abortado. Se todos os gerenciadores estão no estado \preparado, então qualquer um deles pode cometer, indo para o estado \cometido, ou então abortar, indo para o estado \abortado. Contudo, se exite algum gerenciador no estado \cometido, então nenhum outro gerenciador pode abortar.
+
+A possibilidade de um gerenciador $g$ ir do estado \trabalhando\ ao \preparado\ é representada pela ação $Prepara(g)$ onde, se o estado de $g$ é \trabalhando, então o valor da variável $estadoGR$ no novo estado é igual ao seu valor no estado atual, exceto pelo valor de $estadoGR[g]$, que passa a ser \preparado.
+
+A decisão de um gerenciador de abortar ou cometer é representada pela ação $Decide(g)$. Nessa definição, as fórmulas $podeCometer$ e $naoCometido$ são definidas separadamente para minimizar a complexidade cognitiva da especificação - definí-las dentro de $Decide(g)$ seria equivalente para a linguagem. $podeCometer$ verifica se todos os estados estão preparados ou cometidos, ou seja, qualquer um pode cometer. Se for verdadeiro, e $g$ ainda não cometeu, então $g$ comete - o estado dos gerenciadores passa a ser uma cópia do estado atual exceto por $estadoGR[g]$, que é \cometido. Outra decisão possível, separada da primeira por um operador de disjunção, é a de abortar. Para isso, verifica-se, com a fórmula $naoCometido$ se não há nenhum gerenciador cometido. Se for verdadeira, e $g$ ainda não tiver abortado, então o novo estado dos gerenciadores passa a ter $g$ como \abortado.
+
+Com essas fórmulas, é possível definir a \textit{next state function} $TBDNext$, onde um passo do sistema é dado por um gerenciador de recursos no conjunto $GR$ que faz uma ação de preparar ou decidir. A fórmula temporal $TBDSpec$ consiste a especificação do sistema de transações bancárias e tem um formato semelhante à fórmula $Spec$ do exemplo 1 na Seção \ref{exemplo1}.
+
+Para verificar que o sistema especificado por $TBDSpec$ está de acordo com a restrição do problema - em nenhum momento pode haver um gerenciador abortado e outro cometido - define-se $TBDConsistente$ onde, para cada possível par de gerenciadores de recursos, não é o caso de o primeiro estar abortado e o segundo, cometido. Essa fórmula é uma afirmação sobre um valor da variável $estadoGR$, porém precisa ser verdadeira para todos os valores dessa variável em qualquer comportamento que satisfaça $TBDSpec$. Para isso, define-se o teorema
+
+\[\THEOREM TBDSpec \implies \square(TBDTypeOK \land TBDConsistente)\]
+
+que permite verificar que, se um comportamento satisfaz $TBDSpec$ - isto é, seu estado inicial satisfaz $TBDInit$ e seus passos satisfazem $TBDNext$ - então as fórmulas de estado $TBDTypeOK$ e $TBDConsistente$ são verdadeiras para todas as estados - todos os valores atribuídos para as variáveis - neste comportamento. Com esse teorema, $TBDTypeOK$ e $TBDConsistente$ são definidos com invariantes da especificação.
+
+\subsection{A implementação}

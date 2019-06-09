@@ -5,6 +5,14 @@ Dada uma especificação na linguagem \TLA, contendo elementos da lógica TLA e 
 
 \section{Elixir}
 
-Para esse propósito, a linguagem de programação escolhida para o código traduzido foi Elixir.
+Para esse propósito, a linguagem de programação escolhida para o código traduzido foi Elixir. As motivações são expostas abaixo por ordem de relevância na decisão:
+\begin{enumerate}
+  \item A concorrência é facilitada por ter seu código traduzido para \textit{bytecode} da máquina virtual do Erlang (BEAM). Suporte a concorrência é de extrema importância, já que \TLA foi criado para facilitar a especificação de sistemas concorrentes. É necessário que o código gerado seja capaz de refletir o sistema também nesse quesito.
+  \item Uma linguagem funcional tende a se aproximar mais de definições matemáticas do que linguagens de outros paradigmas. Uma vez que a estrutura de \TLA foi construída principalmente no âmbito da matemática, a complexidade das traduções tende a ser menor para uma linguagem funcional.
+  \item O alto nível de abstração da sintaxe de Elixir, que se inspira em Ruby e sua busca por código facilmente entendível, faz com o programador que trabalhar com o código gerado possa entendê-lo de forma mais simples e rápida do que seria com uma linguagem de baixo nível. Com isso, otimizações podem ser feitas com mais segurança, e a manutenabilidade do código é favorecida.
+  \item A transparência de plataforma provida pela máquina virtual BEAM maximiza o número de ambientes aonde o código pode ser executado. Não seria de muito uso gerar um código para um ambiente específico, e uma máquina virtual permite que o código gerado seja \textit{Cross Plataform}.
+  \item O seu código é aberto sobre a licença Apache 2.0, permitindo que o funcionamento de suas estruturas possa ser verificado a qualquer momento. Não seria possível garantir nenhuma correspondência do código gerado com a especificação se não fosse conhecida a execução gerada pelos operadores usados no código.
 
-Em vista da relação das especificações em TLA+ e sistemas concorrentes, é interessante que a linguagem do código gerado seja capaz de suportar concorrência em um nível alto de abstração. Adicionalmente, devido à natureza matemática dessas especificações, espera-se minimizar a complexidade e a quantidade de mapeamentos ao traduzi-las para uma linguagem funcional. Ambos estes requistos se fazem necessários pela finalidade de proporcionar um código modificável, de forma que o programador seja capaz de entender a correspondência e minimizando a diferença do nível de abstração no qual ele está programando. Uma linguagem de programação que atende esses requisitos é Elixir.
+\end{enumerate}
+
+Essa escolha vem de encontro com a finalidade de proporcionar um código modificável, de forma que o programador seja capaz de entender a correspondência e minimizando a diferença do nível de abstração no qual ele está programando.

@@ -4,7 +4,7 @@
 %   Licence: LPPL (LaTeX Project Public License)
 %     You can change this file in the terms of LPPL
 %     (http://www.latex-project.org/lppl.html)
-% 
+%
 %   Licenca: LPPL (LaTeX Project Public License)
 %     Esta licenca diz basicamente que se voce editar o codigo desta
 %     classe, mesmo localmente (no seu micro), voce DEVE RENOMEAR o arquivo
@@ -14,10 +14,10 @@
 %
 %   Classe para confeccao de monografias, dissertacoes e tese
 %   de acordo com as normas da exigidas pela Universidade Federal
-%   do Maranhao, tendo com parametro as diretrizes da Associacao Brasileira 
-%   de Normas Tecnicas (ABNT). Esta classe foi   
+%   do Maranhao, tendo com parametro as diretrizes da Associacao Brasileira
+%   de Normas Tecnicas (ABNT). Esta classe foi
 %   desenvolvidas pelo prof. Maxwell Mariano de Barros do DEMAT/UFMA
-%   (http://www.demat.ufma.br) 
+%   (http://www.demat.ufma.br)
 %   A classe monografia foi obtida modificando a classe report, fazendo
 %   com que a mesma gere a capa as folhas de rosto e de aprovacao das
 %   monografias e dissertacoes.
@@ -38,10 +38,10 @@
 %        \ano
 %        \local
 %        \data
-%% 
+%%
 %% This file was generated from file(s) of the LaTeX base system.
 %% --------------------------------------------------------------
-%% 
+%%
 %% It may be distributed and/or modified under the
 %% conditions of the LaTeX Project Public License, either version 1.2
 %% of this license or (at your option) any later version.
@@ -49,15 +49,15 @@
 %%    http://www.latex-project.org/lppl.txt
 %% and version 1.2 or later is part of all distributions of LaTeX
 %% version 1999/12/01 or later.
-%% 
+%%
 %% This file may only be distributed together with a copy of the LaTeX
 %% base system. You may however distribute the LaTeX base system without
 %% such generated files.
-%% 
+%%
 %% The list of all files belonging to the LaTeX base distribution is
 %% given in the file `manifest.txt'. See also `legal.txt' for additional
 %% information.
-%% 
+%%
 %% \CharacterTable
 %%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
 %%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
@@ -198,8 +198,8 @@
           \thesection\ \ %
         \fi%
         ##1}%
-    }%   
-  }% 
+    }%
+  }%
 
   %%  Defining pagestyle plainheader
   %
@@ -228,8 +228,8 @@
           \thesection\ \ %
         \fi%
         ##1}%
-    }%   
-  }% 
+    }%
+  }%
 
   %%  Defining pagestyle ruledheader
   %
@@ -262,8 +262,8 @@
           \thesection\ \ %
         \fi%
         ##1}%
-    }%   
-  }% 
+    }%
+  }%
 
  }%
  {}%{{\slshape\rightmark}\hfil\thepage}%
@@ -310,7 +310,7 @@
 \def\doutorado{\grau{DOUTOR} \tipo{Tese}\ph@dtrue \ps@dtrue}
 \def\autor#1{\gdef\@autor{#1}}
 \def\titulo#1{\gdef\@titulo{#1}}
-\def\subtitulo#1{\gdef\@subtitulo{#1}\sb@ttrue} 
+\def\subtitulo#1{\gdef\@subtitulo{#1}\sb@ttrue}
 \def\ultimonome#1{\gdef\@ultimonome{#1}}
 \def\nome#1{\gdef\@nome{#1}}
 \def\grau#1{\gdef\@grau{#1}}
@@ -331,7 +331,7 @@
 \def\ttcoorientador#1{\gdef\@ttcoorientador{#1}}
 \def\coorientador#1{\gdef\@coorientador{#1}\co@dtrue}
 \def\setcoorientador{%
-     {\rmfamily \Large \bf \@coorientador} \\ Co-Orientador}                   
+     {\rmfamily \large \bf \@coorientador} \\ Co-Orientador}
 \def\examinadorum#1{\gdef\@examinadorum{#1}}
 \def\ttexaminadorum#1{\gdef\@ttexaminadorum{#1}}
 \def\examinadordois#1{\gdef\@examinadordois{#1}}
@@ -352,8 +352,8 @@
 
 \def\figura{%
            \includegraphics[width=0.3\textwidth]{precedencia.eps}\\}
-         
-          
+
+
 \def\assinaturaum{%
              \rule{9.0cm}{0.1mm} \\
              {\@orientador \\ \footnotesize\@ttorientador}\\
@@ -377,7 +377,7 @@
              {\@examinadorum { - }\@ttexaminadorum}\\
              \vspace{2cm}
              \rule{9.0cm}{0.1mm} \\
-             {\@examinadordois { - }\@ttexaminadordois}\\ 
+             {\@examinadordois { - }\@ttexaminadordois}\\
              \vspace{2cm}
              \rule{9.0cm}{0.1mm} \\
              {\@examinadortres { - }\@ttexaminadortres}}
@@ -399,21 +399,21 @@
 \newif\ifsb@t           \sb@tfalse
 \newif\ifre@s           \re@sfalse
 \newif\ifes@p           \es@pfalse
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \if@titlepage
   \newcommand\maketitle{\begin{titlepage}%
-  
+
   \lineskip .0em
 
   %\begin{flushleft}%
   %{\rmfamily \sc
   %\begin{tabular}{p{20.0cm}}
-  
+
   %\begin{wrapfigure}[0]{c} {1.3\textwidth}
   %\includegraphics[width=1\textwidth]{logodcc.eps}\\
   %\end{wrapfigure}
-%\hfill  
-%\end{tabular}      
+%\hfill
+%\end{tabular}
  % }
  % \end{flushleft}
 
@@ -426,7 +426,7 @@
   \vspace{20.0em}
     {\rmfamily \@autor \par}%
   \vspace{2em}%
-  \ifsb@t 
+  \ifsb@t
      {\large\it  \@titulo }\\
      {\large  \@subtitulo }
     \else
@@ -437,7 +437,7 @@
 \hskip -0.7cm
 \rule{16.2cm}{0.5mm}
 
-    {\rmfamily \@cidade \\ \@ano }%  
+    {\rmfamily \@cidade \\ \@ano }%
   \end{center}
   \end{titlepage}
   %%--------------------------------------------------
@@ -447,9 +447,9 @@
     {\rmfamily \large \bf UNIVERSIDADE DO ESTADO DE SANTA CATARINA \\
                 BACHARELADO EM CI\^{E}NCIA DA COMPUTA\c{C}\~{A}O \par}
    \vspace{7.0em}
-   {\rmfamily \large \bf \@autor \par} 
+   {\rmfamily \large \bf \@autor \par}
    \vspace{7.0em}
-  \ifsb@t 
+  \ifsb@t
      {\Large  \@titulo }\\
      {\large  \@subtitulo }
     \else
@@ -467,13 +467,13 @@
  {\bfseries \setorientador}\\
               \vspace{0.4cm}
  {\bfseries \setcoorientador}
-    \else 
+    \else
  {\bfseries  \setorientador}
- \fi   
-                   
+ \fi
+
  \vfill
 
- {\rmfamily \large \@cidade , {\@mes } de \@ano} 
+ {\rmfamily \large \@cidade , {\@mes } de \@ano}
  \end{center}
  \end{titlepage}%
  %%-----------------------------------------------
@@ -490,7 +490,7 @@
  %      \@areas . I.T\'{\i}tulo. \\
  %      \hfill CDD \@CDD \\
  %      \hfill CDU \@CDU
- %   \end{tabular} }  
+ %   \end{tabular} }
  %\end{titlepage}
  %%-------------------------------------------------------
  \begin{titlepage}
@@ -503,13 +503,13 @@
   \vspace{3.0em}
 \par
 \begin{minipage}{\hsize}
-{\rmfamily \centering \setlength{\normallineskip}{1cm}   
+{\rmfamily \centering \setlength{\normallineskip}{1cm}
 Este Trabalho de Conclus\~{a}o de Curso foi julgado adequado para a obten\c{c}\~{a}o do t\'{i}tulo de Bacharel em Ci\^{e}ncia da Computa\c{c}\~{a}o e aprovado em sua forma final pelo Curso de Ci\^{e}ncia da Computa\c{c}\~{a}o Integral do CCT/UDESC.}
 \end{minipage}
 \end{center}
 \vfill
 \begin{flushleft}
- {\large Banca Examinadora}\\ 
+ {\large Banca Examinadora}\\
 \end{flushleft}
 \vspace{2.0cm}
 \begin{flushright}
@@ -690,7 +690,7 @@ Este Trabalho de Conclus\~{a}o de Curso foi julgado adequado para a obten\c{c}\~
   \vspace*{10\p@}%
     {\parindent \z@ \raggedright \normalfont
     \ifnum \c@secnumdepth >\m@ne
-        \LARGE\bfseries %\@chapapp 
+        \LARGE\bfseries %\@chapapp
         \thechapter \space
         %\par\nobreak
         %\vskip 20\p@
@@ -1233,8 +1233,8 @@ Este Trabalho de Conclus\~{a}o de Curso foi julgado adequado para a obten\c{c}\~
           \thesection\ \ %
         \fi%
         ##1}%
-    }%   
-  }% 
+    }%
+  }%
 
   %%  Defining pagestyle plainheader
   %
@@ -1263,8 +1263,8 @@ Este Trabalho de Conclus\~{a}o de Curso foi julgado adequado para a obten\c{c}\~
           \thesection\ \ %
         \fi%
         ##1}%
-    }%   
-  }% 
+    }%
+  }%
 
   %%  Defining pagestyle ruledheader
   %
@@ -1297,8 +1297,8 @@ Este Trabalho de Conclus\~{a}o de Curso foi julgado adequado para a obten\c{c}\~
           \thesection\ \ %
         \fi%
         ##1}%
-    }%   
-  }% 
+    }%
+  }%
 
 
  {}%

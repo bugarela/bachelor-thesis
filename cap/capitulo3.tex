@@ -8,11 +8,115 @@ Dada uma especificação na linguagem \TLA, contendo elementos da lógica TLA e 
 Para esse propósito, a linguagem de programação escolhida para o código traduzido foi Elixir. As motivações são expostas abaixo por ordem de relevância na decisão:
 \begin{enumerate}
   \item A concorrência é facilitada por ter seu código traduzido para \textit{bytecode} da máquina virtual do Erlang (BEAM). Suporte a concorrência é de extrema importância, já que \TLA foi criado para facilitar a especificação de sistemas concorrentes. É necessário que o código gerado seja capaz de refletir o sistema também nesse quesito.
+
   \item Uma linguagem funcional tende a se aproximar mais de definições matemáticas do que linguagens de outros paradigmas. Uma vez que a estrutura de \TLA foi construída principalmente no âmbito da matemática, a complexidade das traduções tende a ser menor para uma linguagem funcional.
+
   \item O alto nível de abstração da sintaxe de Elixir, que se inspira em Ruby e sua busca por código facilmente entendível, faz com o programador que trabalhar com o código gerado possa entendê-lo de forma mais simples e rápida do que seria com uma linguagem de baixo nível. Com isso, otimizações podem ser feitas com mais segurança, e a manutenabilidade do código é favorecida.
+
   \item A transparência de plataforma provida pela máquina virtual BEAM maximiza o número de ambientes aonde o código pode ser executado. Não seria de muito uso gerar um código para um ambiente específico, e uma máquina virtual permite que o código gerado seja \textit{Cross Plataform}.
+
   \item O seu código é aberto sobre a licença Apache 2.0, permitindo que o funcionamento de suas estruturas possa ser verificado a qualquer momento. Não seria possível garantir nenhuma correspondência do código gerado com a especificação se não fosse conhecida a execução gerada pelos operadores usados no código.
 
 \end{enumerate}
 
-Essa escolha vem de encontro com a finalidade de proporcionar um código modificável, de forma que o programador seja capaz de entender a correspondência e minimizando a diferença do nível de abstração no qual ele está programando.
+Essa escolha vem de encontro com a finalidade de proporcionar um código modificável, de forma que o programador seja capaz de entender a correspondência entre as duas partes e minimizando a diferença do nível de abstração no qual ele está programando.
+
+\section{A tradução}
+
+A geração de código para uma especificação se dá pela tradução das estruturas de \TLA para Elixir. Esta tradução será feita de forma automática por uma ferramenta escrita em Haskell, implementada durante o corrente trabalho. A ferramenta será responsável pelo \textit{parsing} do aquivo da especificação, no formato \texttt{.tla}, para estruturas internas e, então, transformação dessas estruturas internas em código Elixir.
+
+A escolha da linguagem Haskell para implementação do gerador de código é motivada pela possibilidade da definição de tipos algébricos generalizados, que facilitam na representação das estruturas, e na tipagem forte, que ajuda a garantir consistência das relações entre estruturas definidas durante o processo, minimizando a possibilidade de erros no desenvolvimento. Haskell também conta com a biblioteca de \textit{parsing} Parsec, que abstrai a complexidade de analisar sintaticamente um arquivo.
+
+O escopo da tradução se limita à especificação definida, sendo suficiente para gerar código executável para o sistema definido. Traduzir teoremas e suposições não é necessário, uma vez que essas estruturas servem para fazer verificações sobre a especificação e não são necessárias para seu funcionamento. Ao código gerado não é atribuída a responsabilidade de refazer verificações, e sim de manter as propriedades já verificadas.
+
+\subsection{Mapeamentos}
+
+A tradução funciona como um grande mapeamento do conjunto de todas as especificações para um conjunto de programas em Elixir. Para viabilizar esse mapeamento, são definidos sub-mapeamentos que traduzem frações de uma especificação. Encontrar sub-mapeamentos suficientes para atender todo o domínio de especificações é suficiente para definir o processo de tradução.
+
+Os primeiros mapeamentos definidos envolvem fórmulas transicionais e variáveis. Para cada fórmula transicional da especificação, é definida uma função, declarada com a sintaxe \texttt{def nome(parametros) do ... end}, que recebe as variáveis como parâmetro. O conjunto de variáveis do sistema é representado em uma Hash - estrutura de dados chave-valor de Elixir, equivalente a um dicionário - representada no padrão \texttt{variaveis = \%\{ variavel1: valor1, variavel2: valor2 \}} e podendo ser acessada com \texttt{variaveis[:variavel1]} para obter o valor.
+
+Cada função mapeada de uma fórmula transicional recebe uma hash representando o estado atual e retorna outra hash representando o novo estado. O retorno, em Elixir, não exige uma palavra chave - a função retorna aquilo que a última linha retornou, sendo, para as funções geradas, a hash resultante da chamada do seu construtor.
+
+A Figura \ref{fig:esvaziapequeno-elixir} contém a função mapeada da fórmula $EsvaziaPequeno$ definida na Figura \ref{fig:ex1tla}.
+
+\begin{figure}[h]
+  \centering
+  $\progfig{
+  ~~def esvazia\_pequeno(variaveis) do\\
+  ~~~~\%\{\\
+  ~~~~~~pequeno: 0,\\
+  ~~~~~~grande: variaveis[:grande]\\
+  ~~~~\}\\
+  ~~end
+  }$
+  \caption{Fórmula transicional $EsvaziaPequeno$ como uma função em Elixir}
+\label{fig:esvaziapequeno-elixir}
+\end{figure}
+
+Alguns operadores de \TLA permitem mapeamentos ainda mais diretos, como \IF e \CASE, devido a sua inspiração em linguagens de programação. A Figura \ref{fig:pequenoparagrande-elixir} traz a função correspondente à fórmula $PequenoParaGrande$ definida na Figura \ref{fig:ex1tla}. A sintaxe para operadores \IF em Elixir é na forma \texttt{if condição do ... else ... end}.
+
+\begin{figure}[h]
+  \centering
+  $\progfig{
+  ~~def pequeno\_para\_grande(variaveis) do\\
+  ~~if variaveis[:grande] + variaveis[:pequeno] <= 5 do\\
+  ~~~~~~\%\{\\
+  ~~~~~~~~pequeno: 0,\\
+  ~~~~~~~~grande: variaveis[:grande] + variaveis[:pequeno]\\
+  ~~~~~~\}\\
+  ~~~~else\\
+  ~~~~~~\%\{\\
+  ~~~~~~~~pequeno: variaveis[:pequeno] - (5 - variaveis[:grande]),\\
+  ~~~~~~~~grande: 5\\
+  ~~~~~~\}\\
+  ~~~~end\\
+  ~~end
+  }$
+  \caption{Fórmula transicional $PequenoParaGrande$ como uma função em Elixir}
+\label{fig:pequenoparagrande-elixir}
+\end{figure}
+
+Com o conjunto inicial de mapeamentos apresentado, é possível definir todas as fórmulas transicionais do sistema definido na Seção \ref{exemplo1}. Ao traduzir as definições $Init$ e $Next$, é possível executar concorrentemente todos os comportamentos permitidos pela especificação. A definição $Next$ é traduzida para a função \texttt{main}, que recebe as variáveis para o estado atual e dispara um processo para cada passo permitido por $Next$. Como $Next$ é uma disjunção de todas as fórmulas transicionais, é disparado um novo processo com o resultado de cada função traduzida.
+
+Para disparar processos, é chamada a função da biblioteca padrão de Elixir responsável por executar processos ligados: \texttt{spawn\_link}. Essa função é chamada com três parâmetros: o módulo que receberá a chamada, a função a ser executada e uma lista contendo seus parâmetros. Para a tradução de $Next$, o módulo é sempre o módulo do arquivo gerado(\texttt{JarrosDeAgua}), a função é sempre \texttt{main} e os parâmetros são o resultado da aplicação de um dos passos permitidos. O último disparo corresponde à aplicação de um passo balbuciante. A definição dessa função encontra-se na Figura \ref{fig:main-ex1}.
+
+\begin{figure}[h]
+  \centering
+  $\progfig{
+  ~def main(variaveis) do\\
+  ~~~spawn\_link JarrosDeAgua, :main, [grande\_para\_pequeno(variaveis)]\\
+  ~~~spawn\_link JarrosDeAgua, :main, [pequeno\_para\_grande(variaveis)]\\
+  ~~~spawn\_link JarrosDeAgua, :main, [esvazia\_grande(variaveis)]\\
+  ~~~spawn\_link JarrosDeAgua, :main, [esvazia\_pequeno(variaveis)]\\
+  ~~~spawn\_link JarrosDeAgua, :main, [enche\_grande(variaveis)]\\
+  ~~~spawn\_link JarrosDeAgua, :main, [enche\_pequeno(variaveis)]\\
+  ~~~spawn\_link JarrosDeAgua, :main, [variaveis]\\
+  ~end\\\\
+  ~JarrosDeAgua.main(\%\{\ grande: 0, pequeno: 0 \})
+  }$
+  \caption{Disparo de processos para o sistema de Jarros de Água}
+\label{fig:main-ex1}
+\end{figure}
+
+A chamada \texttt{JarrosDeAgua.main(\%\{grande: 0, pequeno: 0\})} é a tradução de $Init$. Como esse sistema permite um único estado inicial, apenas uma chamada a \texttt{main} é necessária. Com ela, todos os passos dados para iniciar novos processos terão iniciado com o valor para variáveis que satisfaz a condição inicial. Através da definição de \texttt{main}, é também garantido que todos os passos satisfazem $\square [Next]_{vars}$. Assim, todos os comportamentos iniciados com essa chamada são permitidos por $Spec$, conforme definida na Seção \ref{exemplo1}.
+
+O código gerado para esse sistema não permite, por si só, a solução do problema - uma vez que a especificação não tratava de uma solução. Entretanto, verificou-se que a invariante $jarro\_grande\ \backslash= 4$ não é satisfeita, e portanto um comportamento que leva à solução é permitido por esse sistema. É possível, apenas para fins exploratórios, encontrar os processos disparados pelo código que correspondem a esses comportamentos. Para isso, uma chamada que encerra o programa é invocada se o predicado da invariante for insatisfeito. Essa verificação é feita em todos os passos do comportamento, e portanto é definida como uma condição na função \texttt{main} como na Figura \ref{fig:invariant-ex1}, que imprime os valores das variáveis com \texttt{IO.puts} e encerra o programa com um código de sucesso através de \texttt{:ok}.
+
+\begin{figure}[h]
+  \centering
+  $\progfig{
+  ~def main(variaveis) do\\
+  ~~~if variaveis[:grande] == 4 do\\
+  ~~~~~IO.puts "\#\{variaveis[:grande]\} \#\{variaveis[:pequeno]\}"\\
+  ~~~~~:ok\\
+  ~~~end\\
+  ~~~\dots\\
+  ~end
+  }$
+  \caption{Exploração de invariantes no código gerado}
+\label{fig:invariant-ex1}
+\end{figure}
+
+Com essa tradução inicial, é evidenciada a semelhança entre as definições matemáticas de \TLA e as estruturas do paradigma funcional presentes em Elixir. Espera-se obter mapeamentos claros tais quais os encontrados até então para o restante das estruturas das duas linguagens, de forma que o tradutor finalizado seja intuitivo, e que o código gerado seja trivialmente relacionado com a especificação para o programador que a escreveu.
+
+\section{Cronograma}

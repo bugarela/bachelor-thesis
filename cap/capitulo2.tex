@@ -9,7 +9,7 @@ O método de especificação é baseado em máquinas de estados \cite{tlahistory
 
 Lamport destaca \cite{hyperbook} que as especificações deveriam ser sobre modelos de uma abstração do sistema, e não algo retirado do próprio sistema. Semelhante à planta de um edifício, a especificação pode ser consultada para obter informações sobre o edifício (ou programa) de forma mais conveniente, além de ser capaz de facilitar uma série de verificações e perceber problemas enquanto a mudança ainda não é inviavelmente custosa.
 
-Sendo assim, uma especificação em \TLA pode ser sobre comportamentos do ambiente no qual o programa funciona - como ao especificar um sistema e verificar possíveis comportamentos indesejáveis, entendendo aonde o programa deve atuar - descrevendo as operações existentes daquele sistema.
+Sendo assim, uma especificação em \TLA pode ser sobre comportamentos do ambiente no qual o programa funciona - como ao especificar um sistema e verificar possíveis comportamentos indesejáveis, entendendo aonde o programa deve atuar - des\-crevendo as operações existentes daquele sistema.
 
 Não limitada a definição de um sistema, uma especificação pode incluir comportamentos do programa em si, compostas por operações existentes do sistema e novas operações definidas pelo programa. Em seu livro \cite{specifying-systems}, Lamport define um sistema de memória linear e, então, propõe uma implementação de um programa de escrita através de \textit{cache} que atua sobre um sistema de memória linear. Assim, ele verifica que a especificação da implementação dele satisfaz a especificação do sistema e prova a implementação. Nos exemplos deste capítulo, serão explicadas especificações de sistemas e de implementações.
 
@@ -17,27 +17,44 @@ Não limitada a definição de um sistema, uma especificação pode incluir comp
 
 \TLA combina a Lógica Temporal das Ações, TLA (\textit{Temporal Logic of Actions}), proposta por Lamport em \cite{tlaformalization}, com teoria dos conjuntos - mais especificamente, a teoria de conjuntos de Zermelo-Fraenkel (ZFC), como detalhado em \cite{merzlogic}.
 
-Lamport sumariza em \cite{proofsystem} o uso de TLA em \TLA. TLA é uma lógica temporal linear. Em \TLA, as variáveis rígidas do TLA são chamadas constantes, enquanto as flexíveis são chamadas variáveis. As constantes são declaradas com a palavra-chave \CONSTANTS e tem o mesmo valor para todos os estados de um comportamento - podendo diferir entre comportamentos. Já variáveis são declaradas com a palavra-chave \VARIABLES e podem ter valores diferentes em cada estado de um comportamento.
+Lamport sumariza em \cite{proofsystem} o uso de TLA em \TLA. TLA é uma lógica temporal linear. Em \TLA, as variáveis rígidas do TLA são chamadas constantes, enquanto as flexíveis são chamadas variáveis. As constantes são declaradas com a palavra-chave \CONSTANTS e tem o mesmo valor para todos os estados de um comportamento - podendo diferir entre comportamentos. Já variáveis são declaradas com a palavra-chave \VARIABLES\ e podem ter valores diferentes em cada estado de um comportamento.
 
 Os operadores são classificados em constantes e não constantes. Os constantes são aqueles que podem ser escritos em lógica clássica de primeira ordem. Os não constantes dependem de mais fatores, tal como o operador \textit{primed} ('), que depende do valor de uma variável em um estado diferente do atual. As definições em \TLA podem ser categorizadas em tipos de expressão. São denominadas fórmulas todas as expressões com valoração booleana.
 \begin{itemize}
   \item \textbf{Expressões constantes} são expressões com apenas constantes declaradas e operadores constantes. Pela definição de operador constante, o valor de uma expressão constante depende apenas do valor das constantes contidas nela.
-  \item \textbf{Expressões de estado} contém expressões constantes e variáveis declaradas. O valor de uma expressão de estado depende do estado, já que os valores das variáveis são definidos em um estado.
+  \item \textbf{Expressões de estado} contém expressões constantes e variáveis declaradas. O valor de uma expressão de estado depende do estado, já que os valores das variáveis são definidos em um estado. Quando não são fórmulas, ou seja, sua valoração não é booleana, são chamadas também de funções de estado.
   \item \textbf{Expressões de ação} contém expressões de estado e operadores não constantes. O seu valor depende de um passo - um par de estados. Esse tipo de definição sobre ações dá o nome \textit{actions} a TLA, e pode ser chamado simplesmente de ação.
   \item \textbf{Expressões temporais} são permitidas apenas com valoração booleana em \TLA, sendo assim, chamadas sempre de fórmulas temporais. Elas contém expressões de ação os operadores $\square$ e $\Diamond$ da lógica temporal (definidos posteriormente neste capítulo). O valor de uma fórmula temporal depende de uma sequência de passos - um comportamento.
 \end{itemize}
 
-Com essa estrutura, toda a complexidade das definições estão nas fórmulas de ações. Os operadores temporais são usados somente no momento de verificar propriedades de segurança, vivacidade e razoabilidade (\textit{fairness}).
+Com essa estrutura, define-se a sintaxe na Figura \ref{fig:sintaxe-tla}. A hierarquia permite que toda a complexidade das definições em uma especificação esteja nas fórmulas de ações. Os operadores temporais são usados somente no momento de verificar propriedades de segurança, vivacidade e razoabilidade (\textit{fairness}).
 
-Uma fórmula temporal em TLA é verdadeira ou falsa em um comportamento, que é definido por uma sequência infinita de estados. Uma fórmula é dita válida se e somente se ela é verdadeira para todos os comportamentos. Uma especificação $F$ implementa outra especificação $G$ se e somente se qualquer sistema que satisfaz $F$ também satisfaz $G$, ou seja, a fórmula $G \implies F$ é válida.
+\begin{figure}[h]
+  \centering
+  \fbox{$\begin{array}{l} \begin{array}{lrll}
+    \text{Constantes} & c & ~~~~
+    \text{Variáveis} & v \\
+    \text{Estados} & s, t & ~~~~
+    \text{Funções de estado} & f, g \\
+    \text{Conjuntos} & S \\
+    \end{array} \\ \\
+    \begin{array}{lrcl}
+  \text{Ação} & \FANCYA & ::= & c \,\mid\, v \,\mid\, v' \,\mid\, \neg \FANCYA \,\mid\, \FANCYA \land \FANCYA \smallskip\\
+  \text{Predicado} & P, Q & ::= & c \,\mid\, v \,\mid\, \neg P \,\mid\, P \land P \,\mid\, \ENABLED \FANCYA\smallskip\\
+  \text{Fórmula Simples} & F & ::= & P \,\mid\, \square[\FANCYA]_f  \mid\, \square\langle\FANCYA\rangle_f \,\mid\,  \neg F \,\mid\,  F \land F  \,\mid\, \square F \smallskip\\
+  \text{Fórmula Geral} & G & ::= & F \,\mid\, \EE x : G  \,\mid\, \neg G \,\mid\,  G \land G \mid\, G \implies G \smallskip\\
+  \end{array} \end{array}$}
+  \caption{Sintaxe da linguagem de TLA}
+\label{fig:sintaxe-tla}
+\end{figure}
 
-Aos operadores de TLA, são atribuídos os seguintes significados \cite{tlaformalization}:
+Uma fórmula temporal em TLA é verdadeira ou falsa em um comportamento, que é definido por uma sequência infinita de estados. Uma fórmula é dita válida se e somente se ela é verdadeira para todos os comportamentos. Assim, a especificação de um sistema é dada por uma fórmula geral $G$ e representa um sistema cujo conjunto de comportamentos permitidos é igual ao conjunto de comportamentos que satisfazem $G$.
+
+Implementação é representada através de implicação. Uma especificação dada pela fórmula $G_1$ implementa outra especificação dada por $G_0$ se e somente se qualquer sistema cujo conjunto de comportamentos satisfaz $G_1$ também satisfaz $G_0$, ou seja, a fórmula $G_0 \implies G_1$ é válida.
+
+Em \cite{tlaformalization}, são definidas também notações auxiliares. A lista abaixo apresenta a definição e atribui um possível significado a possíveis operadores para fórmulas temporais:
 \begin{itemize}
-  \item \ENABLED \FANCYA (\FANCYA é ativável) para uma ação \FANCYA é um predicado cujo valor é verdadeiro para um estado $s$ se e somente se é possível fazer um passo \FANCYA partindo de $s$. Isto é, existe um estado $t$ tal que o passo $s \rightarrow t$ satisfaz \FANCYA.
-
-  \item $\square F$ ($F$ é sempre verdadeiro) para uma fórmula temporal $F$ é satisfeito por um comportamento se e somente se $F$ é verdadeiro para todos os sufixos (primeiro estado em uma passo) do comportamento.
-
-  \item A fórmula $\square [\FANCYA]_f$ para uma ação $\FANCYA$ é satisfeita por um comportamento se e somente se cada passo do comportamento satisfaz \FANCYA ou mantém o valor de $f$, ou seja, $f' = f$.
+  \item $\square F$ ($F$ é sempre verdadeiro) para uma fórmula temporal $F$ é satisfeito por um comportamento se e somente se $F$ é verdadeiro para todos os sufixos (primeiro estado em um passo) do comportamento.
 
   \item $\Diamond F$ (Eventualmente F) é definido como $\neg \square \neg F$.
 
@@ -45,34 +62,71 @@ Aos operadores de TLA, são atribuídos os seguintes significados \cite{tlaforma
 
   \item $F \stackrel{+}\rightarrow G$ para fórmulas temporais $F$ e $G$ é verdadeiro para um comportamento se e somente se $G$ é verdadeiro, pelo menos, enquanto $F$ é.
 
-  \item \UNCHANGED $f$ ($f$ não é modificado) para uma fórmula de estado $f$ em um passo (par de estados) é definido como $f' = f$  (o valor de $f$ no estado atual é igual ao valor de $f$ no próximo estado).
-
   \item \EE $x : F$ para uma variável $x$ e uma fórmula temporal $F$ é satisfeito por comportamento se e somente se existem alguns valores a serem atribuídos a $x$ que produzem um comportamento que satisfaz $F$. Esse operador é uma especialização do quantificador existencial comum $\E$ porque ele asserte a existência de uma sequência infinita de valores para $x$, e não um único valor.
 
-  \item \CHOOSE $x : P$ (escolha algum $x$ que satisfaça $P$) para uma variável $x$ e um predicado $P$ resulta em algum valor de $x$ que satisfaz $P$ se \EE $x : P$ for verdadeiro. Sobre \CHOOSE, e possível afirmar que se \EE $x : P$ então $P(\CHOOSE x : P)$ é verdadeiro, e que para todo predicado $Q$ tal que $Q \equiv P$, é verdade que $(\CHOOSE x : P) = (\CHOOSE x : Q)$.
-
-  \item $f \EXCEPT ![v] = e$ para uma função $f$, um elemento de seu domínio $v$ e uma expressão $e$ é definida por $[x \in D \mapsto \IF x = d\ \textsc{THEN}\ e\ \textsc{ELSE}\ f[x]]$ onde $D$ é o domínio de $f$. Ou seja, o valor da expressão \EXCEPT é uma cópia de $f$ exceto pelo valor $f[v]$ que é igual a $e$.
-
-  \item \ASSUME $c$ (assuma $c$) para uma fórmula constante $c$ define $c$ como verdadeiro. Esse operador não tem nenhum efeito nas definições de uma especificação, apenas pode facilitar a verificação de teoremas.
 \end{itemize}
 
-Além deles, existem os operadores lógicos $\land,\ \lor$ e $\neg$ com seus significados padrões, assim como os operadores \IF e \CASE.
+Para ações, são definidos ainda outros operadores:
 
-%% CHOOSE EXCEPT
+\begin{itemize}
+  \item $f'$ para uma função de estado $f$ é o valor de $f$ no final de um passo. Em outras palavras, para um passo composto pelo par de estados $s$ e $t$, $f'$ é o valor de $f$ para $t$. De forma semelhante, $P'$ para um predicado $P$ é o valor de $P$ para o estado final de um passo.
+
+  \item A fórmula $\square [\FANCYA]_f$ para uma ação $\FANCYA$ e uma função de estado $f$ é satisfeita por um comportamento se e somente se cada passo do comportamento satisfaz \FANCYA ou mantém o valor de $f$ - ou seja, $\FANCYA \lor (f = f')$.
+
+  \item A fórmula $\square \langle\FANCYA\rangle_f$ para uma ação $\FANCYA$ e uma função de estado $f$ é satisfeita por um comportamento se e somente se cada passo do comportamento satisfaz \FANCYA e altera o valor de $f$ - ou seja, $\FANCYA \land (f \neq f')$.
+
+  \item \ENABLED \FANCYA (\FANCYA é ativável) para uma ação \FANCYA é um predicado cujo valor é verdadeiro para um estado $s$ se e somente se é possível fazer um passo \FANCYA partindo de $s$. Isto é, existe um estado $t$ tal que o passo formado pelo par $s$ e $t$ satisfaz \FANCYA.
+
+  \item \UNCHANGED $f$ ($f$ não é modificado) para uma fórmula de estado $f$ em um passo (par de estados) é definido como $f' = f$  (o valor de $f$ no estado atual é igual ao valor de $f$ no próximo estado).
+
+\end{itemize}
+
+TLA conta com muitos operadores constantes, trazidos da matemática, da lógica, da teoria de conjuntos e de linguagens de programação. Abaixo, são apresentados os considerados menos triviais, sendo que a lista completa é definida em \cite{specifying-systems}.
+
+\begin{itemize}
+
+  \item \CHOOSE $x \in S : P$ (escolha algum $x$ pertencente ao conjunto $S$ que satisfaça $P$) para uma variável $x$ e um predicado $P$ resulta em algum valor de $x$ que satisfaz $P$ se \EE $x : P$ for verdadeiro. Sobre \CHOOSE, e possível afirmar que se \EE $x : P$ então $P(\CHOOSE x \in S : P)$ é verdadeiro, e que para todo predicado $Q$ tal que $Q \equiv P$, é verdade que $(\CHOOSE x \in S : P) = (\CHOOSE x \in S : Q)$.
+
+  \item $f \EXCEPT ![v] = e$ para uma função $f$, um elemento de seu domínio $v$ e uma expressão $e$ resulta em uma cópia de $f$ exceto pelo valor $f[v]$ que é igual a $e$.
+
+  \item $[h_1 \mapsto e_1, \dots, h_n \mapsto e_n]$ é uma estrutura do tipo registro (\textit{record}) onde $h_i$ são campos e $e_i$ são expressões constantes para os valores de $h_i$. O valor de um campo $h$ qualquer em um registro $r$ pode ser obtido por $r.h$, e o operador $r \EXCEPT !h = e$ funciona de forma semelhante ao definido no item anterior, retornando uma cópia de $r$ exceto pelo valor de $r.h$, que é $e$.
+
+  % \item \ASSUME $c$ (assuma $c$) para uma fórmula constante $c$ define $c$ como verdadeiro. Esse operador não tem nenhum efeito nas definições de uma especificação, apenas pode facilitar a verificação de teoremas.
+\end{itemize}
+
+Finalmente, os operadores lógicos $\land$ e $\lor$ podem ser prefixados às expressões, sendo
+
+\begin{center}
+  $\begin{array}{lll}
+\begin{array}{ll}
+  \land\ e_1\\
+  \vdots ~~~~ & \equiv ~~~~ e_1 \land \dots \land e_n\\
+  \land\ e_n
+\end{array} &
+~~~~ e ~~~~ &
+\begin{array}{ll}
+  \lor\ e_1\\
+  \vdots ~~~~ & \equiv ~~~~ e_1 \lor \dots \lor e_n\\
+  \lor\ e_n
+\end{array}
+\end{array}$
+\end{center}
+
 \subsection{Passos balbuciantes}
 
-Os passos balbuciantes (\textit{stuttering steps}) são parte importante das especificações em \TLA. Eles permitem que o estado - formado pelos valores das variáveis da especificação - se mantenha igual durante um passo.
+Os passos balbuciantes (\textit{stuttering steps}) são parte importante das especificações em TLA. Eles permitem que o estado - formado pelos valores das variáveis da especificação - se mantenha igual durante um passo.
 
 Supondo que as variáveis da especificação estejam declaradas como
-\[vars = <var_1, var_2, \dots, var_n>\]
+\[vars = \langle var_1, var_2, \dots, var_n\rangle\]
 
 Então é possível usar o operador $\square [\FANCYA]_f$ definido, com $f = vars$, no seguinte teorema sobre uma especificação $Spec$
 
 \[\THEOREM Spec \implies \square [\FANCYA]_{vars}\]
 
-o que, se verificado, garante que cada passo de um comportamento satisfeito por $Spec$ satisfaz a ação \FANCYA ou é um passo balbuciante e mantém os valores das variáveis em $vars$.
+o que, se verificado, garante que cada passo de um comportamento satisfeito por $Spec$ satisfaz a ação \FANCYA ou é um passo balbuciante e mantém os valores das variáveis em $vars$. Isso é importante porque possibilita que nem todos os passos do sistema sejam especificados - seria muito complexo definir tudo o que pode ocorrer durante sua execução. Assim, definem-se apenas os passos relevantes para o sistema, e todos os outros passos - aqueles que não alteram as variáveis definidas - são permitidos. Um comportamento que passa a ter infinitos passos balbuciantes pode significar uma execução do sistema que finalizou. Com a definição de passos balbuciantes, é possível definir as propriedades apresentadas na Seção \ref{propriedades}.
 
 \section{Propriedades}
+\label{propriedades}
 
 Sobre uma especificação definida, \TLA permite a verificação de algumas propriedades de segurança e vivacidade. Essas propriedades são descritas em forma de teoremas na especificação apenas com o intuito de documentar sua verificação, porém devem ser inseridas manualmente no modelo TLC para serem, de fato, checadas.
 
@@ -80,9 +134,9 @@ Propriedades são fórmulas temporais sobre ações definidas na especificação
 
 \subsection{Propriedades de Segurança}
 
-Propriedades de segurança define o que o sistema pode fazer. Quando uma propriedade de segurança é violada, ela é violada em um instante específico de um comportamento. Esse tipo de propriedade é definido em \TLA através de invariantes.
+Propriedades de segurança define o que o sistema pode fazer. Quando uma propriedade de segurança é violada, ela é violada em um instante específico de um comportamento. Esse tipo de propriedade é definido em \TLA como uma invariante.
 
-Uma invariante é um predicado $P$ que é verdadeiro em todos os passos de todos os comportamentos permitidos por uma especificação $Spec$, e pode ser verificada através do teorema
+Uma invariante é um predicado $P$ que é verdadeiro em todos os passos de todos os comportamentos permitidos por uma especificação $Spec$, e pode ser verificada com a prova do teorema
 
 \[\THEOREM Spec \implies \square P\]
 
@@ -92,17 +146,17 @@ Propriedades de vivacidade definem o que o sistema deve fazer. Quando uma propri
 
 A razoabilidade fraca para uma fórmula de estado $f$ e uma ação \FANCYA é escrita como $WF_f (\FANCYA)$. Ela é satisfeita por um comportamento se e somente se \FANCYA $\land\ (f' \neq f)$ é infinitamente não ativável (\textsc{enabled}) ou infinitos passos \FANCYA $\land\ (f' \neq f)$ ocorrem. Sendo assim, essa propriedade garante que \FANCYA não possa permanecer continuamente ativável para sempre sem que um passo \FANCYA ocorra. Essa condição pode ser escrita de forma equivalente como
 
-\[\square (\ENABLED \FANCYA \implies \Diamond[\FANCYA]_f)\]
+\[\square (\ENABLED \FANCYA \implies \Diamond\langle\FANCYA\rangle_f)\]
 
-A conjunção com $(f' \neq f)$ se deve ao fato de não ser desejável exigir que passos balbuciantes eventualmente ocorram. \FANCYA $\land\ (f' \neq f)$ pode ser lido como "todos os passos não balbuciantes que satisfazem \FANCYA".
+A conjunção com $(f' \neq f)$, expressada com a notação $\langle\FANCYA\rangle_f$, se deve ao fato de não ser desejável exigir que passos balbuciantes eventualmente ocorram. \FANCYA $\land\ (f' \neq f)$ pode ser lido como "todos os passos não balbuciantes que satisfazem \FANCYA".
 
 A razoabilidade fraca recebe a denominação "fraca" porque exige que uma ação permaneça continuamente ativável para garantir a ocorrência de um passo satisfazendo-a. Se um comportamento repetidamente tornar a ação ativável e em seguida não ativável, a razoabilidade fraca não garante nada sobre a ocorrência da ação neste comportamento. Para tal, é necessário garantir a propriedade de razoabilidade forte (\textit{strong fairness}).
 
 A razoabilidade forte para uma fórmula de estado $f$ e uma ação \FANCYA é escrita como $SF_f (\FANCYA)$ . Ela é satisfeita por um comportamento se e somente se \FANCYA $\land (f' \neq f)$ ocorre finitas vezes ou infinitos passos \FANCYA $\land (f' \neq f)$ ocorrem. Essa propriedade garante que \FANCYA não possa ser repetidamente ativável para sempre sem que um passo \FANCYA ocorra.Uma forma equivalente de representar essa condição é
 
-\[\square \Diamond \ENABLED \FANCYA \implies \square \Diamond[\FANCYA]_f\]
+\[\square \Diamond \ENABLED \FANCYA \implies \square \Diamond\langle\FANCYA\rangle_f\]
 
-que pode ser lida como "se sempre \FANCYA for eventualmente ativável, então sempre um passo $[\FANCYA]_f$ deve eventualmente ocorrer".
+que pode ser lida como "se sempre \FANCYA for eventualmente ativável, então sempre um passo $\langle\FANCYA\rangle_f$ deve eventualmente ocorrer".
 
 \section{Exemplo 1 - Jarros de Água}
 \label{exemplo1}
@@ -144,9 +198,10 @@ Outra propriedade interessante de ser verificada para esse problema antes da imp
 
 O TLC, ao encontrar uma execução que insatisfaz a invariante, traz a sequência de transições que levam ao estado onde o predicado é falso, o que, no caso do simples problema dos jarros, é a solução buscada.
 
-Esse exemplo é apresentado com o intuito de demonstrar a estrutura da especificação de um sistema e o funcionamento das invariantes. A seguir, é proposto um exemplo com especificações de um sistema real e de um protocolo implementado sobre ele.
+Esse exemplo é apresentado com o intuito de demonstrar a estrutura da especificação de um sistema e o funcionamento das invariantes. A seguir, é proposto um exemplo com a especificação de um sistema real que pode ser implementado por especificações de programas para verificar que as propriedades definidas são mantidas. % e de um protocolo implementado sobre ele.
 
 \section{Exemplo 2 - Transações em Bancos de Dados}
+\label{exemplo2}
 
 Já tratando de um contexto de um problema real de sistemas concorrentes, define-se uma especificação para o problema da consistência das transações em bancos de dados. Esse é um problema clássico onde, dado um conjunto de gerenciadores de recursos fazendo operações sobre um mesmo banco, um gerenciador só pode cometer (fazer a ação \textit{commit}) se todos os outros gerenciadores estiverem preparados para cometer, e se algum gerenciador quiser abortar, então todos devem abortar. Ou seja, em nenhum momento pode haver um gerenciador abortado e outro cometido.
 
@@ -175,4 +230,4 @@ Para verificar que o sistema especificado por $TBDSpec$ está de acordo com a re
 
 que permite verificar que, se um comportamento satisfaz $TBDSpec$ - isto é, seu estado inicial satisfaz $TBDInit$ e seus passos satisfazem $TBDNext$ - então as fórmulas de estado $TBDTypeOK$ e $TBDConsistente$ são verdadeiras para todas as estados - todos os valores atribuídos para as variáveis - neste comportamento. Sendo satisfeito esse teorema, $TBDTypeOK$ e $TBDConsistente$ são ambos invariantes da especificação.
 
-\subsection{A implementação}
+% \subsection{A implementação}

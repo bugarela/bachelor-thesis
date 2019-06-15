@@ -4,6 +4,7 @@
 Dada uma especificação na linguagem \TLA, contendo elementos da lógica TLA e da teoria de conjuntos, além de elementos sintáticos próprios, deseja-se obter uma definição equivalente em linguagem de programação. Equivalência para esse propósito é definida pela igualdade do conjunto de comportamentos permitidos. Isto é, todo comportamento especificado deve ser permitido na execução do código, e todo comportamento permitido pela execução do código deve ter sido especificado.
 
 \section{Elixir}
+\label{elixir}
 
 Para esse propósito, a linguagem de programação escolhida para o código traduzido foi Elixir. As motivações são expostas abaixo por ordem de relevância na decisão:
 \begin{enumerate}
@@ -22,6 +23,7 @@ Para esse propósito, a linguagem de programação escolhida para o código trad
 Essa escolha vem de encontro com a finalidade de proporcionar um código modificável, de forma que o programador seja capaz de entender a correspondência entre as duas partes e minimizando a diferença do nível de abstração no qual ele está programando.
 
 \section{A tradução}
+\label{traducao}
 
 A geração de código para uma especificação se dá pela tradução das estruturas de \TLA para Elixir. Esta tradução será feita de forma automática por uma ferramenta escrita em Haskell, implementada durante o corrente trabalho. A ferramenta será responsável pelo \textit{parsing} do aquivo da especificação, no formato \texttt{.tla}, para estruturas internas e, então, transformação dessas estruturas internas em código Elixir.
 
@@ -30,6 +32,7 @@ A escolha da linguagem Haskell para implementação do gerador de código é mot
 O escopo da tradução se limita à especificação definida, sendo suficiente para gerar código executável para o sistema definido. Traduzir teoremas e suposições não é necessário, uma vez que essas estruturas servem para fazer verificações sobre a especificação e não são necessárias para seu funcionamento. Ao código gerado não é atribuída a responsabilidade de refazer verificações, e sim de manter as propriedades já verificadas.
 
 \subsection{Mapeamentos}
+\label{mapeamentos}
 
 A tradução funciona como um grande mapeamento do conjunto de todas as especificações para um conjunto de programas em Elixir. Para viabilizar esse mapeamento, são definidos sub-mapeamentos que traduzem frações de uma especificação. Encontrar sub-mapeamentos suficientes para atender todo o domínio de especificações é suficiente para definir o processo de tradução.
 
@@ -118,5 +121,3 @@ O código gerado para esse sistema não permite, por si só, a solução do prob
 \end{figure}
 
 Com essa tradução inicial, é evidenciada a semelhança entre as definições matemáticas de \TLA e as estruturas do paradigma funcional presentes em Elixir. Espera-se obter mapeamentos claros tais quais os encontrados até então para o restante das estruturas das duas linguagens, de forma que o tradutor finalizado seja intuitivo, e que o código gerado seja trivialmente relacionado com a especificação para o programador que a escreveu.
-
-\section{Cronograma}

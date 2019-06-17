@@ -3,31 +3,29 @@
 
 \TLA é uma linguagem de especificação de software, criada por Leslie Lamport \cite{tlahistory} voltada à modelagem de sistemas concorrentes. Ela se propõe a oferecer uma maneira mais simples de escrever um algoritmo, ao utilizar um nível de abstração acima do que há ao escrever código em uma linguagem de programação. Assim, ao programar, não é necessário atentar-se a detalhes de implementação, permitindo o foco no comportamento do algoritmo - e não das suas dependências.
 
-As especificações são descritas em fórmulas lógicas, com pequenas adaptações de sintaxe. Para facilitar a curva de aprendizado para engenheiros, foi criada a linguagem PlusCal \cite{pluscal}, com uma sintaxe semelhante a linguagens de programação imperativas, e que traduz seus programas para \TLA. A linguagem PlusCal não permite especificar sistemas tão complexos quanto os que podem ser escritos diretamente em \TLA, mas, devido à tradução para a linguagem original, aproveita completamente as capacidades dela de verificação de propriedades.
+As especificações são descritas em fórmulas lógicas, com pequenas adaptações de sintaxe. Para facilitar a curva de aprendizado para engenheiros, foi criada a linguagem PlusCal \cite{pluscal}, com uma sintaxe semelhante a linguagens de programação imperativas, e que traduz seus programas para \TLAA. A linguagem PlusCal não permite especificar sistemas tão complexos quanto os que podem ser escritos diretamente em \TLAA, mas, devido à tradução para a linguagem original, aproveita completamente as capacidades dela de verificação de propriedades.
 
-O método de especificação é baseado em máquinas de estados \cite{tlahistory} e, sendo assim, a descrição de um modelo é composta por uma condição inicial, que determina os possíveis estados inciais, e por uma relação de transições, que determina os possíveis estados que podem suceder cada estado em uma execução. Dessa forma, o conjunto de comportamentos especificado é composto por todos os comportamentos cujo estado inicial satisfaz a condição inicial e todas as transições fazem parte relação.
+O método de especificação é baseado em máquinas de estados \cite{tlahistory} e, sendo assim, a descrição de um modelo é composta por uma condição inicial, que determina os possíveis estados inciais, e por uma relação de transições, que determina os possíveis estados que podem suceder cada estado em uma execução. Dessa forma, o conjunto de comportamentos especificado é composto por todos os comportamentos cujo estado inicial satisfaz a condição inicial e todas as transições fazem parte da relação.
 
 Lamport destaca \cite{hyperbook} que as especificações deveriam ser sobre modelos de uma abstração do sistema, e não algo retirado do próprio sistema. Semelhante à planta de um edifício, a especificação pode ser consultada para obter informações sobre o edifício (ou programa) de forma mais conveniente, além de ser capaz de facilitar uma série de verificações e perceber problemas enquanto a mudança ainda não é inviavelmente custosa.
 
-Sendo assim, uma especificação em \TLA pode ser sobre comportamentos do ambiente no qual o programa funciona - como ao especificar um sistema e verificar possíveis comportamentos indesejáveis, entendendo aonde o programa deve atuar - des\-crevendo as operações existentes daquele sistema.
-
-Não limitada a definição de um sistema, uma especificação pode incluir comportamentos do programa em si, compostas por operações existentes do sistema e novas operações definidas pelo programa. Em seu livro \cite{specifying-systems}, Lamport define um sistema de memória linear e, então, propõe uma implementação de um programa de escrita através de \textit{cache} que atua sobre um sistema de memória linear. Assim, ele verifica que a especificação da implementação dele satisfaz a especificação do sistema e prova a implementação. Nos exemplos deste capítulo, serão explicadas especificações de sistemas e de implementações.
+Sendo assim, uma especificação em \TLA pode ser sobre comportamentos do ambiente no qual o programa funciona - como ao especificar um sistema e verificar possíveis comportamentos indesejáveis, entendendo aonde o programa deve atuar - des\-crevendo as operações existentes daquele sistema. Contudo, não limitada a definição de um sistema, uma especificação pode incluir comportamentos do programa em si, compostas por operações existentes do sistema e novas operações definidas pelo programa. Em seu livro \cite{specifying-systems}, Lamport define um sistema de memória linear e, então, propõe uma implementação de um programa de escrita através de \textit{cache} que atua sobre um sistema de memória linear. Assim, ele verifica que a especificação da implementação dele satisfaz a especificação do sistema e prova a implementação. Nos exemplos deste capítulo, serão explicadas especificações de sistemas e de implementações.
 
 \section{Lógica Temporal das Ações}
 
-\TLA combina a Lógica Temporal das Ações, TLA (\textit{Temporal Logic of Actions}), proposta por Lamport em \cite{tlaformalization}, com teoria dos conjuntos - mais especificamente, a teoria de conjuntos de Zermelo-Fraenkel (ZFC), como detalhado em \cite{merzlogic}.
+\TLA combina a lógica TLA, proposta por Lamport em \cite{tlaformalization}, com teoria dos conjuntos - mais especificamente, a teoria de conjuntos de Zermelo-Fraenkel (ZFC), como detalhado em \cite{merzlogic}.
 
-Lamport sumariza em \cite{proofsystem} o uso de TLA em \TLA. TLA é uma lógica temporal linear. Em \TLA, as variáveis rígidas do TLA são chamadas constantes, enquanto as flexíveis são chamadas variáveis. As constantes são declaradas com a palavra-chave \CONSTANTS e tem o mesmo valor para todos os estados de um comportamento - podendo diferir entre comportamentos. Já variáveis são declaradas com a palavra-chave \VARIABLES\ e podem ter valores diferentes em cada estado de um comportamento.
+Lamport sumariza em \cite{proofsystem} o uso de TLA em \TLAA. TLA é uma lógica temporal linear. Em \TLAA, as variáveis rígidas do TLA são chamadas constantes, enquanto as flexíveis são chamadas variáveis. As constantes são declaradas com a palavra-chave \CONSTANTS e tem o mesmo valor para todos os estados de um comportamento - podendo diferir entre comportamentos. Já variáveis são declaradas com a palavra-chave \VARIABLES\ e podem ter valores diferentes em cada estado de um comportamento.
 
 Os operadores são classificados em constantes e não constantes. Os constantes são aqueles que podem ser escritos em lógica clássica de primeira ordem. Os não constantes dependem de mais fatores, tal como o operador \textit{primed} ('), que depende do valor de uma variável em um estado diferente do atual. As definições em \TLA podem ser categorizadas em tipos de expressão. São denominadas fórmulas todas as expressões com valoração booleana.
 \begin{itemize}
-  \item \textbf{Expressões constantes} são expressões com apenas constantes declaradas e operadores constantes. Pela definição de operador constante, o valor de uma expressão constante depende apenas do valor das constantes contidas nela.
+  \item \textbf{Expressões constantes} são expressões com apenas constantes declaradas e o\-pe\-ra\-do\-res constantes. Pela definição de operador constante, o valor de uma expressão constante depende apenas do valor das constantes contidas nela.
   \item \textbf{Expressões de estado} contém expressões constantes e variáveis declaradas. O valor de uma expressão de estado depende do estado, já que os valores das variáveis são definidos em um estado. Quando não são fórmulas, ou seja, sua valoração não é booleana, são chamadas também de funções de estado.
   \item \textbf{Expressões de ação} contém expressões de estado e operadores não constantes. O seu valor depende de um passo - um par de estados. Esse tipo de definição sobre ações dá o nome \textit{actions} a TLA, e pode ser chamado simplesmente de ação.
-  \item \textbf{Expressões temporais} são permitidas apenas com valoração booleana em \TLA, sendo assim, chamadas sempre de fórmulas temporais. Elas contém expressões de ação os operadores $\square$ e $\Diamond$ da lógica temporal (definidos posteriormente neste capítulo). O valor de uma fórmula temporal depende de uma sequência de passos - um comportamento.
+  \item \textbf{Expressões temporais} são permitidas apenas com valoração booleana em \TLAA, sendo assim, chamadas sempre de fórmulas temporais. Elas contém expressões de ação e operadores $\square$ e $\Diamond$ da lógica temporal (definidos posteriormente neste capítulo). O valor de uma fórmula temporal depende de uma sequência de passos - um comportamento.
 \end{itemize}
 
-Com essa estrutura, define-se a sintaxe na Figura \ref{fig:sintaxe-tla}. A hierarquia permite que toda a complexidade das definições em uma especificação esteja nas fórmulas de ações. Os operadores temporais são usados somente no momento de verificar propriedades de segurança, vivacidade e razoabilidade (\textit{fairness}).
+Com essa estrutura, define-se a sintaxe na Figura \ref{fig:sintaxe-tla}. A hierarquia permite que toda a complexidade das definições em uma especificação esteja nas fórmulas de ações, e os operadores temporais sejam usados somente no momento de verificar propriedades de segurança, vivacidade e razoabilidade (\textit{fairness}).
 
 \begin{figure}[h]
   \centering
@@ -58,9 +56,9 @@ Em \cite{tlaformalization}, são definidas também notações auxiliares. A list
 
   \item $\Diamond F$ (Eventualmente F) é definido como $\neg \square \neg F$.
 
-  \item $F \leadsto G$ (Em qualquer momento em que $F$ for verdadeiro, $G$ eventualmente será) é definido como $\square(F \implies \Diamond G)$
+  \item $F_0 \leadsto F_1$ (Em qualquer momento em que $F_0$ for verdadeiro, $F_1$ eventualmente será) é definido como $\square(F_0 \implies \Diamond F_1)$
 
-  \item $F \stackrel{+}\rightarrow G$ para fórmulas temporais $F$ e $G$ é verdadeiro para um comportamento se e somente se $G$ é verdadeiro, pelo menos, enquanto $F$ é.
+  % \item $F \stackrel{+}\rightarrow G$ para fórmulas temporais $F$ e $G$ é verdadeiro para um comportamento se e somente se $G$ é verdadeiro, pelo menos, enquanto $F$ é.
 
   \item \EE $x : F$ para uma variável $x$ e uma fórmula temporal $F$ é satisfeito por comportamento se e somente se existem alguns valores a serem atribuídos a $x$ que produzem um comportamento que satisfaz $F$. Esse operador é uma especialização do quantificador existencial comum $\E$ porque ele asserte a existência de uma sequência infinita de valores para $x$, e não um único valor.
 
@@ -69,7 +67,7 @@ Em \cite{tlaformalization}, são definidas também notações auxiliares. A list
 Para ações, são definidos ainda outros operadores:
 
 \begin{itemize}
-  \item $f'$ para uma função de estado $f$ é o valor de $f$ no final de um passo. Em outras palavras, para um passo composto pelo par de estados $s$ e $t$, $f'$ é o valor de $f$ para $t$. De forma semelhante, $P'$ para um predicado $P$ é o valor de $P$ para o estado final de um passo.
+  \item $f'$ (f \textit{primed}) para uma função de estado $f$ é o valor de $f$ no final de um passo. Em outras palavras, para um passo composto pelo par ordenado de estados $s$ e $t$, $f'$ é o valor de $f$ para $t$. De forma semelhante, $P'$ para um predicado $P$ é o valor de $P$ para o estado final de um passo. Assim, na avaliação da valoração de uma ação para um passo, predicados e variáveis sem o operador \textit{primed} se referem aos seus respectivos valores no primeiro estado do passo, e sempre que forem marcados com o operador, fazem referência aos valores no segundo estado do passo.
 
   \item A fórmula $\square [\FANCYA]_f$ para uma ação $\FANCYA$ e uma função de estado $f$ é satisfeita por um comportamento se e somente se cada passo do comportamento satisfaz \FANCYA ou mantém o valor de $f$ - ou seja, $\FANCYA \lor (f = f')$.
 
@@ -85,7 +83,7 @@ TLA conta com muitos operadores constantes, trazidos da matemática, da lógica,
 
 \begin{itemize}
 
-  \item \CHOOSE $x \in S : P$ (escolha algum $x$ pertencente ao conjunto $S$ que satisfaça $P$) para uma variável $x$ e um predicado $P$ resulta em algum valor de $x$ que satisfaz $P$ se \EE $x : P$ for verdadeiro. Sobre \CHOOSE, e possível afirmar que se \EE $x : P$ então $P(\CHOOSE x \in S : P)$ é verdadeiro, e que para todo predicado $Q$ tal que $Q \equiv P$, é verdade que $(\CHOOSE x \in S : P) = (\CHOOSE x \in S : Q)$.
+  \item \CHOOSE $x \in S : P$ (escolha algum $x$ pertencente ao conjunto $S$ que satisfaça $P$) para uma variável $x$ e um predicado $P$ resulta em algum valor de $x$ que satisfaz $P$ se \EE $x : P$ for verdadeiro. Sobre \CHOOSE, é possível afirmar que se \EE $x : P$ então $P(\CHOOSE x \in S : P)$ é verdadeiro, e que para todo predicado $Q$ tal que $Q \equiv P$, é verdade que $(\CHOOSE x \in S : P) = (\CHOOSE x \in S : Q)$.
 
   \item $f \EXCEPT ![v] = e$ para uma função $f$, um elemento de seu domínio $v$ e uma expressão $e$ resulta em uma cópia de $f$ exceto pelo valor $f[v]$ que é igual a $e$.
 
@@ -134,7 +132,7 @@ Propriedades são fórmulas temporais sobre ações definidas na especificação
 
 \subsection{Propriedades de Segurança}
 
-Propriedades de segurança define o que o sistema pode fazer. Quando uma propriedade de segurança é violada, ela é violada em um instante específico de um comportamento. Esse tipo de propriedade é definido em \TLA como uma invariante.
+Propriedades de segurança definem o que o sistema pode fazer. Quando uma propriedade de segurança é violada, ela é violada em um instante específico de um comportamento. Esse tipo de propriedade é definido em \TLA como uma invariante.
 
 Uma invariante é um predicado $P$ que é verdadeiro em todos os passos de todos os comportamentos permitidos por uma especificação $Spec$, e pode ser verificada com a prova do teorema
 
@@ -152,7 +150,7 @@ A conjunção com $(f' \neq f)$, expressada com a notação $\langle\FANCYA\rang
 
 A razoabilidade fraca recebe a denominação "fraca" porque exige que uma ação permaneça continuamente ativável para garantir a ocorrência de um passo satisfazendo-a. Se um comportamento repetidamente tornar a ação ativável e em seguida não ativável, a razoabilidade fraca não garante nada sobre a ocorrência da ação neste comportamento. Para tal, é necessário garantir a propriedade de razoabilidade forte (\textit{strong fairness}).
 
-A razoabilidade forte para uma fórmula de estado $f$ e uma ação \FANCYA é escrita como $SF_f (\FANCYA)$ . Ela é satisfeita por um comportamento se e somente se \FANCYA $\land (f' \neq f)$ ocorre finitas vezes ou infinitos passos \FANCYA $\land (f' \neq f)$ ocorrem. Essa propriedade garante que \FANCYA não possa ser repetidamente ativável para sempre sem que um passo \FANCYA ocorra.Uma forma equivalente de representar essa condição é
+A razoabilidade forte para uma fórmula de estado $f$ e uma ação \FANCYA é escrita como $SF_f (\FANCYA)$ . Ela é satisfeita por um comportamento se e somente se \FANCYA $\land (f' \neq f)$ ocorre finitas vezes ou infinitos passos \FANCYA $\land (f' \neq f)$ ocorrem. Essa propriedade garante que \FANCYA não possa ser repetidamente ativável para sempre sem que um passo \FANCYA ocorra. Uma forma equivalente de representar essa condição é
 
 \[\square \Diamond \ENABLED \FANCYA \implies \square \Diamond\langle\FANCYA\rangle_f\]
 
@@ -174,21 +172,21 @@ O objetivo do problema é ter exatamente 4 litros de água em um dos jarros. Iss
 
 Entendendo essa especificação no modelo de máquina de estado, é possível observar que as variáveis (\VARIABLES) são um conjunto de valores que variam nos estados, de forma que o conjunto com todas as combinações dos valores possíveis para cada uma das variáveis forma o conjunto de estados da máquina. Um estado desse sistema seria $jarro\_pequeno = 0, jarro\_grande = 1$. Na definição $Init$, é especificada uma fórmula que determina estados iniciais válidos - o que, nesse caso, é apenas o estado onde todas as variáveis do sistema tem valor 0.
 
-As seis definições seguintes representam as transições através de ações. Em cada uma delas, as variáveis com o símbolo de linha representam os valores no estado seguinte, e sempre precisam ser definidas. Na transição $EnchePequeno$, o valor de $jarro\_grande$ se mantém o mesmo entre os estados atual e seguinte, mas é necessário explicitar isso com $jarro\_grande' = jarro\_grande$. Essa necessidade vem da aproximação da sintaxe de \TLA com a matemática, onde não existe efeito colateral e, portanto, o valor da variável $jarro\_grande$ não propaga de um estado para outro.
+As seis definições seguintes representam as transições através de ações. Em cada uma delas, as variáveis com o operador \textit{primed} (') representam os valores no estado seguinte, e sempre precisam ser definidas. Na transição $EnchePequeno$, o valor de $jarro\_grande$ se mantém o mesmo entre os estados atual e seguinte, mas é necessário explicitar isso com $jarro\_grande' = jarro\_grande$. Essa necessidade vem da aproximação da sintaxe de \TLA com a matemática, onde não existe efeito colateral e, portanto, o valor da variável $jarro\_grande$ não propaga de um estado para outro.
 
-É possível, sintaticamente, utilizar a informação das variáveis do estado atual para definir o estado seguinte - não é necessário definir exaustivamente transições para todas as combinações de variáveis. Dessa forma, as ações definidas representam transições para vários estados do sistema. Cada transição da especificação do problema dos jarros pode ser aplicada nos em qualquer um dos estados, isto é: $(jarro\_pequeno = 0,\ jarro\_grande = 0), (jarro\_pequeno = 0,\ jarro\_grande = 1), \dots$.
+É possível, sintaticamente, utilizar a informação das variáveis do estado a\-tu\-al para definir o estado seguinte - não é necessário definir exaustivamente transições para todas as combinações de variáveis. Dessa forma, as ações definidas representam transições para vários estados do sistema. Cada transição da especificação do problema dos jarros pode ser aplicada em qualquer um dos estados, isto é: $(jarro\_pequeno = 0,\ jarro\_grande = 0), (jarro\_pequeno = 0,\ jarro\_grande = 1), \dots$.
 
 No sentido de aproveitar informações do estado atual, é possível utilizar condicionais, como nas ações $PequenoParaGrande$ e $GrandeParaPequeno$. Com isso, é fácil definir transições diferentes para conjuntos de estados com propriedades diferentes. Na definição de $PequenoParaGrande$, os estados que atualmente possuem 5 litros ou menos de água nos jarros em total recebem uma transição para um estado onde o jarro pequeno está vazio. Já os estados que possuem mais de 5 litros de água recebem uma transição para um estado onde o jarro grande está cheio.
 
 Ao fim dessa especificação, em $Next$, é definida a \textit{next state function} (função de próximo estado), na qual são declaradas as fórmulas transicionais do sistema, incluindo qualquer composição dessas fórmulas que possa levar um estado a outro. No caso do problema dos jarros, apenas é definido que qualquer transição pode ser utilizada para obter um novo estado.
 
-As definições $Init$ e $Next$ são buscadas pelo \textit{model checker} TLC na construção da máquina de estados. É possível renomear essas definições, mas é preciso informar ao TLC os novos nomes para o estado inicial e a \textit{next state function}. A especificação - chamada $Spec$ - é descrita a partir dessas definições com a seguinte fórmula temporal:
+As definições $Init$ e $Next$ são buscadas pelo \textit{model checker} TLC na construção da máquina de estados. É possível renomear essas definições, mas é preciso informar ao TLC os novos nomes para o estado inicial e a \textit{next state function}. A especificação - chamada $Spec$ - é descrita a partir dessas definições com a fórmula temporal
 
 \[Spec \defeq Init \land \square [Next]_{vars}\]
 
 Onde $vars$ é uma tupla contendo todas as variáveis declaradas. Com essa especificação, o sistema está definido. As operações permitidas e as variáveis relevantes foram descritas e, a partir do estado inicial, cada passo do sistema pode ser executado a partir de uma das seis diferentes ações ou de passos balbuciantes sobre $vars$. Essas informações são suficientes para o TLC fazer verificações sobre o sistema, é apenas necessário definir tais verificações.
 
-A definição $TypeOK$ na especificação apresentada pode ser utilizada para verificar os tipos desse sistema. Ela define que a variável $jarro\_pequeno$ é sempre um inteiro entre 0 e 3, e a variável $jarro\_grande$ é sempre um inteiro entre 0 e 5. Ou seja, $TypeOK$ será verdadeiro se e somente se os valores das variáveis estiverem de acordo com essas restrições. Isso não é uma verificação em si, e sim uma definição. Para que essa definição seja verificada em todos os estados alcançáveis pelo sistema, é necessário adicioná-la como uma invariante do modelo. Como uma invariante, o valor dela não deve ser modificado em nenhum estado da execução. Já que o estado inicial definido em $Init$ faz $TypeOK$ verdadeiro, ao colocar essa invariante, todos os estados devem fazer $TypeOK$ verdadeiro, ou o TLC retornará um erro. $TypeOk$ pode ser definido como uma invariante através do teorema:
+A definição $TypeOK$ na especificação apresentada pode ser utilizada para verificar os tipos desse sistema. Ela define que a variável $jarro\_pequeno$ é sempre um inteiro entre 0 e 3, e a variável $jarro\_grande$ é sempre um inteiro entre 0 e 5. Ou seja, $TypeOK$ será verdadeiro se e somente se os valores das variáveis estiverem de acordo com essas restrições. Isso não é uma verificação em si, e sim uma definição. Para que essa definição seja verificada em todos os estados alcançáveis pelo sistema, é necessário adicioná-la como uma invariante do modelo. Como uma invariante, o valor dela deve ser verdadeiro para todos os estados da execução. Assim, ao definir essa invariante, todos os estados devem fazer $TypeOK$ verdadeiro, ou o TLC retornará um erro. $TypeOk$ pode ser definido como uma invariante através do teorema:
 
 \[\THEOREM Spec \implies \square (TypeOK)\]
 
@@ -203,7 +201,7 @@ Esse exemplo é apresentado com o intuito de demonstrar a estrutura da especific
 \section{Exemplo 2 - Transações em Bancos de Dados}
 \label{exemplo2}
 
-Já tratando de um contexto de um problema real de sistemas concorrentes, define-se uma especificação para o problema da consistência das transações em bancos de dados. Esse é um problema clássico onde, dado um conjunto de gerenciadores de recursos fazendo operações sobre um mesmo banco, um gerenciador só pode cometer (fazer a ação \textit{commit}) se todos os outros gerenciadores estiverem preparados para cometer, e se algum gerenciador quiser abortar, então todos devem abortar. Ou seja, em nenhum momento pode haver um gerenciador abortado e outro cometido.
+Já tratando de um contexto de um problema real de sistemas concorrentes, define-se uma especificação para o problema da consistência das transações em bancos de dados. Esse é um problema clássico onde, dado um conjunto de gerenciadores de recursos fazendo operações sobre um mesmo banco, um gerenciador só pode cometer (fazer a ação \textit{commit}) se todos os outros gerenciadores estiverem preparados para cometer; e se algum gerenciador quiser abortar, então todos devem abortar. Ou seja, em nenhum momento pode haver um gerenciador abortado e outro cometido.
 
 \subsection{O sistema}
 
@@ -228,6 +226,6 @@ Para verificar que o sistema especificado por $TBDSpec$ está de acordo com a re
 
 \[\THEOREM TBDSpec \implies \square(TBDTypeOK \land TBDConsistente)\]
 
-que permite verificar que, se um comportamento satisfaz $TBDSpec$ - isto é, seu estado inicial satisfaz $TBDInit$ e seus passos satisfazem $TBDNext$ - então as fórmulas de estado $TBDTypeOK$ e $TBDConsistente$ são verdadeiras para todas as estados - todos os valores atribuídos para as variáveis - neste comportamento. Sendo satisfeito esse teorema, $TBDTypeOK$ e $TBDConsistente$ são ambos invariantes da especificação.
+que permite verificar que, se um comportamento satisfaz $TBDSpec$ - isto é, seu estado inicial satisfaz $TBDInit$ e seus passos satisfazem $TBDNext$ - então os predicados $TBDTypeOK$ e $TBDConsistente$ são verdadeiros para todas as estados - todos os valores atribuídos para as variáveis - neste comportamento. Sendo satisfeito esse teorema, $TBDTypeOK$ e $TBDConsistente$ são ambos invariantes da especificação.
 
 % \subsection{A implementação}

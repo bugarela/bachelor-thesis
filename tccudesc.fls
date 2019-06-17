@@ -280,6 +280,7 @@ INPUT /home/gabriela/udesc/TCC/bachelor-thesis/cap/introducao.tex
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/jknappen/ec/ecrm2074.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/jknappen/ec/ecbx2074.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/jknappen/ec/ecsl1200.tfm
+INPUT /usr/share/texlive/texmf-dist/fonts/tfm/jknappen/ec/ecti0800.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/jknappen/ec/eccc1200.tfm
 INPUT /usr/share/texlive/texmf-dist/tex/latex/base/omscmr.fd
 INPUT /usr/share/texlive/texmf-dist/tex/latex/base/omscmr.fd
@@ -350,6 +351,7 @@ INPUT /home/gabriela/udesc/TCC/bachelor-thesis/tccudesc.aux
 INPUT /home/gabriela/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx1095.600pk
 INPUT /usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc
 INPUT /home/gabriela/.texmf-var/fonts/pk/ljfour/jknappen/ec/eccc1200.600pk
+INPUT /home/gabriela/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecti0800.600pk
 INPUT /home/gabriela/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx2074.600pk
 INPUT /home/gabriela/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx0800.600pk
 INPUT /home/gabriela/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm0800.600pk

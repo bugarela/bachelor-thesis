@@ -331,7 +331,7 @@
 \def\ttcoorientador#1{\gdef\@ttcoorientador{#1}}
 \def\coorientador#1{\gdef\@coorientador{#1}\co@dtrue}
 \def\setcoorientador{%
-     {\rmfamily \large \bf \@coorientador} \\ Co-Orientador}
+     {\rmfamily \large \bf \@coorientador} \\ Co-Orientadora}
 \def\examinadorum#1{\gdef\@examinadorum{#1}}
 \def\ttexaminadorum#1{\gdef\@ttexaminadorum{#1}}
 \def\examinadordois#1{\gdef\@examinadordois{#1}}
@@ -359,6 +359,9 @@
              {\@orientador \\ \footnotesize\@ttorientador}\\
              \vspace{3cm}
              \rule{9.0cm}{0.1mm} \\
+             {\@coorientador \\ \footnotesize\@ttcoorientador}\\
+             \vspace{3cm}
+             \rule{9.0cm}{0.1mm} \\
              {\@examinadorum \\ \footnotesize\@ttexaminadorum}\\
              \vfill
              \rule{9.0cm}{0.1mm} \\
@@ -374,6 +377,9 @@
              {\@orientador { - }{\@ttorientador } (orientador)}\\
              \vspace{2cm}
              \rule{9.0cm}{0.1mm} \\
+             {\@coorientador { - }{\@ttcoorientador } (co-orientadora)}\\
+             \vspace{2cm}
+             \rule{9.0cm}{0.1mm} \\
              {\@examinadorum { - }\@ttexaminadorum}\\
              \vspace{2cm}
              \rule{9.0cm}{0.1mm} \\
@@ -384,6 +390,9 @@
 \def\assinaturatres{%
              \rule{9.0cm}{0.1mm} \\
              {\@orientador { - }{\@ttorientador } (orientador)}\\
+             \vspace{2cm}
+             \rule{9.0cm}{0.1mm} \\
+             {\@coorientador { - }{\@ttcoorientador } (co-orientadora)}\\
              \vspace{2cm}
              \rule{9.0cm}{0.1mm} \\
              {\@examinadorum { - }\@ttexaminadorum}\\
@@ -1173,7 +1182,7 @@ Este Trabalho de Conclus\~{a}o de Curso foi julgado adequado para a obten\c{c}\~
 \newcommand\listtablename{List of Tables}
 \newcommand\bibname{Bibliography}
 \newcommand\indexname{Index}
-\newcommand\figurename{Figure}
+\newcommand\figurename{Figura}
 \newcommand\tablename{Table}
 \newcommand\partname{Part}
 \newcommand\chaptername{Chapter}

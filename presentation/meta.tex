@@ -1,0 +1,175 @@
+\definecolor{mygrey}{gray}{0.85}
+
+\newcommand{\prog}[1]{
+  \normalfont\ttfamily
+  \begin{center}\begin{tabular}{l}
+       #1
+  \end{tabular} \end{center}
+  \normalfont}
+
+\newcommand{\proga}[1]{
+ \normalfont\ttfamily
+  \begin{tabbing}
+        #1
+   \end{tabbing}
+ \normalfont}
+
+\newcommand{\progfig}[1]{\fbox{\parbox{.96\textwidth}{
+  \normalfont\ttfamily
+  {\small
+%  \begin{center}
+  \parbox{\textwidth}{\begin{tabbing}
+        #1
+  \end{tabbing}}
+%  \end{center}
+}
+  \normalfont}}}
+
+\newcommand{\progfigsmall}[1]{\fbox{\parbox{.44\textwidth}{
+  \normalfont\ttfamily
+  {\small
+%  \begin{center}
+  \parbox{.44\textwidth}{\begin{tabbing}
+        #1
+  \end{tabbing}}
+%  \end{center}
+}
+  \normalfont}}}
+
+\newcommand{\progb}[1]{
+  \normalfont\ttfamily
+  {\small
+  \begin{center}
+  \parbox{\textwidth}{\begin{tabbing}
+        #1
+  \end{tabbing}}
+  \end{center} }
+  \normalfont}
+
+\newcommand{\scripttag}[1]{\texttt{\scriptsize{(}}\textsl{\scriptsize{#1}}{\texttt{\scriptsize{)}}}}
+
+\newcommand{\progn}[1]{
+  \begin{center}
+  \parbox{\textwidth}{\begin{tabbing}
+        #1
+  \end{tabbing}}
+  \end{center} }
+
+
+
+\newcommand{\progbb}[1]{
+  \normalfont\ttfamily
+  \begin{center}
+  \shadowbox{\parbox{\textwidth}{\begin{tabbing}
+        #1
+  \end{tabbing}}}
+  \end{center}
+  \normalfont}
+
+\newcommand{\progc}[1]{
+  \normalfont\ttfamily
+  \begin{center}
+  \fbox{\parbox{\textwidth}{\begin{tabbing}
+        #1
+  \end{tabbing}}}
+  \end{center}
+  \normalfont}
+
+\newcommand{\progcc}[1]{
+  \normalfont\ttfamily
+  \begin{center}
+  \fbox{\begin{tabular}{p{4cm}}
+        #1
+  \end{tabular}}
+  \end{center}
+  \normalfont}
+
+\newcommand{\progaa}[1]{
+  \normalfont\ttfamily
+  \begin{center}\begin{tabular}{ll}
+       #1
+  \end{tabular} \end{center}
+  \normalfont}
+
+\newcommand{\progaaa}[1]{
+  \normalfont\ttfamily
+  \begin{center}\begin{tabular}{lll}
+       #1
+  \end{tabular} \end{center}
+  \normalfont}
+
+\newcommand{\progeq}[1]{
+  \normalfont\ttfamily
+  \begin{center}\begin{tabular}{rcl}
+       #1
+  \end{tabular} \end{center}
+  \normalfont}
+
+\newcommand{\CT}{\text{\it CT\/}}
+\newcommand{\CSSAT}{\text{\it CS-SAT\/}}
+\newcommand{\ssat}{\text{\tt sat}}
+
+\newcommand{\lcg}{\text{\it lcg\/}}
+
+\newcommand{\Integer}{\text{\it Integer\/}}
+\newcommand{\Bool}{\text{\it Bool\/}}
+\newcommand{\Int}{\text{\it Int\/}}
+\newcommand{\Char}{\text{\it Char\/}}
+\newcommand{\Float}{\text{\it Float\/}}
+\newcommand{\Double}{\text{\it Double\/}}
+
+\newcommand{\True}{\text{\it True\/}}
+\newcommand{\False}{\text{\it False\/}}
+
+\newcommand{\Lit}{\text{\it Lit\/}}
+\newcommand{\Inc}{\text{\it Inc\/}}
+\newcommand{\IsZ}{\text{\it IsZ\/}}
+\newcommand{\If}{\text{\it If\/}}
+\newcommand{\Pair}{\text{\it Pair\/}}
+\newcommand{\Term}{\text{\it Term\/}}
+
+\newcommand{\eval}{\text{\it eval\/}}
+\newcommand{\iinsert}{\text{\it insert\/}}
+
+\newcommand{\MMo}{{\tt MMo}}
+
+\newcommand{\genn}[1]{\bar{\bar{#1}}}
+\newcommand{\abrgenn}[1]{\|#1\|}
+
+\newcommand{\T}{\text{\it T\/}}
+\newcommand{\Tu}{\text{\it T1\/}}
+\newcommand{\Td}{\text{\it T2\/}}
+\newcommand{\test}{\text{\it test\/}}
+\newcommand{\sat}{\text{\it sat\/}}
+\newcommand{\sats}{\text{\it sats\/}}
+
+\newcommand{\Eq}{\text{\it Eq\/}}
+
+% \newcommand{\INST}{\text{\tt INST}}
+% \newcommand{\ABS}{\text{\tt ABS}}
+% \newcommand{\GEN}{\text{\tt GEN}}
+% \newcommand{\VAR}{\text{\tt VAR}}
+% \newcommand{\PVAR}{\text{\tt PVAR}}
+% \newcommand{\SKO}{\text{\tt VAR-SKO}}
+% \newcommand{\UNI}{\text{\tt VAR-UNI}}
+% \newcommand{\FUN}{\text{\tt FUN}}
+% \newcommand{\CONS}{\text{\tt CONS}}
+% \newcommand{\LAM}{\text{\tt LAM}}
+% \newcommand{\APP}{\text{\tt APP}}
+% \newcommand{\LET}{\text{\tt LET}}
+% \newcommand{\LETA}{\text{\tt LETA}}
+% \newcommand{\CASE}{\text{\tt CASE}}
+% \newcommand{\BIND}{\text{\tt BIND}}
+% \newcommand{\EEMPTY}{\text{\tt EMPTY}}
+% \newcommand{\IMPROVE}{\text{\tt IMPROVE}}
+% \newcommand{\PATVAR}{\text{\tt PAT-VAR}}
+% \newcommand{\PAT}{\text{\tt PAT}}
+% \newcommand{\TPAT}{\text{\tt TPAT}}
+% \newcommand{\INFER}{\text{\tt INFER}}
+% \newcommand{\PATCONS}{\text{\tt PAT-CONS}}
+% \newcommand{\ALTS}{\text{\tt ALTS}}
+% \newcommand{\ALT}{\text{\tt ALT}}
+% \newcommand{\MAIN}{\text{\tt MAIN}}
+% \newcommand{\alts}{\text{\tt alts}}
+% \newcommand{\alt}{\text{\tt alt}}
+% \newcommand{\pat}{\text{\tt pat}}

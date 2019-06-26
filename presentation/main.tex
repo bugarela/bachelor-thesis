@@ -59,21 +59,54 @@
 \begin{frame}
   \frametitle{Especificação Formal}
 
-
+  \textbf{Especificar Software é como fazer a planta de um edifício}
+  \begin{itemize}
+    \item Permite verificações
+    \item Serve como base para consulta
+    \item Mais fácil de modificar do que o produto final
+    \item Vem antes da produção
+  \end{itemize}
 
 \end{frame}
 
 \begin{frame}
   \frametitle{Sistemas Concorrentes}
 
+  Um sistema é concorrente quando há mais de uma computação concorrendo pelo mesmo recurso.\medskip
 
+  O resultado pode depender da ordem em que essas computações conseguem os recursos.
+  \begin{itemize}
+    \item Muitas ordens possíveis
+    \item Muitos comportamentos possíveis
+  \end{itemize}
+
+  \medskip\textbf{Especificar pode ser ainda mais relevante.}
 
 \end{frame}
 
 \begin{frame}
   \frametitle{Geração de código}
 
+  A implementação - ou a tradução da especificação em linguagem de programação - pode ser feita por um programador ou um tradutor automático.\medskip
 
+  Problemas da tradução manual:
+  \begin{itemize}
+    \item Sucetível a erro - causando a perda de propriedades verificadas.
+    \item Custosa
+  \end{itemize}\medskip
+
+  Z, B-Method e ASM (\textit{Abstract State Machine}) tem geradores de código.\medskip
+
+\end{frame}
+
+\section{\TLA}
+
+\begin{frame}
+  \frametitle{Temporal Logic of Actions\textsuperscript{+}}
+
+  Bom pq matemática e concorrente
+
+  Não tem gerador.
 
 \end{frame}
 

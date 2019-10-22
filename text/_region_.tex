@@ -1,0 +1,159 @@
+\message{ !name(tccudesc.tex)}\NeedsTeXFormat{LaTeX2e}
+
+\documentclass[a4paper,12pt]{pkg/monografia}
+% \usepackage[pdfpagelabels]{hyperref}
+\usepackage{amsmath,amsthm,amsfonts,amssymb}
+\usepackage[mathcal]{eucal}
+\usepackage{latexsym}
+\usepackage[utf8]{inputenc}
+% \usepackage[brazil]{babel}
+%\usepackage{bm}
+\usepackage[alf]{pkg/abntex2cite}
+\usepackage{url}
+\usepackage{enumitem}
+\usepackage{graphicx}
+\usepackage{placeins}
+%\usepackage{epstopdf}
+\usepackage{multirow}
+%\usepackage{fancyhdr}
+\usepackage[FIGTOPCAP]{subfigure}
+\usepackage{textcase}
+\usepackage{tabularx}
+\usepackage[table,xcdraw]{xcolor}
+% \usepackage{tlatex}
+%\usepackage[portuguese,noend,ruled]{algorithm2e}
+\usepackage{listings}
+\usepackage[T1]{fontenc}
+\usepackage{courier}
+\usepackage[printonlyused]{acronym}
+\usepackage{caption}
+\usepackage{adjustbox}
+\usepackage{floatrow}
+% \floatsetup[figure]{capposition=top}
+% \floatsetup[table]{capposition=top}
+% \captionsetup{labelsep=endash}
+% %\usepackage{rotating}
+%\usepackage{rotfloat}
+%\usepackage{placeins}
+% \usepackage{fontspec}B
+% \setmonofont{Inconsolata}
+% \captionsetup[figure]{position=bottom}
+\usepackage{makecell}
+\usepackage{listings}
+
+\usepackage{latexsym}
+\usepackage{ifthen}
+\usepackage{verbatim}
+\usepackage[nottoc]{tocbibind}
+\usepackage{bm}
+% \usepackage{natbib}
+
+\sloppy
+\input{tla.tex}
+\input{meta.tex}
+%-----------------------------------------------------------
+\begin{document}
+
+\message{ !name(tccudesc.tex) !offset(-3) }
+
+
+%----------------- Título e Dados do Autor -----------------
+\titulo{Tradução automática de especificação formal modelada em \TLA para linguagem de programação}
+\autor{Gabriela Moreira Mafra}
+\nome{Gabriela Moreira}
+\ultimonome{Mafra}
+
+%---------- Informe o Curso e Grau -------------------------
+\bacharelado \curso{Ciência da Computação} \mes{Março} \ano{2019}
+\data{\today} % Data da aprovação
+\cidade{Joinville}
+
+%---------- Informações sobre a Instituição -----------------
+\instituicao{Universidade do Estado de Santa Catarina}
+\sigla{UDESC} \unidadeacademica{Centro de Ciências Tecnológicas}
+
+%-- Nomes do Orientador, 1o. Examinador e 2o. Examinador ---
+\orientador{Cristiano Damiani Vasconcellos}
+\coorientador{Karina Girardi Roggia}
+\examinadorum{Adelaine Franciele Gelain}
+\examinadordois{Paulo Henrique Torrens}
+%\examinadortres{}
+
+%-- Títulos do Orientador, 1o. Examinador e 2o. Examinador -
+\ttorientador{Doutor}
+\ttcoorientador{Doutora}
+\ttexaminadorum{Mestre}
+\ttexaminadordois{Mestre}
+%\ttexaminadortres{}
+
+%---------- Capa -------------------------------------------
+\maketitle
+
+%---------- Agradecimentos----------------------------------
+%\agradecimento{Agradecimentos}
+% \input{cap/agradecimentos}
+%\newpage
+
+%---------- Epígrafe ---------------------------------------
+%\begin{epigrafe}
+
+
+
+%\end{epigrafe}
+
+%---------- Resumo -----------------------------------------
+\resumo{Resumo}
+\input{cap/resumo}
+\\
+\noindent \textbf{Palavras-chaves:} Especificação de software, Lógica temporal, Geração de código, Métodos formais, Model checking
+
+%---------- Abstract ---------------------------------------
+\resumo{Abstract}
+\input{cap/abstract}
+\\
+\noindent \textbf{Keywords:} Software specification, Temporal Logic, Code Generation, Formal Methods, Model Checking
+
+%-----------------------------------------------------------
+
+% SUMÁRIO, LISTA DE FIGURAS E LISTA DE TABELAS
+%---------- Sumário ----------------------------------------
+\tableofcontents
+\thispagestyle{empty}
+
+%---------- Lista de figuras -------------------------------
+\listoffigures
+\thispagestyle{empty}
+
+%---------- Lista de tabelas -------------------------------
+\listoftables
+\thispagestyle{empty}
+
+%---------- Lista de Abreviaturas --------------------------
+% \input{cap/acronimos}
+% \thispagestyle{empty}
+
+%---------- Início do Conteúdo -----------------------------
+\pagestyle{ruledheader}
+
+\input{cap/introducao}
+\input{cap/capitulo2}
+\input{cap/capitulo3}
+\input{cap/capitulo4}
+% \input{cap/conclusao}
+
+%\input{cap/agradecimentos}
+
+%---------- Referências ------------------------------------
+% \renewcommand{\bibname}{Referências}
+\bibliographystyle{pkg/abnt-alf}
+\nocite{*}
+\bibliography{tccudesc}
+
+%---------- Apêndice ---------------------------------------
+%\appendix
+%\include{cap/apendice-publicacoes}
+
+%-----------------------------------------------------------
+\end{document}
+
+\message{ !name(tccudesc.tex) !offset(-159) }

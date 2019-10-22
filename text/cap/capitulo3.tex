@@ -120,4 +120,64 @@ O código gerado para esse sistema não permite, por si só, a solução do prob
 \label{fig:invariant-ex1}
 \end{figure}
 
-Com essa tradução inicial, é evidenciada a semelhança entre as definições matemáticas de \TLA e as estruturas do paradigma funcional presentes em Elixir. Espera-se obter mapeamentos claros tais quais os encontrados até então para o restante das estruturas das duas linguagens, de forma que o tradutor finalizado seja intuitivo, e que o código gerado seja trivialmente relacionado com a especificação para o programador que a escreveu.
+Com essa tradução inicial, é evidenciada a semelhança entre as definições
+matemáticas de \TLA e as estruturas do paradigma funcional presentes em Elixir.
+Entretanto, o disparo de múltiplos processos contemplando todos os caminhos
+possíveis do sistema não é viável dada a explosão de estados nem possui
+aplicação prática de muito valor. Assim, se apresenta a maior dificuldade
+encontrada durante o deselvolvimento deste trabalho: como traduzir
+especificações intermediárias que não descrevem uma implementação e sim um
+sistema ou protocolo.
+
+A tradução da especificação completa de uma implementação não resultaria no
+disparo de múltiplos processos pela definição $Next$ porque, ao especificar uma
+implementação, são definidas quais condições levam a execução de cada ação. Isso
+é evidenciado pela comparação das especificações do sistema (Figura
+\ref{fig:ex2tla}), do protocolo e da implementação no Capítulo \ref{cap2}. Como o
+intuito do gerador de código é fornecer um protótipo funcional e viável, e não
+um disparador de processos interminável, são necessárias condições bem definidas
+para a decisão de que ação deve ser tomada. A Seção \ref{sec:condicoes}
+descreve como a exigência dessas condições é feita.
+
+\subsection{Condições e Ações}
+\label{sec:condicoes}
+
+Na definição de uma ação em \TLAA, existem expressões de estado e expressões de
+ação (descritas na seção \ref{sec:tla}). As expressões de estado em uma ação
+\FANCYA são predicados que terão terão valoração verdadeira se e somente se o estado em que \FANCYA
+será executada - ou seja, o primeiro estado do passo - seja um estado onde
+\FANCYA é permitido.
+
+Já uma expressão de ação envolve ambos os estados de um passo - o estado atual e
+o próximo estado. Se tratada puramente como uma especificação, esse próximo
+estado pode ser entendido como qualquer estado possível especificado, de forma
+que, de todos os estados possíveis, a expressão de ação só será verdadeira para
+aqueles pares de estado que respeitam a condição por ela determinada. Com essa
+perspectiva, as expressões de ação também são condições.
+
+Contudo, no contexto de um programa executável viável, os estados são obtidos de
+maneira incremental. No código gerado, o estado inicial é obtido pela definicão
+do estado inicial da especificação, e os próximos estados são obtidos a partir
+da sucessiva aplicação de funções - que representam ações - nesse estado. Gerar
+todos os estados possíveis e avaliar uma ``condição de ação'' para cada um dos
+passos e então filtrá-los seria uma forma possível de executar o programa, porém
+não foi a abordagem preferida para este trabalho.
+
+As expressões de ação, no código gerado proposto, são operações efetuadas sobre
+um estado a partir da satisfação de condições (definidas pelas expressões
+de estado) sobre ele, que resultam sempre em um novo estado válido. Considera-se
+essa abordagem mais intuitiva por sua estrutura ser mais próxima de programas
+existentes no universo das linguagens funcionais. 
+
+A Figura \ref{fig:decide-tla} é um recorte da especificação de transações em
+bancos de dados da Figura \ref{fig:ex2tla} e apresenta um exemplo de definição
+com expressões de estado e de ação.  
+
+% Primeiro dar exemplo do protocolo e dps vejo o do Decide que é mais complexo
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.8\textwidth]{Decide.png}
+  \caption{Especificação de $Decide$ das Transações em bancos de dados}
+  \label{fig:decide-tla}
+\end{figure}

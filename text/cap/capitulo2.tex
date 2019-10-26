@@ -202,7 +202,7 @@ Esse exemplo é apresentado com o intuito de demonstrar a estrutura da especific
 \section{Exemplo 2 - Transações em Bancos de Dados}
 \label{exemplo2}
 
-Já tratando de um contexto de um problema real de sistemas concorrentes, define-se uma especificação para o problema da consistência das transações em bancos de dados. Esse é um problema clássico onde, dado um conjunto de gerenciadores de recursos fazendo operações sobre um mesmo banco, um gerenciador só pode cometer (fazer a ação \textit{commit}) se todos os outros gerenciadores estiverem preparados para cometer; e se algum gerenciador quiser abortar, então todos devem abortar. Ou seja, em nenhum momento pode haver um gerenciador abortado e outro cometido.
+Já tratando de um contexto de um problema real de sistemas concorrentes, define-se uma especificação para o problema da consistência das transações em bancos de dados. Esse é um problema clássico onde, dado um conjunto de gerenciadores de recursos fazendo operações sobre um mesmo banco, um gerenciador só pode efetivar (fazer a ação \textit{commit}) se todos os outros gerenciadores estiverem preparados para efetivar; e se algum gerenciador quiser abortar, então todos devem abortar. Ou seja, em nenhum momento pode haver um gerenciador abortado e outro cometido.
 
 \subsection{O sistema}
 
@@ -215,11 +215,15 @@ Na Figura \ref{fig:ex2tla}, encontra-se uma especificação para um sistema de t
 \label{fig:ex2tla}
 \end{figure}
 
-Um gerenciador de recursos pode estar em quatro estados diferentes, como definido em $TBDTypeOK$. Do estado \trabalhando, ele pode ir para o estado \preparado, no sentido de que ele está pronto para cometer; ou então abortar, indo para o estado \abortado. Se todos os gerenciadores estão no estado \preparado, então qualquer um deles pode cometer, indo para o estado \cometido; ou então abortar, indo para o estado \abortado. Contudo, se exite algum gerenciador no estado \cometido, então nenhum outro gerenciador pode abortar.
+Um gerenciador de recursos pode estar em quatro estados diferentes, como definido em $TBDTypeOK$. Do estado \trabalhando, ele pode ir para o estado \preparado, no sentido de que ele está pronto para efetivar; ou então abortar, indo para o estado \abortado. Se todos os gerenciadores estão no estado \preparado, então qualquer um deles pode efetivar, indo para o estado \cometido; ou então abortar, indo para o estado \abortado. Contudo, se exite algum gerenciador no estado \cometido, então nenhum outro gerenciador pode abortar.
 
 A possibilidade de um gerenciador $g$ ir do estado \trabalhando\ ao \preparado\ é representada pela ação $Prepara(g)$ onde, se o estado de $g$ é \trabalhando, então o valor da variável $estadoGR$ no novo estado é igual ao seu valor no estado atual, exceto pelo valor de $estadoGR[g]$, que passa a ser \preparado.
 
-A decisão de um gerenciador de abortar ou cometer é representada pela ação $Decide(g)$. Nessa definição, as fórmulas $podeCometer$ e $naoCometido$ são definidas separadamente para minimizar a complexidade cognitiva da especificação - definí-las dentro de $Decide(g)$ seria semanticamente equivalente. $podeCometer$ verifica se todos os estados estão preparados ou cometidos, ou seja, qualquer um pode cometer. Se $podeCometer$ for verdadeiro, e $g$ ainda não cometeu, então $g$ comete - o estado dos gerenciadores passa a ser uma cópia do estado atual exceto por $estadoGR[g]$, que é \cometido. Outra decisão possível, separada da primeira por um operador de disjunção, é a de abortar. Para isso, verifica-se, com a fórmula $naoCometido$, se não há nenhum gerenciador cometido. Se $naoCometido$ for verdadeira, e $g$ ainda não tiver abortado, então o novo estado dos gerenciadores passa a ter $g$ como \abortado.
+A decisão de um gerenciador de abortar ou efetivar é representada pela ação
+$Decide(g)$. Nessa definição, as fórmulas $podeEfetivar$ e $naoEfetivado$ são
+definidas separadamente para minimizar a complexidade cognitiva da especificação
+- definí-las dentro de $Decide(g)$ seria semanticamente equivalente.
+$podeEfetivar$ verifica se todos os estados estão preparados ou cometidos, ou seja, qualquer um pode efetivar. Se $podeEfetivar$ for verdadeiro, e $g$ ainda não cometeu, então $g$ comete - o estado dos gerenciadores passa a ser uma cópia do estado atual exceto por $estadoGR[g]$, que é \cometido. Outra decisão possível, separada da primeira por um operador de disjunção, é a de abortar. Para isso, verifica-se, com a fórmula $naoEfetivado$, se não há nenhum gerenciador cometido. Se $naoEfetivado$ for verdadeira, e $g$ ainda não tiver abortado, então o novo estado dos gerenciadores passa a ter $g$ como \abortado.
 
 Com essas fórmulas, é possível definir a \textit{next state function} $TBDNext$, onde um passo do sistema é dado por um gerenciador de recursos no conjunto $GR$ que faz uma ação de preparar ou decidir. A fórmula temporal $TBDSpec$ consiste a especificação do sistema de transações bancárias e tem um formato semelhante à fórmula $Spec$ do exemplo anterior, na Seção \ref{exemplo1}.
 
@@ -227,6 +231,69 @@ Para verificar que o sistema especificado por $TBDSpec$ está de acordo com a re
 
 \[\THEOREM TBDSpec \implies \square(TBDTypeOK \land TBDConsistente)\]
 
-que permite verificar que, se um comportamento satisfaz $TBDSpec$ - isto é, seu estado inicial satisfaz $TBDInit$ e seus passos satisfazem $TBDNext$ - então os predicados $TBDTypeOK$ e $TBDConsistente$ são verdadeiros para todas as estados - todos os valores atribuídos para as variáveis - neste comportamento. Sendo satisfeito esse teorema, $TBDTypeOK$ e $TBDConsistente$ são ambos invariantes da especificação.
+que permite verificar que, se um comportamento satisfaz $TBDSpec$ - isto é, seu
+estado inicial satisfaz $TBDInit$ e seus passos satisfazem $TBDNext$ - então os
+predicados $TBDTypeOK$ e $TBDConsistente$ são verdadeiros para todas as estados
+- todos os valores atribuídos para as variáveis - neste comportamento. Sendo
+satisfeito esse teorema, $TBDTypeOK$ e $TBDConsistente$ são ambos invariantes da especificação.
 
-% \subsection{A implementação}
+\subsection{Um protocolo para transações}
+
+A partir da definição de ações válidas em um sistema de transações, é possível
+especificar um protocolo que restringe as ações de forma a atender propriedades
+desejadas. A estratégia de definir um protocolo com esse objetivo está presente
+em diversos contextos, como ao abrir uma nova conta bancária. Ao especificar um
+protocolo em \TLAA, é possível verificar as propriedades que ele busca atender e
+garantir que está cumprindo seu propósito.
+
+Para o sistema de transações em bancos de dados, Lamport define em
+\cite{video-protocol} o protocolo de efetivação em duas fases. Esse protocolo
+estabelece que os gerenciadores de recurso se comuniquem com um gerenciador de
+transações (GT), avisando quando estão preparados para efetivar uma transação.
+Quando todos os gerenciadores de recurso estão preparados ($GRsPreparados =
+GR$), o gerenciador de transações envia uma mensagem a todos os gerenciadores de
+recurso para que efetivem.
+
+A Figura \ref{fig:ex3tlap1} apresenta a primeira
+parte da especificação desse protocolo, onde são definidas as ações para o
+gerenciador de transações. A ação $GTRecebePrepara$ acontece quando uma mensagem
+``EstouPreparado'' é recebida e colocao gerenciador de recurso $g$ que enviou a
+mensagem no conjunto de gerenciadores preparados $GRsPreparados$. Quando todos
+os gerenciadores estão preparados, a ação $GTEfetiva$ se torna ativável, podendo
+enviar o comando ``Efetive'' para os gerenciadores.
+
+Adicionalmente, o gerenciador de transações pode abortar espontaneamente. Essa
+característica é definida por $GTAborta$, que pode ocorrer a qualquer momento em
+que o gerenciador esteja ativo, isto é, $estadoGT = ``inicio''$.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\textwidth]{EfetivacaoEmDuasFases1.png}
+  \caption{Especificação do protocolo de efetivação em duas fases - Parte 1}
+\label{fig:ex3tlap1}
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\textwidth]{EfetivacaoEmDuasFases2.png}
+ \caption{Especificação do protocolo de efetivação em duas fases - Parte 2}
+\label{fig:ex3tlap2}
+\end{figure}
+
+A parte 2 da especificação, na Figura \ref{fig:ex3tlap2}, contém as definições
+de ações para os gerenciadores de recurso. Elas são semelhantes àquelas da
+especificação do sistema de transações, na Figura \ref{fig:ex1tla}, exceto que
+nessa especificação o $estadoGR$ só alterado se uma mesagem de abortar ou
+efetivar for recebida, e não diretamente após o gerenciador escolher abortar ou efetivar.
+
+$DFNext$ que qualquer ação para qualquer gerenciador de recurso pode acontecer a
+qualquer momento, e $DFSpec$ obedece o mesmo formato das especificações
+apresentadas até então. O teorema $\THEOREM DFSpec \implies \square DFTypeOK$
+define o predicado sobre tipos comoo uma invariante, e com as declarações
+\[\INSTANCE TransacoesBD\]
+\[\THEOREM DFSpec \implies TBDSpec\]
+
+as definições da especificação do sistema são importadas e, ao verificar que
+$DFSpec \implies TBDSpec$, garante-se que as ações do protocolo respeitam as
+propriedades exigidas por $TBDSpec$ - a especificação so sistema. Em outras
+palavras, $DFSpec$ implementa $TBDSpec$.

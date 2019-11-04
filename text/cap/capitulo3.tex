@@ -10,7 +10,7 @@ Para esse propósito, a linguagem de programação escolhida para o código trad
 \begin{enumerate}
   \item A concorrência é facilitada por ter seu código traduzido para \textit{bytecode} da máquina virtual do Erlang (BEAM). Suporte a concorrência é de extrema importância, já que \TLA foi criado para facilitar a especificação de sistemas concorrentes. É necessário que o código gerado seja capaz de refletir o sistema também nesse quesito.
 
-  \item Uma linguagem funcional tende a se aproximar mais de definições matemáticas do que linguagens de outros paradigmas. Uma vez que a estrutura de \TLA foi construída principalmente no âmbito da matemática, a complexidade das traduções tende a ser menor para uma linguagem funcional.
+  \item Uma linguagem funcional tende a se(setq mouse-wheel-scroll-amount '(1 ((shift) . 1) ((control) . nil)))  aproximar mais de definições matemáticas do que linguagens de outros paradigmas. Uma vez que a estrutura de \TLA foi construída principalmente no âmbito da matemática, a complexidade das traduções tende a ser menor para uma linguagem funcional.
 
   \item O alto nível de abstração da sintaxe de Elixir, que se inspira em Ruby e sua busca por código facilmente entendível, faz com o programador que trabalhar com o código gerado possa entendê-lo de forma mais simples e rápida do que seria com uma linguagem de baixo nível. Com isso, otimizações podem ser feitas com mais segurança, e a manutenabilidade do código é favorecida.
 
@@ -144,9 +144,11 @@ descreve como a exigência dessas condições é feita.
 
 Na definição de uma ação em \TLAA, existem expressões de estado e expressões de
 ação (descritas na seção \ref{sec:tla}). As expressões de estado em uma ação
-\FANCYA são predicados que terão terão valoração verdadeira se e somente se o estado em que \FANCYA
+\FANCYA são predicados que terão valoração verdadeira se e somente se o estado em que \FANCYA
 será executada - ou seja, o primeiro estado do passo - seja um estado onde
-\FANCYA é permitido.
+\FANCYA é permitido. Essas expressões, quando dentro da definição de uma ação,
+podem ser interpretadas como condições de ativação. A ação só pode ser ativada
+se suas condições de ativação forem satisfeitas.
 
 Já uma expressão de ação envolve ambos os estados de um passo - o estado atual e
 o próximo estado. Se tratada puramente como uma especificação, esse próximo
@@ -158,16 +160,51 @@ perspectiva, as expressões de ação também são condições.
 Contudo, no contexto de um programa executável viável, os estados são obtidos de
 maneira incremental. No código gerado, o estado inicial é obtido pela definicão
 do estado inicial da especificação, e os próximos estados são obtidos a partir
-da sucessiva aplicação de funções - que representam ações - nesse estado. Gerar
-todos os estados possíveis e avaliar uma ``condição de ação'' para cada um dos
+da sucessiva aplicação de funções - que representam ações - nesse estado.
+
+Gerar todos os estados possíveis e avaliar uma ``condição de ação'' para cada um dos
 passos e então filtrá-los seria uma forma possível de executar o programa, porém
-não foi a abordagem preferida para este trabalho.
+não é viável quando há muitos valores possíveis para as variáveis de estado. Ao
+especificar $x' = x + 1$, define-se que todos os pares de estado onde o segundo estado tem o
+valor de $x$ igual ao valor $x - 1$ do primeiro estado. Contudo, em uma
+implementação, gerar pares de estado que para todos os valores
+inteiros e filtrar os que atendem essa condição é
+inviável. Nesse contexto, é possível simplesmente gerar os pares de estado válidos e,
+considerando que o estado atual é conhecido durante a execução, isso significa apenas
+somar 1 ao valor de $x$ para obter o segundo estado do par que satisfaz a ação.
 
 As expressões de ação, no código gerado proposto, são operações efetuadas sobre
-um estado a partir da satisfação de condições (definidas pelas expressões
-de estado) sobre ele, que resultam sempre em um novo estado válido. Considera-se
-essa abordagem mais intuitiva por sua estrutura ser mais próxima de programas
-existentes no universo das linguagens funcionais. 
+um estado que resultam sempre em um novo estado válido. Para isso, elas só são
+ativadas quanso as condições de ativação (definidas pelas expressões
+de estado) são satisfeitas. A divisão
+entre expressões de estado, que serão tranformadas em condições, e expressões de
+ação, que serão transformadas em funções que alteram o estado, é feita pelo
+próprio parser já que essas expressões se distuinguem na gramática da linguagem
+de \TLAA.
+
+Na especificação do protocolo de efetivação em duas fases, na Figura
+\ref{fig:ex3tla2}, o tradutor transformará cada uma das ações em duas funções:
+uma de retorno booleano determinando se a condição de ativação é satisfeita, e
+outra retornando o estado resultante da aplicação da ação.
+
+% exemplo protocolo
+
+\subsection{Decisões}
+
+Um par de estados pode atender mais de uma ação especificada em \TLAA.
+Quando isso acontece, o TLC avalia todos os pares estados possíveis distintos
+e que atendem as condições da ação, verificando os caminhos que surgem de outras
+ações a partir de cada um deles. No programa
+gerado, contudo, executar uma ação significa fazer uma alteração de estado, e
+múltiplas alterações de estado não são muito interessantes para o propósito do
+código gerado, conforme discutido na Seção \ref{mapeamentos}.
+
+Assim, é necessário um processo bem definido para decidir qual ação executar a
+partir de um estado. Para garantir que seja possível tomar tais decisões, é
+necessário que a especificação defina condições de ativação mutualmente
+exclusivas para ações disjuntas - isto é, sempre que há uma disjunção de ações,
+todas as condições de ativação dessas ações devem ser falsas exceto pela daquela
+que deve ser executada.
 
 A Figura \ref{fig:decide-tla} é um recorte da especificação de transações em
 bancos de dados da Figura \ref{fig:ex2tla} e apresenta um exemplo de definição

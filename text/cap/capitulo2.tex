@@ -237,7 +237,7 @@ predicados $TBDTypeOK$ e $TBDConsistente$ são verdadeiros para todas as estados
 - todos os valores atribuídos para as variáveis - neste comportamento. Sendo
 satisfeito esse teorema, $TBDTypeOK$ e $TBDConsistente$ são ambos invariantes da especificação.
 
-\subsection{Um protocolo para transações}
+\subsection{O protocolo}
 
 A partir da definição de ações válidas em um sistema de transações, é possível
 especificar um protocolo que restringe as ações de forma a atender propriedades
@@ -266,14 +266,14 @@ Adicionalmente, o gerenciador de transações pode abortar espontaneamente. Essa
 característica é definida por $GTAborta$, que pode ocorrer a qualquer momento em
 que o gerenciador esteja ativo, isto é, $estadoGT = ``inicio''$.
 
-\begin{figure}[h]
+\begin{figure}[hb]
   \centering
   \includegraphics[width=\textwidth]{EfetivacaoEmDuasFases1.png}
   \caption{Especificação do protocolo de efetivação em duas fases - Parte 1}
 \label{fig:ex3tlap1}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[ht]
   \centering
   \includegraphics[width=\textwidth]{EfetivacaoEmDuasFases2.png}
  \caption{Especificação do protocolo de efetivação em duas fases - Parte 2}
@@ -297,3 +297,60 @@ as definições da especificação do sistema são importadas e, ao verificar qu
 $DFSpec \implies TBDSpec$, garante-se que as ações do protocolo respeitam as
 propriedades exigidas por $TBDSpec$ - a especificação so sistema. Em outras
 palavras, $DFSpec$ implementa $TBDSpec$.
+
+
+\subsubsection{Troca de mensagens}
+
+O conjunto $msgs$ dessa especificação contém todas as mensagens que em algum
+momento foram enviadas, uma vez que em nenhum momento uma mensagem é retirada do
+conjunto. Isso significa que uma mesagem pode ser recebida qualquer número de
+vezes e, no contexto dessa especificação, isso não é um problema, já que a ação
+executada ao receber mensagens pode ser feita uma ou infinitas vezes sem alterar
+o resultado.
+
+Apesar de modelar a troca de mensagens da maneira mais simples possível fazer todo o sentido para uma especificação, fazer uma implementação com esse tipo de estrutura não seria viável, já que as ações são executadas por processos e os recursos são finitos. O protocolo de efetivação em duas fases não é um algoritmo a ser implementado, e isso permite que extrapolações como essas sejam presentes em sua especificação. O protocolo não determina como fazer a troca de mensagens - isso não faz parte da sua responsabilidade - e uma implementação desse protocolo deve definir uma forma de fazê-lo que seja viável e que satisfaça o protocolo.
+
+\subsubsection{Escolhas}
+
+$DFNext$ define que qualquer ação para qualquer gerenciador de recurso é válida
+como um próximo passo, ou seja, dado um passo de um estado $s$ para outro
+estado $t$, qualquer ação satisfeita pela dupla $<s, t>$ pode ocorrer como
+próximo passo.
+
+A influência dos valores de $s$ e $t$ na satisfação de ações, contudo, pode
+variar. Dado um momento onde o estado $s$ possui o valor de $msgs$ igual a
+$\{[tipo \mapsto ``Efetive"]\}$, as ações $GRRecebeMsgAborte(g)$ não poderiam ser
+satisfeitas para nenhum valor de $t$, já que há nelas o predicado $[tipo \mapsto
+``Aborte"] \in msgs$. Se o estado também possuir o valor de
+$estadoGR$ igual a ``preparado'' para todo gerenciador $g \in GR$, as ações
+$GRPrepara(g)$ e $GREscolheAbortar(g)$ também não poderiam ser satisfeitas, já
+que exigem um gerenciador no estado ``trabalhando''.
+
+Em alguns casos, apenas olhando para o valor do estado atual, é possível filtrar
+ações disjuntivas a ponto de apenas uma ação ser possivelmente satisfeita. Se
+essa ação define o valor de todas as variáveis no próximo estado - através de
+operadores \textit{primed} e $\UNCHANGED$ - então esses valores são os únicos
+possíveis para as variáveis do próximo estado.
+
+Em outros casos, encontrar apenas uma possível ação a partir do estado atual nunca será possível. As
+ações $GRPrepara(g)$ e $GREscolheAbortar(g)$ para um mesmo gerenciador $g$, por
+exemplo, tem um único predicado e ele é idêntico para ambas: $estadoGR[g] =
+``trabalhando"$. Uma vez que essas ações exigem próximos estados diferentes pelo
+valor de $estadoGR'$, sabe-se que a partir de um estado $s$ que satisfaça-as,
+sempre haverá mais de um próximo estado possível que satisfaça a especificação.
+
+Se a disjunção do conjunto de ações cujos predicados são satisfeitos pelo estado
+atual $s$ é satisfeita por mais de um valor de próximo estado $t$, o estado
+atual exige uma escolha. Para a lógica temporal e o TLC, essas situações representam uma ramificação
+na árvore de estados.
+
+Uma escolha no protocolo efetivação em duas fases, por exemplo, é a de um
+gerenciador de recurso preparar ($GRPrepara(g)$) ou abortar ($GREscolheAbortar(g)$).
+Escolhas não estão definidas pela especificação, e nesse caso poderia ser dada pelo
+resultado de uma etapa da transação de um gerenciador de recursos, onde ele pode
+escolher preparar (se o resultado foi sucesso) ou abortar (caso o resultado
+tenha sido fracasso); ou então poderia ser dada por um fator aleatório, isso não
+é relevante para o modelo especificado - qualquer escolha é válida.
+
+
+

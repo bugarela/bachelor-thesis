@@ -62,7 +62,7 @@ Alguns operadores de \TLA permitem mapeamentos ainda mais diretos, como \IF e \C
   \centering
   $\progfig{
   ~~def pequeno\_para\_grande(variaveis) do\\
-  ~~if variaveis[:grande] + variaveis[:pequeno] <= 5 do\\
+  ~~~~if variaveis[:grande] + variaveis[:pequeno] <= 5 do\\
   ~~~~~~\%\{\\
   ~~~~~~~~pequeno: 0,\\
   ~~~~~~~~grande: variaveis[:grande] + variaveis[:pequeno]\\
@@ -226,7 +226,36 @@ Quando é definido o conceito de escolha na Seção \ref{sec:protocolo}, define-
 que exista apenas um valor possível para $t$ que atenda essa restrição. Isso acontece quando a restrição
 de condições de ativação mutualmente exclusivas é respeitada pelo estado atual.
 Nesse caso, a influência externa não é necessária, já que é possível decidir o
-valor de $t$. Assim, a influência externa só é necessária quando uma escolha é exigida.
+valor de $t$. Assim, a influência externa só é necessária quando uma escolha é
+exigida. Nesses casos, o código gerado estabelece uma troca de mensagens entre o
+processo gerado pelo modelo e um novo processo denominado oráculo, que será
+responsável por toda influência externa no modelo.
+
+\subsection{Concorrência}
+
+Mesmo \TLA sendo uma linguagem de especificação para sistemas concorrentes, ela
+não permite descrições para um \textit{fork} ou disparo de novos
+processos. O valor de \TLA para sistemas concorrentes é possibilitar um conjunto
+de ordens de execução válido, e não limitar a apenas uma única ordem. Sistemas
+concorrentes usualmente apresentam muitos comportamentos distintos, e \TLA
+permite especificar um modelo que aceite vários desses comportamentos.
+
+Assim, o modelo em si e sua tradução são sequenciais, e se comportam como uma troca
+sucessiva de estados. A ordem das transições que alteram esses estados é
+possivelmente determinada por uma influência externa - e esta, sim, pode possuir
+elementos concorrentes.
+
+Considerando o sistema dos Jarros de Água do Capítulo \ref{cap2}, cada passo da
+execução exige uma escolha, já que nenhuma ação tem condição de ativação. Uma
+forma de fazer essa escolha é através do disparo de vários processos onde cada
+um seleciona uma das possíveis ações - esses procesos podem ser representados
+como pessoas com intenções diferentes de resolver o problema dos jarros. Não é
+possível permitir que mais de uma pessoa (ou processo) altere o estado dos
+jarros ao mesmo tempo. É possível, contudo, a partir de uma fila ou de uma
+escolha aleatória de pessoas, estabelecer uma ordem de ações sobre os jarros.
+
+Algumas operações computacionais, como a escrita em um endereço de memória,
+serializam ações - já que não podem ser feitos concorrentemente.
 
 A Figura \ref{fig:decide-tla} é um recorte da especificação de transações em
 bancos de dados da Figura \ref{fig:ex2tla} e apresenta um exemplo de definição

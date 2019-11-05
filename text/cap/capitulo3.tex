@@ -147,7 +147,7 @@ ação (descritas na seção \ref{sec:tla}). As expressões de estado em uma aç
 \FANCYA são predicados que terão valoração verdadeira se e somente se o estado em que \FANCYA
 será executada - ou seja, o primeiro estado do passo - seja um estado onde
 \FANCYA é permitido. Essas expressões, quando dentro da definição de uma ação,
-podem ser interpretadas como condições de ativação. A ação só pode ser ativada
+podem ser interpretadas como condições de ativação dessa ação. A ação só pode ser ativada
 se suas condições de ativação forem satisfeitas.
 
 Já uma expressão de ação envolve ambos os estados de um passo - o estado atual e
@@ -189,22 +189,44 @@ outra retornando o estado resultante da aplicação da ação.
 
 % exemplo protocolo
 
-\subsection{Decisões}
+\subsection{Determinando a próxima ação}
 
-Um par de estados pode atender mais de uma ação especificada em \TLAA.
-Quando isso acontece, o TLC avalia todos os pares estados possíveis distintos
-e que atendem as condições da ação, verificando os caminhos que surgem de outras
-ações a partir de cada um deles. No programa
-gerado, contudo, executar uma ação significa fazer uma alteração de estado, e
-múltiplas alterações de estado não são muito interessantes para o propósito do
+Como discutido na Seção \ref{sec:protocolo}, a ação de próximo estado $Next$
+pode ser atendida por mais de um próximo estado $t$ para o mesmo estado atual $s$.
+Isso não é um problema para o TLC, que avalia todos os pares estados possíveis distintos
+que atendem as condições da ação, verificando todas as ramificações da árvore de
+estados. No programa gerado, contudo, executar uma ação significa fazer possivelmente uma alteração de estado, e
+múltiplas alterações de estado não são interessantes para o propósito do
 código gerado, conforme discutido na Seção \ref{mapeamentos}.
 
 Assim, é necessário um processo bem definido para decidir qual ação executar a
-partir de um estado. Para garantir que seja possível tomar tais decisões, é
-necessário que a especificação defina condições de ativação mutualmente
-exclusivas para ações disjuntas - isto é, sempre que há uma disjunção de ações,
-todas as condições de ativação dessas ações devem ser falsas exceto pela daquela
-que deve ser executada.
+partir de um estado. Para garantir que seja possível tomar tais decisões sem uma
+situação que exija uma escolha, é
+necessário que a especificação defina, para cada estado do comportamento, condições de ativação mutualmente
+exclusivas para ações disjuntas com próximos estados distintos - isto é,
+sempre que há uma disjunção de ações, para todos os estados de um comportamento,
+todas as condições de ativação dessas ações devem ser falsas para aquele estado exceto pelas daquelas
+que levem ao próximo estado do comportamento.
+
+Uma especificação que atenda essa restrição descreve uma função pura, onde não
+há efeitos colaterais e uma mesma entrada, dada pelo estado inicial, sempre gera uma mesma
+saída, dada pelo comportamento - sequência de estados - obtido. \TLA permite,
+contudo, espeficiar diversos comportamentos válidos a partir do mesmo estado
+inicial, o que possibilita que a sequência de estados possa ser eventualmente modificada por
+efeitos colaterais e permanecer válida.
+
+Para garantir que o comportamento satisfaz a especificação, as influências de
+efeitos colaterais devem obedecer a função de próximo estado. Isso quer dizer
+que as influências são, para cada estado da execução, a escolha de uma ação que
+satisfaça a função de próximo estado. Como o estado atual $s$ já é conhecido em
+tempo de execução, a influência precisa levar a um estado $t$ tal que $<s,t>$
+satisfaça tal função.
+
+Quando é definido o conceito de escolha na Seção \ref{sec:protocolo}, define-se que é possível
+que exista apenas um valor possível para $t$ que atenda essa restrição. Isso acontece quando a restrição
+de condições de ativação mutualmente exclusivas é respeitada pelo estado atual.
+Nesse caso, a influência externa não é necessária, já que é possível decidir o
+valor de $t$. Assim, a influência externa só é necessária quando uma escolha é exigida.
 
 A Figura \ref{fig:decide-tla} é um recorte da especificação de transações em
 bancos de dados da Figura \ref{fig:ex2tla} e apresenta um exemplo de definição

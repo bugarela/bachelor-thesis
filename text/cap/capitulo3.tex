@@ -163,7 +163,7 @@ do estado inicial da especificação, e os próximos estados são obtidos a part
 da sucessiva aplicação de funções - que representam ações - nesse estado.
 
 Gerar todos os estados possíveis e avaliar uma ``condição de ação'' para cada um dos
-passos e então filtrá-los seria uma forma possível de executar o programa, porém
+passos para então filtrá-los seria uma forma possível de executar o programa, porém
 não é viável quando há muitos valores possíveis para as variáveis de estado. Ao
 especificar $x' = x + 1$, define-se que todos os pares de estado onde o segundo estado tem o
 valor de $x$ igual ao valor $x - 1$ do primeiro estado. Contudo, em uma
@@ -175,7 +175,7 @@ somar 1 ao valor de $x$ para obter o segundo estado do par que satisfaz a ação
 
 As expressões de ação, no código gerado proposto, são operações efetuadas sobre
 um estado que resultam sempre em um novo estado válido. Para isso, elas só são
-ativadas quanso as condições de ativação (definidas pelas expressões
+ativadas quando as condições de ativação (definidas pelas expressões
 de estado) são satisfeitas. A divisão
 entre expressões de estado, que serão tranformadas em condições, e expressões de
 ação, que serão transformadas em funções que alteram o estado, é feita pelo
@@ -183,7 +183,7 @@ próprio parser já que essas expressões se distuinguem na gramática da lingua
 de \TLAA.
 
 Na especificação do protocolo de efetivação em duas fases, na Figura
-\ref{fig:ex3tla2}, o tradutor transformará cada uma das ações em duas funções:
+\ref{fig:ex3tla2}, o tradutor transformara cada uma das ações em duas funções:
 uma de retorno booleano determinando se a condição de ativação é satisfeita, e
 outra retornando o estado resultante da aplicação da ação.
 
@@ -255,17 +255,31 @@ jarros ao mesmo tempo. É possível, contudo, a partir de uma fila ou de uma
 escolha aleatória de pessoas, estabelecer uma ordem de ações sobre os jarros.
 
 Algumas operações computacionais, como a escrita em um endereço de memória,
-serializam ações - já que não podem ser feitos concorrentemente.
+serializam ações - já que não podem ser feitos concorrentemente. Isso não
+significa que essas operações não precisam ser levadas em conta quando usadas em
+um sistema concorrente. Elas são justamente o ponto onde podem ocorrer problemas
+nesse tipo de sistema, nos momentos onde processos paralelos precisam de um
+recurso compartilhado e a ordem em que eles o obtém influencia o resultado
+final. Por isso, um procedimento de serialização como a ordem de obtenção de um
+recurso compartilhado pode acontecer de várias maneiras diferentes, e em razão
+disso sua especificação é importante.
 
-A Figura \ref{fig:decide-tla} é um recorte da especificação de transações em
-bancos de dados da Figura \ref{fig:ex2tla} e apresenta um exemplo de definição
-com expressões de estado e de ação.  
+Um exemplo mais tangível desse fenômeno pode ser dado pelo protocolo de
+efetivação em duas fases, discutido na Seção \ref{sec:protocolo}, onde existem vários gerenciadores de recursos
+enviando suas intenções de efetivar ou abortar para um gerenciador de transações
+compartilhado entre eles. O gerenciador de transações é um processo sequencial,
+mas pode ter vários comportamentos diferentes devido as possíveis ordens que as
+mensagens dos gerenciadores de recurso chegam.
 
-% Primeiro dar exemplo do protocolo e dps vejo o do Decide que é mais complexo
+% A Figura \ref{fig:decide-tla} é um recorte da especificação de transações em
+% bancos de dados da Figura \ref{fig:ex2tla} e apresenta um exemplo de definição
+% com expressões de estado e de ação.
 
-\begin{figure}[h]
-  \centering
-  \includegraphics[width=0.8\textwidth]{Decide.png}
-  \caption{Especificação de $Decide$ das Transações em bancos de dados}
-  \label{fig:decide-tla}
-\end{figure}
+% % Primeiro dar exemplo do protocolo e dps vejo o do Decide que é mais complexo
+
+% \begin{figure}[h]
+%   \centering
+%   \includegraphics[width=0.8\textwidth]{Decide.png}
+%   \caption{Especificação de $Decide$ das Transações em bancos de dados}
+%   \label{fig:decide-tla}
+% \end{figure}

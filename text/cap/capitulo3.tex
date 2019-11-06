@@ -182,12 +182,41 @@ ação, que serão transformadas em funções que alteram o estado, é feita pel
 próprio parser já que essas expressões se distuinguem na gramática da linguagem
 de \TLAA.
 
-Na especificação do protocolo de efetivação em duas fases, na Figura
-\ref{fig:ex3tla2}, o tradutor transformara cada uma das ações em duas funções:
-uma de retorno booleano determinando se a condição de ativação é satisfeita, e
-outra retornando o estado resultante da aplicação da ação.
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.8\textwidth]{GRRecebeMsgEfetive.png}
+  \caption{Ação para o recebimendo da mensagem ``Efetive'' por um gerenciador de
+  recurso}
+  \label{fig:recebe-efetive-tla}
+\end{figure}
+\begin{figure}[h]
+  \centering
+  $\progfig{
+  def gr\_recebe\_msg\_efetive\_condition(variables, g) do\\
+  ~~Enum.member?(variables[:msgs], \%\{tipo: "Efetive"\})\\
+  end\\\\
 
-% exemplo protocolo
+  def gr\_recebe\_msg\_efetive(variables, g) do\\
+  ~~\%\{\\
+  ~~~~estado\_gr: Map.put(variables[:estado\_gr], g, "efetivado"),\\
+  ~~~~estado\_gt: variables[:estado\_gt],\\
+  ~~~~grs\_preparados: variables[:grs\_preparados],\\
+  ~~~~msgs: variables[:msgs]\\
+  ~~\}\\
+  end\\
+  }$
+  \caption{Código gerado para a ação $GRRecebeMsgEfetive(g)$}
+\label{fig:recebe-efetive-elixir}
+\end{figure}
+
+
+Na especificação do protocolo de efetivação em duas fases, na Figura
+\ref{fig:ex3tlap2}, o tradutor transformara cada uma das ações em duas funções:
+uma de retorno booleano determinando se a condição de ativação é satisfeita, e
+outra retornando o estado resultante da aplicação da ação. A Figura
+\ref{fig:recebe-efetive-tla} é um recorte dessa especificação, e será traduzida
+nas duas funções expostas na Figura \ref{fig:recebe-efetive-elixir}.
+
 
 \subsection{Determinando a próxima ação}
 
@@ -231,6 +260,37 @@ exigida. Nesses casos, o código gerado estabelece uma troca de mensagens entre 
 processo gerado pelo modelo e um novo processo denominado oráculo, que será
 responsável por toda influência externa no modelo.
 
+O Algoritmo \ref{alg:decide-action} é responsável por examinar as ações
+possíveis e decidir qual será aplicada ao estado atual - seja por uma decisão
+pura ou por uma escolha de um influência externa. Ela recebe uma identificação
+da ação origem, isto é, a definição cuja disjunção de ações precisa de uma
+decisão; e uma lista de ações que contém, para cada ação, um rótulo, o valor da
+sua condição de ativação para o estado atual e o próximo estado que sua execução traria.
+
+\begin{algorithm}
+\caption{Decisão da próxima ação}\label{alg:decide-action}
+\begin{algorithmic}[1]
+\Procedure{DecideAção}{origem, ações}
+\State $acoes\_possiveis\gets$ ações com condição satisfeita
+\State $estados\_distintos\gets$ estados únicos restultantes de $acoes\_possiveis$
+\If{tamanho de $estados\_distintos=1$}\Comment{Decisão pura}
+\State \textbf{return} primeiro estado em $estados\_distintos$
+\Else\Comment{Influência Externa}
+\State envie a origem e os rótulos das $acoes\_possiveis$ para o oráculo
+\State $acao\_escolhida\gets$ resposta do oráculo
+\State \textbf{return} estado resultante de $acao\_escolhida$
+\EndIf
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+Se há apenas um próximo estado possível resultante das aplicações das ações
+ativadas, então o algoritmo decide por aquele estado. Caso contrário, ele abre
+uma conexão com o oráculo, enviando a origem e uma identificação das ações
+possíveis. O algoritmo permanece bloqueado até que o oráculo responda a ação
+escolhida, e então retorna o próximo estado correspondente àquela ação.
+
+
 \subsection{Concorrência}
 
 Mesmo \TLA sendo uma linguagem de especificação para sistemas concorrentes, ela
@@ -270,6 +330,43 @@ enviando suas intenções de efetivar ou abortar para um gerenciador de transaç
 compartilhado entre eles. O gerenciador de transações é um processo sequencial,
 mas pode ter vários comportamentos diferentes devido as possíveis ordens que as
 mensagens dos gerenciadores de recurso chegam.
+
+\subsection{Estado Inicial}
+
+Para verificar propriedades no TLC, o \TLA exige uma definição dos estados
+iniciais possíveis. Essa definição tem a forma de um predicado sobre um estado
+- e não um passo - ou seja, não é uma ação.
+
+Ao definir o predicado sobre estados iniciais para enviá-lo ao TLC, é
+possivelmente desejável que mais de um estado atenda-o, de forma que o TLC
+inicie a exploração do espaço de estados a partir de mais de um estado. Isso
+traria segurança de que, não importa quais dos estados iniciais definidos o
+programa tenha quando inicia, seu comportamento será válido.
+
+No contexto da execução desse programa, considera-se que não há benefício em
+permitir mais de um possível estado inicial. Uma possibilidade de lidar com uma
+definição de múltiplos estados iniciais seria delegar a escolha do estado
+inicial ao oráculo, porém isso significaria uma interação com o oráculo antes do
+início da execução do modelo, sendo que, nesse momento, o programador poderia
+fazer a escolha de forma mais simples. Assim, opta-se por encarregar o
+programador de definir o predicado para estados iniciais de forma a garantir que
+haja apenas um possível estado que satisfaça-o.
+
+Após a ferramenta de tradução ser aplicada em contextos diferentes, será
+possível observar de que forma o oráculo é utilizado pelos programadores.
+Considera-se que se for comum o oráculo permanecer continuamente rodando e ter
+memória do seu estado persistida, é provável que seja interessante delegar a
+escolha do estado inicial ao oráculo em caso de reinicialização da execução do
+modelo, uma vez que ele pode ser capaz de restaurar o estado ou partes dele com
+as informações retidas. Essa é uma análise e possível trabalho a serem feitos
+futuramente.
+
+$\TEq$ \TEq $\wedge$
+
+Sintaticamente as definições do estado inicial e da função de próximo estado são
+semelhantes à se qualquer ação.
+
+\input{cap/rules}
 
 % A Figura \ref{fig:decide-tla} é um recorte da especificação de transações em
 % bancos de dados da Figura \ref{fig:ex2tla} e apresenta um exemplo de definição

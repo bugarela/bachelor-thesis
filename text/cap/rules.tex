@@ -1,0 +1,163 @@
+	\begin{figure}[ht]
+	\centering
+  {\fbox{
+      $\begin{array}{c}
+
+         \fbox{$\Gamma\vdash_d \FANCYA \TEq (\overline{c}, \overline{a})$} \\ \\
+         \begin{array}{c}
+
+         \begin{minipage}[t]{0.8\textwidth}
+           \infer[\text{\tt (DEF)}]{
+             \begin{array}{c}
+               \Gamma\vdash_d NomeAcao(p_0, \dots, p_n) \triangleq \FANCYA \TEq\\
+               \progfig{
+               def nome\_acao\_condition(variables, $p_0,\ \dots,\ p_n$)\ do\\
+               ~~$c_0$\ and \ ...\ and\ $c_n$\\
+               end\\
+               def nome\_acao(variables, $p_0,\ \dots,\ p_n$)\ do\\
+               ~~Map.merge($a_0$, Map.merge(..., $a_n$))\\
+               end
+               }
+             \end{array}
+           }
+           {
+             \Gamma \cup \{p_0, \dots, p_n\} \vdash_d \FANCYA \TEq ((c_o, \dots,
+             c_n), (a_0, \dots, a_n))
+           }
+         \end{minipage}\\
+
+         \begin{minipage}[t]{0.2\textwidth}
+           \infer[\text{\tt (COND)}]{
+             \Gamma\vdash_d P \TEq (\{c\},\ \{\})
+           }
+           {
+             \Gamma\vdash_p P \TEq c
+           }\\\vspace*{.7cm}
+
+           \infer[\text{\tt (ACT)}]{
+             \Gamma\vdash_d A \TEq (\{\},\ \{a\})
+           }
+           {
+             \Gamma\vdash_a A \TEq a
+           }
+
+         \end{minipage} \hspace{.7cm}
+
+         \begin{minipage}[t]{0.6\textwidth}
+           \infer[\text{\tt (AND)}]{
+             \begin{array}{l}
+               \Gamma\vdash_d
+               \begin{array}{c}
+                 \land\ \FANCYA_0 \\
+                 \vdots \\
+                 \land\ \FANCYA_n
+               \end{array}
+               \TEq (\overline{c_o} \cup \dots \cup \overline{c_n},\ \overline{a_o} \cup \dots \cup \overline{a_n})
+             \end{array}
+           }
+           {
+             \begin{array}{c}
+               \Gamma\vdash_d \FANCYA_0 \TEq (\overline{c_0},\ \overline{a_0})\\
+               \vdots\\
+               \Gamma\vdash_d \FANCYA_n \TEq (\overline{c_n},\ \overline{a_n})
+             \end{array}
+           }
+         \end{minipage}\vspace{1cm}\\
+
+           \begin{minipage}[t]{0.8\textwidth}
+             \infer[\text{\tt (OR)}]{
+                 \begin{array}{l}
+                   \Gamma\vdash_d
+                   \begin{array}{c}
+                     \lor\ \FANCYA_0 \\
+                     \vdots \\
+                     \lor\ \FANCYA_n
+                   \end{array}
+                   \TEq (\{\},\ \{\text{\tt decide\_action}(l)\})
+                 \end{array}
+               }
+               {
+                 \begin{array}{c}
+                   \Gamma\vdash_d \FANCYA_0 \TEq (c_{00}, \dots, c_{0n},\ a_{00}, \dots, a_{0n})\\
+                   \vdots\\
+                   \Gamma\vdash_d \FANCYA_n \TEq (c_{n0}, \dots, c_{nn},\ a_{n0}, \dots, a_{nn})\\
+               \end{array}
+             }
+         \end{minipage}\\
+
+           \begin{minipage}[t]{0.8\textwidth}
+             \hspace*{2cm}
+             \progfig{
+               $onde\ l =$
+               [\\
+               ~~\%\{\\
+               ~~~~action: show([$a_{00}, \dots, a_{0n}$])\\
+               ~~~~condition: $c_{00}$\ and\ $\dots$\ and\ $c_{0n}$\\
+               ~~~~state: Map.merge($a_{00}$, Map.merge($\dots$, $a_{0n}$))\\
+               ~~\},\\
+               ~~$\dots$,\\
+               ~~\%\{\\
+               ~~~~action: show([$a_{n0}, \dots, a_{nn}$])\\
+               ~~~~condition: $c_{n0}$\ and\ $\dots$\ and\ $c_{nn}$\\
+               ~~~~state: Map.merge($a_{n0}$, Map.merge($\dots$, $a_{nn}$))\\
+               ~~\}\\
+               ]\\
+             }
+
+           \end{minipage}
+           
+
+         \end{array}
+
+
+
+         
+			% \begin{minipage}[t]{.45\textwidth}
+			% \infer[_{(\ABS)}]{\Gamma\vdash \lambda x. e : (S\,\alpha \to \tau,S)}
+			% {\Gamma, x : \alpha \vdash e : (\tau,S) & \alpha\text{ fresh}} 
+			% \end{minipage}\\ \\
+			% \begin{minipage}[t]{.45\textwidth}
+			% \infer[_{(\APP)}]{\Gamma\vdash e_1\: e_2 : (S\,\alpha, S)}
+			% {\begin{array}{l}
+			% 	\Gamma\vdash e_1 : (\tau_1, S_1)  \\
+			% 	S_1\,\Gamma\vdash e_2 : (\tau_2,S_2)
+			% 	\end{array} &
+			% 	\begin{array}{l}
+			% 	S' = \unify(\{\tau_2 \to \alpha = \tau_1\}) \\
+			% 	S = S' \circ S_2 \circ S_1\:\:\:\: \alpha\text{ fresh}
+			% 	\end{array}
+			% } \end{minipage} \hspace{.7cm} \begin{minipage}[t]{.45\textwidth}  
+			% \infer[_{(\LET)}]{\Gamma\vdash\mlet\,x = e_1\,\iin\,e_2 : (S\, \tau_2, S)}
+			% {\begin{array}{c}
+			% 	\Gamma\vdash e_1 : (\, \tau_1, S_1)  \hspace{.5cm}
+			% 	\overline{\alpha} = \ftv(\tau_1) - \ftv(S_1\, \Gamma) \\
+			% 	S_1\,\Gamma, x : \forall\,\overline{\alpha}.\,\tau_1 \vdash e_2 : (\tau_2, S_2) \hspace{.3cm} S = S_2 \circ S_1
+			% 	\end{array}} \end{minipage} \\ \\
+			% \end{array} \\ \\      
+			% \infer[_{(\CASE)}]
+			% {\Gamma \vdash \mcase e~\mof \overline{p \to e}: (S(\rho \to \rho'),\,S)}
+			% {\begin{array}{c}
+			% \text{for $i=1,\ldots,m$}
+			% \hspace{.3cm}\Gamma\vdash_{\pat} p_i \to e_i: \tau_i \to \tau'_i \\
+			% 	\rho \to \rho' = \lcg(\{ \tau_i \to \tau'_i\}^{i=1..m})  \\
+			% 	\overline{\alpha} = \gtv(\rho) \;\;\: \overline{k} \text{ are fresh Skolem constants} \\ 
+		  %           \overline{\beta} = \bigcup^{i=1..m} \gtv( \tau_i \to  \tau'_i)    \;\;\:  \overline{\beta^r} \text{ are fresh rigid type variables}  \\
+			% 	S = {\it unifyall}([\overline{\alpha \mapsto K}] (\rho \to \rho'),  [\overline{\beta \mapsto \beta^r}] \{ \tau_i \to  \tau'_i \}^{i=1..m} )\\						
+			% 	\end{array}}\\ \\
+			% \fbox{$\Gamma\vdash_\pat \overline{p \to e} : \tau \to \tau'$} \vspace*{.5cm} \\ 
+			
+			% \infer[_{(\PAT)}]
+			% {\Gamma \vdash_\pat K~x_1\ldots x_p \to e:(T~\overline{\alpha}\to \tau_e, S_e)}
+			% {\begin{array}{c}
+			% 	\Gamma\vdash K:\forall\overline{a}.\tau_1 \to \ldots \to \tau_p \to T~\overline{a}\hspace{.5cm}
+			% 	\overline{\alpha}\text{ fresh}\hspace{.5cm} S=[\overline{a\mapsto\alpha}]	\hspace{.5cm}
+			% 	\Gamma \cup S\{x_1:\tau_1,\ldots, x_p:\tau_p\}\vdash e:(\tau_e, S_e)					
+			% 	\end{array}}\\ \\ 
+				
+			% 	\infer[_{(\TPAT)}]{\Gamma\vdash (K_1:x_{11}\ldots x_{1p_1},\ldots,K_n:x_{n1}\ldots x_{np_n}) \to e:((T_1~\overline{\alpha}_1,\ldots, T_n~ \overline{\alpha}_n)\to\tau_e, S_e)}{\begin{array}{c}\text{for $i=1,\ldots,n$} \hspace{.2cm} \Gamma\vdash K_i:\forall\overline{a}_i.\tau_{i1}\to\ldots\to\tau_{ip_i}\hspace{.5cm}\overline{\alpha}_i\text{ fresh}\hspace{.5cm} S_i=[\overline{a\mapsto\alpha}]_i\\S=S_1\circ\ldots\circ S_n \hspace{.5cm} \Gamma\cup\bigcup^{i=1..n}\{x_{i1}:\tau_{i1}, \ldots,x_{ip_i}:\tau_{ip_i}\}\vdash e: (\tau_e, S_e)\end{array}} 
+				 
+			\end{array}$
+		}}
+		\caption{Tradução de definições}
+		\label{fig:definitions}
+	\end{figure}

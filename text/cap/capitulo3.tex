@@ -361,10 +361,49 @@ modelo, uma vez que ele pode ser capaz de restaurar o estado ou partes dele com
 as informações retidas. Essa é uma análise e possível trabalho a serem feitos
 futuramente.
 
-$\TEq$ \TEq $\wedge$
+\textbf{Parei aqui} daqui pra baixo é só definições e regras soltas, ainda tenho
+que explicar. Comecei a notação pra ser um pouco menos impossível de entender,
+mas não está nem perto de pronta ou boa. A Figura \ref{fig:t-specification} tá super
+incompleta, vai mais algumas regras nela ainda. As outras estão com o que já
+implementei, vou adicionando o resto conforme for implementando, mas o que fiz
+até agora na implementação já tá validável.
 
 Sintaticamente as definições do estado inicial e da função de próximo estado são
 semelhantes à se qualquer ação.
+\begin{figure}[h]
+  \centering
+  \fbox{$\begin{array}{l} \begin{array}{lrll}
+    \text{Identificadores} & I, k & ~~~~
+    \text{Valores} & v \\
+    \end{array} \\ \\
+    \begin{array}{lrcl}
+  \text{Ação} & \FANCYA & ::= & v' \,\mid\, \neg \FANCYA \,\mid\, \FANCYA \land \FANCYA \smallskip\\
+  \text{Predicado} & P, Q & ::= & \neg P \,\mid\, P \land P \,\mid\, \ENABLED \FANCYA\smallskip\\
+  \text{Conjunto} & S & ::= & {v} \,\mid\, S_a \cup S_b\smallskip\\
+  \text{Registro} & R & ::= & [k \mapsto v] \,\mid\, [I \EXCEPT ![k] = v]\smallskip\\
+  \end{array} \end{array}$}
+  \caption{Notação para a linguagem \TLA}
+\label{fig:notacao-tla}
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \fbox{$\begin{array}{l} \begin{array}{lrll}
+    \text{Identificadores} & i, k & ~~~~
+    \text{Valores} & x, y \\
+    \end{array} \\ \\
+    \begin{array}{lrcl}
+  \text{Ação} & a & ::= & \texttt{\%\{ i : x \}} \,\mid\, \texttt{Map.merge(a, a)} \smallskip\\
+  \text{Condição} & c & ::= & \texttt{not c} \,\mid\, \texttt{c and c} \,\mid\,
+                              \texttt{c or c}\smallskip\\
+  \text{Conjunto} & s & ::= & \texttt{MapSet.new([x])} \,\mid\, \texttt{MapSet.union($s_a, s_b$)}\smallskip\\
+  \text{Registro} & r & ::= & \texttt{\%\{ k: x \}} \,\mid\, \texttt{Map.put(i,
+                              k, x)}\smallskip\\
+  \end{array} \end{array}$}
+  \caption{Notação para a linguagem Elixir}
+\label{fig:notacao-elixir}
+\end{figure}
+
 
 \input{cap/rules}
 

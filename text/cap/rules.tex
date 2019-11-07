@@ -3,13 +3,12 @@
   {\fbox{
       $\begin{array}{c}
 
-         \fbox{$\Gamma\vdash_d \FANCYA \TEq (\overline{c}, \overline{a})$} \\ \\
-         \begin{array}{c}
+         \fbox{$\vdash Spec \TEq code$} \\ \\
 
          \begin{minipage}[t]{0.8\textwidth}
            \infer[\text{\tt (DEF)}]{
              \begin{array}{c}
-               \Gamma\vdash_d NomeAcao(p_0, \dots, p_n) \triangleq \FANCYA \TEq\\
+               \Gamma\vdash NomeAcao(p_0, \dots, p_n) \triangleq \FANCYA \TEq\\
                \progfig{
                def nome\_acao\_condition(variables, $p_0,\ \dots,\ p_n$)\ do\\
                ~~$c_0$\ and \ ...\ and\ $c_n$\\
@@ -21,18 +20,31 @@
              \end{array}
            }
            {
-             \Gamma \cup \{p_0, \dots, p_n\} \vdash_d \FANCYA \TEq ((c_o, \dots,
+             \Gamma \cup \{p_0 : param, \dots, p_n : param\} \vdash_d \FANCYA \TEq ((c_o, \dots,
              c_n), (a_0, \dots, a_n))
            }
          \end{minipage}\\
+				 
+			\end{array}$
+		}}
+		\caption{Tradução da especificação}
+		\label{fig:t-specification}
+	\end{figure}
 
+\begin{figure}[ht]
+	\centering
+  {\fbox{
+      $\begin{array}{c}
+
+         \fbox{$\Gamma\vdash_d \FANCYA \TEq (\overline{c}, \overline{a})$} \\ \\
+         \begin{array}{c}
          \begin{minipage}[t]{0.2\textwidth}
            \infer[\text{\tt (COND)}]{
              \Gamma\vdash_d P \TEq (\{c\},\ \{\})
            }
            {
              \Gamma\vdash_p P \TEq c
-           }\\\vspace*{.7cm}
+           }\vspace*{.7cm}
 
            \infer[\text{\tt (ACT)}]{
              \Gamma\vdash_d A \TEq (\{\},\ \{a\})
@@ -43,7 +55,7 @@
 
          \end{minipage} \hspace{.7cm}
 
-         \begin{minipage}[t]{0.6\textwidth}
+         \begin{minipage}[t]{0.5\textwidth}
            \infer[\text{\tt (AND)}]{
              \begin{array}{l}
                \Gamma\vdash_d
@@ -105,8 +117,6 @@
              }
 
            \end{minipage}
-           
-
          \end{array}
 
 
@@ -158,6 +168,179 @@
 				 
 			\end{array}$
 		}}
-		\caption{Tradução de definições}
+		\caption{Tradução intermediária de definições}
 		\label{fig:definitions}
 	\end{figure}
+
+\begin{figure}[ht]
+	\centering
+  {\fbox{
+      $\begin{array}{c}
+
+         \fbox{$\Gamma\vdash_p P \TEq c$} \\ \\
+
+         \begin{array}{c}
+           
+         \begin{minipage}[t]{0.25\textwidth}
+           \infer[\text{\tt (PRED-EQL)}]{
+               \Gamma\vdash_p v_x = v_y \TEq \texttt{x == y}
+           }
+           {
+             \Gamma\vdash_v v_x \TEq x\hspace*{.4cm}
+             \Gamma\vdash_v v_y \TEq y
+           }
+         \end{minipage}\hspace*{.3cm}
+           
+         \begin{minipage}[t]{0.25\textwidth}
+           \infer[\text{\tt (PRED-INEQL)}]{
+               \Gamma\vdash_p v_x \noteq v_y \TEq \texttt{x != y}
+           }
+           {
+             \Gamma\vdash_v v_x \TEq x\hspace*{.4cm}
+             \Gamma\vdash_v v_y \TEq y
+           }
+         \end{minipage}\vspace*{.7cm}\\
+
+         \begin{minipage}[t]{0.4\textwidth}
+           \infer[\text{\tt (PRED-IN)}]{
+               \Gamma\vdash_p v_e \in v_l \TEq \texttt{Enum.member?($l$,\ $e$)}
+           }
+           {
+             \Gamma\vdash_v v_e \TEq e\hspace*{.4cm}
+             \Gamma\vdash_v v_l \TEq l
+           }
+         \end{minipage}\\
+         \end{array}
+			\end{array}$
+		}}
+		\caption{Tradução de predicados}
+		\label{fig:t-specification}
+	\end{figure}
+  
+\begin{figure}[ht]
+	\centering
+  {\fbox{
+      $\begin{array}{c}
+
+         \fbox{$\Gamma\vdash_a A \TEq a$} \\ \\
+
+         \begin{array}{c}
+           
+         \begin{minipage}[t]{0.8\textwidth}
+           \infer[\text{\tt (ACT-UNCH)}]{
+         \begin{array}{c}
+             \Gamma\vdash_a \UNCHANGED \langle I_0, \dots, I_n \rangle \TEq\\
+             \texttt{\%\{ $I_0$:\ variables[:$I_0$]$,\ \dots,\ I_n$:\ variables[:$I_n$] \}}
+         \end{array}
+           }
+           {
+           }
+         \end{minipage}\vspace*{.7cm}\\
+
+         \begin{minipage}[t]{0.4\textwidth}
+           \infer[\text{\tt (ACT-PRIM)}]{
+               \Gamma\vdash_a I' = v \TEq \texttt{\%\{ $I$:\ $x$ \}}
+           }
+           {
+             \Gamma\vdash_v v \TEq x
+           }
+         \end{minipage}\\
+         \end{array}
+			\end{array}$
+		}}
+		\caption{Tradução de ações}
+		\label{fig:t-specification}
+	\end{figure}
+
+  \begin{figure}[ht]
+	\centering
+  {\fbox{
+      $\begin{array}{c}
+
+         \fbox{$\Gamma\vdash_v v \TEq x$} \\ \\
+
+         \begin{array}{c}
+           
+         \begin{minipage}[t]{0.25\textwidth}
+           \infer[\text{\tt (VAL-PARAM)}]{
+               \Gamma\vdash_v I \TEq I
+           }
+           {
+             \{I : param\} \in \Gamma
+           }
+         \end{minipage}\hspace*{.3cm}
+            
+         \begin{minipage}[t]{0.25\textwidth}
+           \infer[\text{\tt (VAL-CONST)}]{
+             \Gamma\vdash_v I \TEq \texttt{@$I$}
+           }
+           {
+             \{I : const\} \in \Gamma
+           }
+         \end{minipage}\vspace*{.7cm}\\
+  
+         \begin{minipage}[t]{0.25\textwidth}
+           \infer[\text{\tt (VAL-VAR)}]{
+               \Gamma\vdash_v I \TEq \texttt{variables[:$I$]}
+           }
+           {
+             \{I : param\} \notin \Gamma\hspace*{.6cm}
+             \{I : const\} \notin \Gamma
+           }
+         \end{minipage}\vspace*{.7cm}\\
+
+         \begin{minipage}[t]{0.4\textwidth}
+           \infer[\text{\tt (SET-LIT)}]{
+             \Gamma\vdash_v \texttt{MapSet.new([$x_0, \dots, x_n$])}
+           }
+           {
+             \Gamma\vdash_v v_0 \TEq x_o\ \dots\ \Gamma\vdash_v v_n \TEq x_n
+           }
+         \end{minipage}\vspace*{.7cm}\\
+           
+          \begin{minipage}[t]{0.4\textwidth}
+           \infer[\text{\tt (SET-UNION)}]{
+             \Gamma\vdash_v S_{a} \cup S_{b} \TEq \texttt{MapSet.union($s_a$,\ $s_b$)}
+           }
+           {
+             \Gamma\vdash_v S_{a} \TEq s_a\hspace*{.4cm}
+             \Gamma\vdash_v S_{b} \TEq s_b
+           }
+         \end{minipage}\vspace*{.7cm}\\
+
+         \begin{minipage}[t]{0.4\textwidth}
+           \infer[\text{\tt (REC-LIT)}]{
+             \Gamma\vdash_v [k_0 \mapsto v_{o}, \dots, k_n \mapsto v_{n}] \TEq
+             \texttt{\%\{ $k_0$:\ $x_0, \dots, k_n$:\ $x_n$ \}}
+           }
+           {
+             \Gamma\vdash_v v_0 \TEq x_o\ \dots\ \Gamma\vdash_v v_n \TEq x_n
+           }
+         \end{minipage}\vspace*{.7cm}\\
+
+         \begin{minipage}[t]{0.4\textwidth}
+           \infer[\text{\tt (REC-EXCEPT)}]{
+             \Gamma\vdash_v [I \EXCEPT ![k] = v] \TEq
+             \texttt{Map.put($i, k, x$)}
+           }
+           {
+             \Gamma\vdash_v v \TEq x\hspace*{.4cm}
+             \Gamma\vdash_v I \TEq i
+           }
+         \end{minipage}\vspace*{.7cm}\\
+
+           \begin{minipage}[t]{0.4\textwidth}
+           \infer[\text{\tt (REC-INDEX)}]{
+             \Gamma\vdash_v I[k] \TEq \texttt{$i$[$k$]}
+           }
+           {
+             \Gamma\vdash_v I \TEq i
+           }
+         \end{minipage}\vspace*{.7cm}\\
+         \end{array}
+			\end{array}$
+		}}
+		\caption{Tradução de valores}
+		\label{fig:t-specification}
+	\end{figure}
+  

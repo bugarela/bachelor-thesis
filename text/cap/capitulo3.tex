@@ -419,6 +419,53 @@ Elixir.
 
 \subsubsection{Tradução de Ações}
 
+As ações definidas em \TLA são fórmulas envolvendo o próximo estado. Em elixir,
+os estados são representados com a estrutura chave-valor \texttt{Map} em um parâmetro chamado \texttt{variables}, e uma
+ação traduz para uma nova estrutura desse tipo. Assim, ao aplicar a regra (\texttt{ACT-UNCH}) para uma ação do
+tipo \UNCHANGED - isto é, o valor da variável no próximo estado permanece o
+mesmo - a nova estrutura indica que o valor para aquela chave, que representa a
+variável, é o valor que a estrutura anterior tinha para tal chave. A
+estrutura anterior é obtida pelo parâmetro \texttt{variables}, e o valor referente à
+chave \tti é obtido por \texttt{variables[:i]}.
+
+De forma semelhante, quando há uma modificação do valor da variável na transição
+de estado, indicado pelo operador \textit{primed}, a tradução é feita pela regra
+(\texttt{ACT-PRIM}) e a estrutura para o próximo estado apresenta o
+novo valor para a chave referente à variável sendo modificada.
+
+Nas regras $\vdash_a$, cada ação de \TLA é transformada em uma estrutura do tipo
+\texttt{Map}. Essas estruturas são posteriormente agregadas com a função
+\texttt{merge}, que teriam um formato como \texttt{Map.merge(variables, Map.merge(\%\{ i: 1 \}, \%\{
+  j: 2 \}))}. Para melhorar a legibilidade, após a tradução, o gerador agrega os
+valores literais em uma única estrutura, de forma que esse mesmo estado fica
+representado como \texttt{Map.merge(variables, \%\{ i: 1, j: 2 \})}.
+
+\subsubsection{Tradução de valores}
+
+O mapeamento de valores é a camada mais baixa da tradução, e está bastante
+ligada a sintaxe. Conjuntos são traduzidos pra estruturas do tipo
+\texttt{MapSet}, que armazenam valores únicos em árvores binárias de busca;
+Registros são traduzidos para estruturas chave-valor \texttt{Map}, variáveis
+são acessadas pelo estado disponível no parâmetro \texttt{variables} e
+constantes pelo atributo do módulo.
+
+Para decidir como traduzir um identificador, que pode representar uma variável,
+uma constante ou um parâmetro da de definição, utiliza-se o contexto $\Gamma$.
+Se o contexto indicar que um identificador é um parâmetro, ele é traduzido sem
+modificação.
+
+Se ele for uma constante, é necessário verificar se a tradução está
+sendo solicitada de uma definição de dentro do módulo ou de fora - como é no
+caso da tradução do estado inicial. Se o contexto não tiver informação do
+módulo, significa que essa tradução vem de dentro do próprio módulo e então a
+constante pode ser acessada como uma constante do módulo, através do prefixo
+\texttt{@}. Caso haja uma indicação de módulo, é necessário traduzí-la para a
+chamada da função de acesso à constante daquele módulo, através de
+\texttt{NomeDoModulo.constante}.
+
+Se o identificador não for nem um parâmetro e nem uma constante, então ele
+representa uma variável do estado e pode ser acessado por \texttt{variables[:i]}.
+
 \subsection{Estado Inicial}
 
 Para verificar propriedades no TLC, o \TLA exige uma definição dos estados

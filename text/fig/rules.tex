@@ -1,102 +1,29 @@
-	\begin{figure}[ht]
+\begin{figure}[H]
 	\centering
   {\fbox{
       $\begin{array}{c}
 
-         \fbox{$\vdash Spec \TEq code$} \\ \\
-
-      \begin{array}{c}
-          \begin{minipage}[t]{0.6\textwidth}
-           \infer[\text{\tt (MOD)}]{
-             \begin{array}{l}
-               \Gamma\vdash
-               \begin{array}{l}
-                 \MODULE\ M\\
-                 \CONSTANTS\ C_0, \dots, C_n\\
-                 \VARIABLES\ V_0, \dots, V_n\\
-                 Def_0\\
-                 \vdots\\
-                 Def_n\\
-                 Def_{init}\\
-                 Def_{next}
-             \end{array}
-               \TEq
-               \progfigmed{
-               defmodule M do\\
-               ~~@oracle spawn(Oracle, :listen, [])\\
-               ~~$\texttt{const}_0$, ..., $\texttt{const}_n$\\
-               ~~$\texttt{def}_0$, ..., $\texttt{def}_n$\\
-               ~~def\_next\\
-               ~~def\_decide\_action\\
-               end\\\\
-               M.main(state)}
+         \fbox{$\Gamma\vdash_d \FANCYA \TEq (\overline{c}, \overline{a})$} \\
+         \begin{array}{c}
+         \begin{minipage}[t]{0.8\textwidth}
+           \infer[\text{\tt (CALL)}]{
+             \begin{array}{c}
+               \Gamma\vdash_d NomeAcao(v_0, \dots, v_n)
+               \TEq\\ (\{\texttt{\small nome\_acao\_condition(variables, $\ttx_0$, ...,
+               $\ttx_n$)}\},\\
+               \{\texttt{\small nome\_acao(variables,
+                 $\ttx_0$, ..., $\ttx_n$)}\})
              \end{array}
            }
            {
              \begin{array}{c}
-               \Gamma\vdash \CONSTANTS C_0, \dots, C_n \TEq \texttt{$\texttt{const}_0$, ..., $\texttt{const}_n$}\smallskip\\
-               \begin{array}{rll}
-                 \Gamma \cup \{C_0 : const, \dots, C_n : const\} \vdash& Def_0 &\TEq \texttt{def}_0\\
-                 \vdots&\\
-                 \Gamma \cup \{C_0 : const, \dots, C_n : const\} \vdash& Def_n &\TEq \texttt{def}_n\smallskip\\
-                 \Gamma \cup \{C_0 : const, \dots, C_n : const\} \vdash_{next}& Def_{next} &\TEq \texttt{def\_next}\smallskip\\
-                 \Gamma \cup \{M : module, C_0 : const, \dots, C_n : const\} \vdash_{init}& Def_{init} &\TEq \texttt{state}
-               \end{array}
+               \Gamma\vdash_v v_0 \TEq x_0\\
+               \vdots\\
+               \Gamma\vdash_v v_n \TEq x_n
              \end{array}
            }
-         \end{minipage}\vspace*{.7cm}\\
+         \end{minipage}\vspace{.7cm}\\
 
-        \begin{minipage}[t]{0.8\textwidth}
-          \infer[\text{\tt (DEF)}]{
-            \begin{array}{c}
-              \Gamma\vdash NomeAcao(p_0, \dots, p_n) \triangleq \FANCYA \TEq\\
-              \progfig{
-              def nome\_acao\_condition(variables, $p_0,\ \dots,\ p_n$)\ do\\
-              ~~$c_0$\ and \ ...\ and\ $c_n$\\
-              end\\
-              def nome\_acao(variables, $p_0,\ \dots,\ p_n$)\ do\\
-              ~~Map.merge($a_0$, Map.merge(..., $a_n$))\\
-              end
-              }
-            \end{array}
-          }
-          {
-            \Gamma \cup \{p_0 : param, \dots, p_n : param\} \vdash_d \FANCYA \TEq ((c_o, \dots,
-            c_n), (a_0, \dots, a_n))
-          }
-        \end{minipage}\vspace*{.7cm}\\
-
-        \begin{minipage}[t]{0.8\textwidth}
-          \infer[\text{\tt (CONST)}]{
-            \Gamma\vdash\CONSTANTS C_0, \dots, C_n \TEq
-            \begin{array}{c}
-              \progfigsmall{
-              @$C_0$ ``<Value for $C_0$>''\\
-              def $C_0$, do:\ @$C_0$\\
-              $\vdots$\\
-              @$C_n$ ``<Value for $C_n$>''\\
-              def $C_n$, do:\ @$C_n$
-              }
-            \end{array}
-          }
-          {
-          }
-        \end{minipage}\\
-
-      \end{array}
-			\end{array}$
-		}}
-		\caption{Tradução da especificação}
-		\label{fig:t-specification}
-	\end{figure}
-
-\begin{figure}[ht]
-	\centering
-  {\fbox{
-      $\begin{array}{c}
-
-         \fbox{$\Gamma\vdash_d \FANCYA \TEq (\overline{c}, \overline{a})$} \\ \\
-         \begin{array}{c}
            \begin{minipage}[T]{0.2\textwidth}
            \infer[\text{\tt (COND)}]{
              \Gamma\vdash_d P \TEq (\{c\},\ \{\})
@@ -131,7 +58,7 @@
                \Gamma\vdash_d \FANCYA_n \TEq (\overline{c_n},\ \overline{a_n})
              \end{array}
            }
-         \end{minipage}\vspace{1cm}\\
+         \end{minipage}\vspace{.7cm}\\
 
            \begin{minipage}[t]{0.8\textwidth}
              \infer[\text{\tt (OR)}]{
@@ -156,7 +83,7 @@
 
            \begin{minipage}[t]{0.8\textwidth}
              \hspace*{2cm}
-             \progfig{
+             \progfigmed{
                $onde\ l =$
                [\\
                ~~\%\{\\
@@ -171,7 +98,7 @@
                ~~~~state: Map.merge($a_{n0}$, Map.merge($\dots$, $a_{nn}$))\\
                ~~\}\\
                ]\\
-             }
+             }\vspace*{-1cm}
 
            \end{minipage}
          \end{array}
@@ -181,7 +108,7 @@
 		\label{fig:definitions}
 	\end{figure}
 
-\begin{figure}[ht]
+\begin{figure}[h]
 	\centering
   {\fbox{
       $\begin{array}{c}
@@ -251,7 +178,7 @@
 		\label{fig:t-pred-act}
 	\end{figure}
 
-  \begin{figure}[ht]
+  \begin{figure}[h]
 	\centering
   {\fbox{
       $\begin{array}{c}

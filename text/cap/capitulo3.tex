@@ -220,6 +220,7 @@ nas duas funções expostas na Figura \ref{fig:recebe-efetive-elixir}.
 
 
 \subsection{Determinando a próxima ação}
+\label{sec:decisao}
 
 Como discutido na Seção \ref{sec:protocolo}, a ação de próximo estado $Next$
 pode ser atendida por mais de um próximo estado $t$ para o mesmo estado atual $s$.
@@ -309,7 +310,7 @@ elementos concorrentes.
 Considerando o sistema dos Jarros de Água do Capítulo \ref{cap2}, cada passo da
 execução exige uma escolha, já que nenhuma ação tem condição de ativação. Uma
 forma de fazer essa escolha é através do disparo de vários processos onde cada
-um seleciona uma das possíveis ações - esses procesos podem ser representados
+um seleciona uma das possíveis ações - esses processos podem ser representados
 como pessoas com intenções diferentes de resolver o problema dos jarros. Não é
 possível permitir que mais de uma pessoa (ou processo) altere o estado dos
 jarros ao mesmo tempo. É possível, contudo, a partir de uma fila ou de uma
@@ -340,10 +341,10 @@ elementos da Figura \ref{fig:notacao-elixir}. As regras de tradução são
 divididas em camadas conforme a recursão das definições, de forma que a
 especificação completa é traduzida no código pelas regras $\vdash$.
 
-\input{cap/notation}
+\input{fig/notation}
 
 Em \TLAA, as definições \FANCYA englobam predicados e ações e, como discutido na
-Seção \ref{sec:condicoes}, deseja-se separá-los em condiçoes \ttc e ações sobre
+Seção \ref{sec:condicoes}, deseja-se separá-los em condiçoes \ttc\ e ações sobre
 os estados \tta. Devido a essas definições com misturas de predicados e ações
 serem recursivas, é necessário que haja uma separação recursiva também. Para
 isso, ao traduzir uma definição com as regras $\vdash_d$, utiliza-se uma
@@ -351,7 +352,72 @@ estrutura intermediária na forma de dupla, contendo uma lista das condições
 recursivamente encontradas e traduzidas como primeiro elemento, e das ações como
 segundo.
 
-\input{cap/rules}
+\subsection{Tradução de especificações}
+
+A tradução de uma especificação é feita através das regras na Figura
+\ref{fig:t-specification}. As definições são traduzidas pela regra (\texttt{DEF}) que, a partir das duplas
+obtidas recursivamente de uma definição \FANCYA, cria as funções \texttt{nome\_acao\_condition} 
+e \texttt{nome\_acao}, reduzindo as condições com o conector lógico \texttt{and}
+e as ações com a função \texttt{merge}, responsável por unificar duas
+estruturas do tipo \texttt{Map} - usada para representar estados - em uma só.
+
+A declaração de constantes é traduzida pela regra (\texttt{CONST}), que define,
+para cada constante declarada na especificação, um atributo do módulo gerado em
+Elixir, a partir do operador \texttt{@}, assim como uma função para acessá-la de
+fora do módulo. O valor das constantes em \TLA só precisa ser definido para
+executar o TLC, e não está presente na especificação. Assim, o código gerado
+atribui um valor exemplo da forma ``<Value for C>'' a ser substituído pelo programador.
+
+A regra (\texttt{MOD}) é responsável pelo início da tradução, recebendo a
+especificação completa e traduzindo cada elemento com o conjunto de regras
+devido. A partir dela, um módulo Elixir é obtido, assim como a invocação de sua
+função \texttt{main} com o estado inicial traduzido. Dentro do módulo, o oráculo
+é disparado e referenciado por uma constante, as constantes são declaradas e as
+definições traduzidas formam o restante das funções, juntamente com a função de
+próximo estado e a função \texttt{decide\_action} definida pelo Algoritmo \ref{alg:decide-action}.
+
+\input{fig/spec_rules}
+
+\subsection{Tradução das definições}
+
+As definições de ações e predicados é recursivamente agregada em uma dupla de
+listas. Os predicados encontrados são traduzidos para condições com pelas regras
+$\vdash_P$ em (\texttt{COND}) e agregados na primeira lista da dupla, enquanto as ações são
+traduzidas em funções sobre o estado pelas regras $vdash_a$ em (\texttt{ACT}) e agregadas na
+segunda lista.
+
+Quando uma definição é invocada dentro de outra definição, como acontece com
+$podeEfeitvar$ e $naoEfetivado$ na especificação de transações em bancos de
+dados na Figura \ref{fig:ex2tla} e em nas definições de próximo estado apresentadas, aplica-se a regra
+$(\texttt{CALL})$, que adiciona a condição e a ação daquela definição às
+respectivas listas, incorporando completamente a definição invocada.
+
+Quando as definições são conectadas pelo E lógico ($\land$), aplica-se a regra
+(\texttt{AND}) e as listas de
+condições e ações para cada definição são concatenadas - essas listas serão
+devidamente reduzidas a um elemento válido em outras regras.
+
+Já quando o conector é o OU lógico ($\lor$), é necessário iniciar o processo de decisão
+discuto nas Seções \ref{sec:protocolo} e \ref{sec:decisao}. A regra
+(\texttt{OR}) não gera nenhuma nova condição, e encapsula o processo de decisão
+em uma única ação que se dá pela invocação da função \texttt{decide\_action},
+que implementa o Algoritmo \ref{alg:decide-action} e retorna a ação que deve ser
+executada. Essa função recebe uma lista com três informações para cada definição conectada
+pelo OU: Uma identificação da definição (gerada por uma função \texttt{show} de
+conversão da estrutura para \texttt{string}); A redução das condições
+encontradas na definição; e a redução das ações.
+
+\input{fig/rules}
+
+\subsubsection{Tradução de Predicados}
+
+Os predicados em \TLA são fórmulas sobre o estado atual, e são traduzidos para
+expressões lógicas sobre o estado denominadas condições, e estarão sempre
+associados a execução de uma ação. As traduções são bem diretas e mapeiam os
+operadores de igualdade, desigualdade e pertence para suas representações em
+Elixir.
+
+\subsubsection{Tradução de Ações}
 
 \subsection{Estado Inicial}
 
@@ -406,7 +472,7 @@ Para que o programador seja capaz de acompanhar a execução do modelo, é tamb�
 adicionada uma função de saída que exibe o estado atual sempre que a função
 \texttt{main} é invocada.
 
-\input{cap/init_next}
+\input{fig/init_next}
 
 Sintaticamente as definições do estado inicial e da função de próximo estado são
 semelhantes à de qualquer ação. Assim, de forma semelhante a uma execução do

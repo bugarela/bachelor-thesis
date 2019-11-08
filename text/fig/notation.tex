@@ -16,7 +16,7 @@
                                 \FANCYA \,\mid\, \FANCYA \lor \FANCYA \smallskip\\
   \text{Predicado} & P, Q & ::= & \neg P \,\mid\, P \land P \,\mid\, P \lor P
                                   \,\mid\, v_1 \in v_2 \,\mid\, v_1 = v_2\\
-                                  &&&\,\mid\, v_1 \neq v_2 \,\mid\, \ENABLED \FANCYA\smallskip\\
+                                  &&\,\mid\,& v_1 \neq v_2 \,\mid\, \ENABLED \FANCYA\smallskip\\
   \text{Ação} & A & ::= & I' = v \,\mid\, \UNCHANGED \langle I_0, \dots, I_n \rangle\smallskip\\
   \text{Conjunto} & S & ::= & {v} \,\mid\, S_a \cup S_b\smallskip\\
   \text{Registro} & R & ::= & [k \mapsto v] \,\mid\, [I \EXCEPT ![k] = v]\smallskip\\
@@ -33,15 +33,17 @@
     \end{array} \\ \\
     \begin{array}{lrcl}
   \text{Estado} & \tta & ::= & \texttt{nome\_acao(variables, $\ttp_0$, ..., $\ttp_n$)} \,\mid\, \texttt{variables}\\
-      &&&\,\mid\, \texttt{\%\{ $\tti_o : \ttx_o$, ..., $\tti_n : \ttx_n$ \}} \,\mid\, \texttt{Map.merge(a, a)} \smallskip\\
+      &&\,\mid\,& \texttt{\%\{ $\tti_o : \ttx_o$, ..., $\tti_n : \ttx_n$ \}} \,\mid\, \texttt{Map.merge(a, a)} \smallskip\\
   \text{Condição} & \ttc & ::= &  \texttt{nome\_acao\_condition(variables,
-                              $\ttp_0$, ..., $\ttp_n$)}
-                              \,\mid\, \texttt{not c}\\
-      &&&\,\mid\, \texttt{c and c} \,\mid\,
+                              $\ttp_0$, ..., $\ttp_n$)}\\
+                              &&\,\mid\,& \texttt{not c} \,\mid\, \texttt{c and c} \,\mid\,
                               \texttt{c or c}\smallskip\\
   \text{Conjunto} & \tts & ::= & \texttt{MapSet.new([x])} \,\mid\, \texttt{MapSet.union($\tts_a$, $\tts_b$)}\smallskip\\
   \text{Registro} & \ttr & ::= & \texttt{\%\{ k: x \}} \,\mid\, \texttt{Map.put(i,
                               k, x)}\smallskip\\
+  \text{Definição} & \texttt{def} & ::= & \texttt{def nome\_acao(variables,
+                                          $\ttp_0$, ..., $\ttp_n$)}\\
+      &&\,\mid\,& \texttt{def\_decide\_action}\ (\text{\small vide Algoritmo \ref{alg:decide-action}}) \smallskip\\
   \end{array} \end{array}\]}
   \caption{Elementos gerados em Elixir}
 \label{fig:notacao-elixir}

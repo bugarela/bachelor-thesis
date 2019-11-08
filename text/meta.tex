@@ -17,15 +17,23 @@
 \newcommand{\progfig}[1]{\parbox{.96\textwidth}{
   \normalfont\ttfamily
   {\small
-%  \begin{center}
   \parbox{\textwidth}{\begin{tabbing}
         #1
   \end{tabbing}}
-%  \end{center}
 }
   \normalfont}}
 
-\newcommand{\progfigsmall}[1]{\fbox{\parbox{.44\textwidth}{
+\newcommand{\progfigmed}[1]{\parbox{.65\textwidth}{
+  \normalfont\ttfamily
+  {\small
+  \parbox{\textwidth}{\begin{tabbing}
+        #1
+  \end{tabbing}}
+}
+  \normalfont}}
+
+
+\newcommand{\progfigsmall}[1]{\parbox{.44\textwidth}{
   \normalfont\ttfamily
   {\small
 %  \begin{center}
@@ -34,7 +42,7 @@
   \end{tabbing}}
 %  \end{center}
 }
-  \normalfont}}}
+  \normalfont}}
 
 \newcommand{\progb}[1]{
   \normalfont\ttfamily
@@ -145,8 +153,19 @@
 
 \newcommand{\Eq}{\text{\it Eq\/}}
 
-% \newcommand{\TEq}{\text{\small\ \ \textarn{\th}\ \ }}
 \newcommand{\TEq}{\rightarrowtail}}
+
+\newcommand{\tti}{\texttt{i}}
+\newcommand{\ttk}{\texttt{k}}
+\newcommand{\ttx}{\texttt{x}}
+\newcommand{\tty}{\texttt{y}}
+\newcommand{\ttp}{\texttt{p}}
+\newcommand{\tts}{\texttt{s}}
+\newcommand{\ttr}{\texttt{r}}
+\newcommand{\tta}{\texttt{a}}
+\newcommand{\ttc}{\texttt{c}}
+\newcommand{\ttconst}{\texttt{const}}
+
 % \newcommand{\INST}{\text{\tt INST}}
 % \newcommand{\ABS}{\text{\tt ABS}}
 % \newcommand{\GEN}{\text{\tt GEN}}

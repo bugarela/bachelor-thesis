@@ -1,3 +1,4 @@
+% -*- TeX-master: "tccudesc.tex" -*-
 \chapter{O gerador de código}
 \label{cap3}
 
@@ -85,7 +86,7 @@ Para disparar processos, é chamada a função da biblioteca padrão de Elixir r
 
 \begin{figure}[h]
   \centering
-  $\progfig{
+  \progfig{
   ~def main(variaveis) do\\
   ~~~spawn\_link JarrosDeAgua, :main, [grande\_para\_pequeno(variaveis)]\\
   ~~~spawn\_link JarrosDeAgua, :main, [pequeno\_para\_grande(variaveis)]\\
@@ -96,7 +97,7 @@ Para disparar processos, é chamada a função da biblioteca padrão de Elixir r
   ~~~spawn\_link JarrosDeAgua, :main, [variaveis]\\
   ~end\\\\
   ~JarrosDeAgua.main(\%\{\ grande: 0, pequeno: 0 \})
-  }$
+  }
   \caption{Disparo de processos para o sistema de Jarros de Água}
 \label{fig:main-ex1}
 \end{figure}
@@ -125,7 +126,7 @@ matemáticas de \TLA e as estruturas do paradigma funcional presentes em Elixir.
 Entretanto, o disparo de múltiplos processos contemplando todos os caminhos
 possíveis do sistema não é viável dada a explosão de estados nem possui
 aplicação prática de muito valor. Assim, se apresenta a maior dificuldade
-encontrada durante o deselvolvimento deste trabalho: como traduzir
+encontrada durante o desenvolvimento deste trabalho: como traduzir
 especificações intermediárias que não descrevem uma implementação e sim um
 sistema ou protocolo.
 
@@ -177,9 +178,9 @@ As expressões de ação, no código gerado proposto, são operações efetuadas
 um estado que resultam sempre em um novo estado válido. Para isso, elas só são
 ativadas quando as condições de ativação (definidas pelas expressões
 de estado) são satisfeitas. A divisão
-entre expressões de estado, que serão tranformadas em condições, e expressões de
+entre expressões de estado, que serão transformadas em condições, e expressões de
 ação, que serão transformadas em funções que alteram o estado, é feita pelo
-próprio parser já que essas expressões se distuinguem na gramática da linguagem
+próprio parser já que essas expressões se distinguem na gramática da linguagem
 de \TLAA.
 
 \begin{figure}[h]
@@ -240,7 +241,7 @@ que levem ao próximo estado do comportamento.
 Uma especificação que atenda essa restrição descreve uma função pura, onde não
 há efeitos colaterais e uma mesma entrada, dada pelo estado inicial, sempre gera uma mesma
 saída, dada pelo comportamento - sequência de estados - obtido. \TLA permite,
-contudo, espeficiar diversos comportamentos válidos a partir do mesmo estado
+contudo, especificar diversos comportamentos válidos a partir do mesmo estado
 inicial, o que possibilita que a sequência de estados possa ser eventualmente modificada por
 efeitos colaterais e permanecer válida.
 
@@ -272,7 +273,7 @@ sua condição de ativação para o estado atual e o próximo estado que sua exe
 \begin{algorithmic}[1]
 \Procedure{DecideAção}{origem, ações}
 \State $acoes\_possiveis\gets$ ações com condição satisfeita
-\State $estados\_distintos\gets$ estados únicos restultantes de $acoes\_possiveis$
+\State $estados\_distintos\gets$ estados únicos resultantes de $acoes\_possiveis$
 \If{tamanho de $estados\_distintos=1$}\Comment{Decisão pura}
 \State \textbf{return} primeiro estado em $estados\_distintos$
 \Else\Comment{Influência Externa}
@@ -372,35 +373,49 @@ Sintaticamente as definições do estado inicial e da função de próximo estad
 semelhantes à se qualquer ação.
 \begin{figure}[h]
   \centering
-  \fbox{$\begin{array}{l} \begin{array}{lrll}
+  \fbox{\[\begin{array}{l} \begin{array}{lrllll}
     \text{Identificadores} & I, k & ~~~~
-    \text{Valores} & v \\
+    \text{Valores} & v & ~~~~ \text{Parâmetros} & p \\
     \end{array} \\ \\
     \begin{array}{lrcl}
-  \text{Ação} & \FANCYA & ::= & v' \,\mid\, \neg \FANCYA \,\mid\, \FANCYA \land \FANCYA \smallskip\\
-  \text{Predicado} & P, Q & ::= & \neg P \,\mid\, P \land P \,\mid\, \ENABLED \FANCYA\smallskip\\
+      \text{Especificação} & Spec & ::= & Module M\\
+      &&&\CONSTANTS C_o, \dots, C_n\\
+      &&&\VARIABLES\ V_o, \dots, V_n\\
+      &&&NomeAcao_0(p_{00}, \dots, p_{0n}) \triangleq \FANCYA_0\\
+      &&&\vdots\\
+      &&&NomeAcao_n(p_{n0}, \dots, p_{nn}) \triangleq \FANCYA_n\smallskip\\
+  \text{Definição} & \FANCYA & ::= & A \,\mid\, P \,\mid\, \FANCYA \land
+                                \FANCYA \,\mid\, \FANCYA \lor \FANCYA \smallskip\\
+  \text{Predicado} & P, Q & ::= & \neg P \,\mid\, P \land P \,\mid\, P \lor P
+                                  \,\mid\, v_1 \in v_2 \,\mid\, v_1 = v_2\\
+                                  &&&\,\mid\, v_1 \neq v_2 \,\mid\, \ENABLED \FANCYA\smallskip\\
+  \text{Ação} & A & ::= & I' = v \,\mid\, \UNCHANGED \langle I_0, \dots, I_n \rangle\smallskip\\
   \text{Conjunto} & S & ::= & {v} \,\mid\, S_a \cup S_b\smallskip\\
   \text{Registro} & R & ::= & [k \mapsto v] \,\mid\, [I \EXCEPT ![k] = v]\smallskip\\
-  \end{array} \end{array}$}
-  \caption{Notação para a linguagem \TLA}
+  \end{array} \end{array}\]}
+  \caption{Sintaxe aceita para \TLA}
 \label{fig:notacao-tla}
 \end{figure}
 
 \begin{figure}[h]
   \centering
-  \fbox{$\begin{array}{l} \begin{array}{lrll}
-    \text{Identificadores} & i, k & ~~~~
-    \text{Valores} & x, y \\
+  \fbox{\[\begin{array}{l} \begin{array}{lrllll}
+    \text{Átomos} & \tti , \ttk & ~~~~
+    \text{Valores} & \ttx , \tty & ~~~~ \text{Parâmetros} & \ttp \\
     \end{array} \\ \\
     \begin{array}{lrcl}
-  \text{Ação} & a & ::= & \texttt{\%\{ i : x \}} \,\mid\, \texttt{Map.merge(a, a)} \smallskip\\
-  \text{Condição} & c & ::= & \texttt{not c} \,\mid\, \texttt{c and c} \,\mid\,
+  \text{Estado} & \tta & ::= & \texttt{nome\_acao(variables, $\ttp_0$, ..., $\ttp_n$)} \,\mid\, \texttt{variables}\\
+      &&&\,\mid\, \texttt{\%\{ $\tti_o : \ttx_o$, ..., $\tti_n : \ttx_n$ \}} \,\mid\, \texttt{Map.merge(a, a)} \smallskip\\
+  \text{Condição} & \ttc & ::= &  \texttt{nome\_acao\_condition(variables,
+                              $\ttp_0$, ..., $\ttp_n$)}
+                              \,\mid\, \texttt{not c}\\
+      &&&\,\mid\, \texttt{c and c} \,\mid\,
                               \texttt{c or c}\smallskip\\
-  \text{Conjunto} & s & ::= & \texttt{MapSet.new([x])} \,\mid\, \texttt{MapSet.union($s_a, s_b$)}\smallskip\\
-  \text{Registro} & r & ::= & \texttt{\%\{ k: x \}} \,\mid\, \texttt{Map.put(i,
+  \text{Conjunto} & \tts & ::= & \texttt{MapSet.new([x])} \,\mid\, \texttt{MapSet.union($\tts_a$, $\tts_b$)}\smallskip\\
+  \text{Registro} & \ttr & ::= & \texttt{\%\{ k: x \}} \,\mid\, \texttt{Map.put(i,
                               k, x)}\smallskip\\
-  \end{array} \end{array}$}
-  \caption{Notação para a linguagem Elixir}
+  \end{array} \end{array}\]}
+  \caption{Elementos gerados em Elixir}
 \label{fig:notacao-elixir}
 \end{figure}
 

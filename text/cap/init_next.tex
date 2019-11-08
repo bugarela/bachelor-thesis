@@ -1,0 +1,60 @@
+\begin{figure}[ht]
+	\centering
+  {\fbox{
+      $\begin{array}{c}
+
+         \fbox{$\Gamma\vdash_{init} P \TEq a$} \\ \\
+
+         \begin{array}{c}
+           \begin{minipage}[t]{0.25\textwidth}
+             \infer[\text{\tt (INIT-EQ)}]{
+               \Gamma\vdash_{init} I = v \TEq \texttt{\%\{ i:\ x \}}
+             }
+             {
+               \Gamma\vdash_v v \TEq \ttx
+             }
+           \end{minipage} \vspace{.7cm}\\
+           \begin{minipage}[t]{0.4\textwidth}
+             \infer[\text{\tt (INIT-AND)}]{
+               \Gamma\vdash_{init}
+               \begin{array}{c}
+                 \land\ P_0 \\
+                 \vdots \\
+                 \land\ P_n
+               \end{array}
+               \TEq \texttt{Map.merge($\tta_0$, Map.merge(..., $\tta_n$))}\\
+             }
+             {
+               \begin{array}{c}
+                 \Gamma\vdash_{init} P_0 \TEq \tta_0\\
+                 \vdots\\
+                 \Gamma\vdash_{init} P_n \TEq \tta_n
+               \end{array}
+             }
+           \end{minipage}\vspace{1cm}\\
+
+           \fbox{$\Gamma\vdash_{next} NomeAcao \triangleq \FANCYA \TEq \texttt{def}$} \\ \\
+
+           \begin{minipage}[t]{0.6\textwidth}
+             \infer[\text{\tt (NEXT)}]{
+               \Gamma\vdash_{next} NomeAcao \triangleq \FANCYA \TEq
+               \progfigmed{
+                 def main(variables) do\\
+                 ~~IO.puts (inspect variables)\\\\
+                 ~~main(\\
+                 ~~~~Map.merge($\tta_0$, Map.merge(..., $\tta_n$))\\
+                 ~~)\\
+                 end
+               }
+             }
+             {
+               \Gamma\vdash_d\FANCYA \TEq (\{\},\ \tta_0, \dots, \tta_n)
+             }
+           \end{minipage}\vspace*{.7cm}\\
+
+         \end{array}
+       \end{array}$
+     }}
+   \caption{Tradução do Estado Incial de da função de próximo estado}
+   \label{fig:t-init-next}
+ \end{figure}

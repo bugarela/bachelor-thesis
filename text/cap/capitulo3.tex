@@ -332,6 +332,27 @@ compartilhado entre eles. O gerenciador de transações é um processo sequencia
 mas pode ter vários comportamentos diferentes devido as possíveis ordens que as
 mensagens dos gerenciadores de recurso chegam.
 
+\section{Regras de Tradução}
+
+A partir de especificação escritas em \TLAA conforme a sintaxe da figura
+\ref{fig:notacao-tla}, deseja-se obter um código executável em Elixir com
+elementos da Figura \ref{fig:notacao-elixir}. As regras de tradução são
+divididas em camadas conforme a recursão das definições, de forma que a
+especificação completa é traduzida no código pelas regras $\vdash$.
+
+\input{cap/notation}
+
+Em \TLAA, as definições \FANCYA englobam predicados e ações e, como discutido na
+Seção \ref{sec:condicoes}, deseja-se separá-los em condiçoes \ttc e ações sobre
+os estados \tta. Devido a essas definições com misturas de predicados e ações
+serem recursivas, é necessário que haja uma separação recursiva também. Para
+isso, ao traduzir uma definição com as regras $\vdash_d$, utiliza-se uma
+estrutura intermediária na forma de dupla, contendo uma lista das condições
+recursivamente encontradas e traduzidas como primeiro elemento, e das ações como
+segundo.
+
+\input{cap/rules}
+
 \subsection{Estado Inicial}
 
 Para verificar propriedades no TLC, o \TLA exige uma definição dos estados
@@ -341,8 +362,8 @@ iniciais possíveis. Essa definição tem a forma de um predicado sobre um estad
 Ao definir o predicado sobre estados iniciais para enviá-lo ao TLC, é
 possivelmente desejável que mais de um estado atenda-o, de forma que o TLC
 inicie a exploração do espaço de estados a partir de mais de um estado. Isso
-traria segurança de que, não importa quais dos estados iniciais definidos o
-programa tenha quando inicia, seu comportamento será válido.
+traria segurança de que, idependentemente de quais dos estados iniciais definidos o
+programa se encontre no momento que inicia, seu comportamento será válido.
 
 No contexto da execução desse programa, considera-se que não há benefício em
 permitir mais de um possível estado inicial. Uma possibilidade de lidar com uma
@@ -355,65 +376,44 @@ haja apenas um possível estado que satisfaça-o.
 
 Após a ferramenta de tradução ser aplicada em contextos diferentes, será
 possível observar de que forma o oráculo é utilizado pelos programadores.
-Considera-se que se for comum o oráculo permanecer continuamente rodando e ter
-memória do seu estado persistida, é provável que seja interessante delegar a
+Considera-se que se for comum o oráculo permanecer continuamente rodando e
+persistir o estado em que se encontra, é provável que seja interessante delegar a
 escolha do estado inicial ao oráculo em caso de reinicialização da execução do
 modelo, uma vez que ele pode ser capaz de restaurar o estado ou partes dele com
 as informações retidas. Essa é uma análise e possível trabalho a serem feitos
 futuramente.
 
+De forma semelhante à tradução de ações, não é viável gerar todos os estados
+possíveis e então filtrá-los para encontrar um que atenda o predicado para o
+estado inicial. Assim, e exclusivamente nesse momento, deseja-se que o predicado
+gere um estado. Para isso, são necessárias regras de tradução que transforem um
+predicado na representação de um estado, onde igualdade é convertida para
+atribuição. Essas regras são expressadas por $\vdash_{init}$ na Figura
+\ref{fig:t-init-next}. O estado inicial gerado é então enviado para a primeira
+chamada da função de próximo estado \texttt{main} conforme as regras $\vdash$ em \ref{fig:t-specification}.
+
+\subsection{Função de próximo estado}
+
+A definição $Next$ é traduzida de maneira similar à definição das outras ações,
+exceto que o código gerado para a ação resultante é enviado como parâmetro para
+uma nova chamada da mesma função. O nome da definição é alterado para
+\texttt{main} e a função \texttt{main} gerada é chamada recursivamente,
+recebendo sempre um estado e retornando a invocação de \texttt{main} para o
+próximo estado gerado. A Figura \ref{fig:t-init-next} apresenta as regras de
+tradução $\vdash_{next}$, responsáveis por gerar tal função.
+
+Para que o programador seja capaz de acompanhar a execução do modelo, é também
+adicionada uma função de saída que exibe o estado atual sempre que a função
+\texttt{main} é invocada.
+
+\input{cap/init_next}
+
 Sintaticamente as definições do estado inicial e da função de próximo estado são
-semelhantes à se qualquer ação.
-\begin{figure}[h]
-  \centering
-  \fbox{\[\begin{array}{l} \begin{array}{lrllll}
-    \text{Identificadores} & I, k & ~~~~
-    \text{Valores} & v & ~~~~ \text{Parâmetros} & p \\
-    \end{array} \\ \\
-    \begin{array}{lrcl}
-      \text{Especificação} & Spec & ::= & Module M\\
-      &&&\CONSTANTS C_o, \dots, C_n\\
-      &&&\VARIABLES\ V_o, \dots, V_n\\
-      &&&NomeAcao_0(p_{00}, \dots, p_{0n}) \triangleq \FANCYA_0\\
-      &&&\vdots\\
-      &&&NomeAcao_n(p_{n0}, \dots, p_{nn}) \triangleq \FANCYA_n\smallskip\\
-  \text{Definição} & \FANCYA & ::= & A \,\mid\, P \,\mid\, \FANCYA \land
-                                \FANCYA \,\mid\, \FANCYA \lor \FANCYA \smallskip\\
-  \text{Predicado} & P, Q & ::= & \neg P \,\mid\, P \land P \,\mid\, P \lor P
-                                  \,\mid\, v_1 \in v_2 \,\mid\, v_1 = v_2\\
-                                  &&&\,\mid\, v_1 \neq v_2 \,\mid\, \ENABLED \FANCYA\smallskip\\
-  \text{Ação} & A & ::= & I' = v \,\mid\, \UNCHANGED \langle I_0, \dots, I_n \rangle\smallskip\\
-  \text{Conjunto} & S & ::= & {v} \,\mid\, S_a \cup S_b\smallskip\\
-  \text{Registro} & R & ::= & [k \mapsto v] \,\mid\, [I \EXCEPT ![k] = v]\smallskip\\
-  \end{array} \end{array}\]}
-  \caption{Sintaxe aceita para \TLA}
-\label{fig:notacao-tla}
-\end{figure}
-
-\begin{figure}[h]
-  \centering
-  \fbox{\[\begin{array}{l} \begin{array}{lrllll}
-    \text{Átomos} & \tti , \ttk & ~~~~
-    \text{Valores} & \ttx , \tty & ~~~~ \text{Parâmetros} & \ttp \\
-    \end{array} \\ \\
-    \begin{array}{lrcl}
-  \text{Estado} & \tta & ::= & \texttt{nome\_acao(variables, $\ttp_0$, ..., $\ttp_n$)} \,\mid\, \texttt{variables}\\
-      &&&\,\mid\, \texttt{\%\{ $\tti_o : \ttx_o$, ..., $\tti_n : \ttx_n$ \}} \,\mid\, \texttt{Map.merge(a, a)} \smallskip\\
-  \text{Condição} & \ttc & ::= &  \texttt{nome\_acao\_condition(variables,
-                              $\ttp_0$, ..., $\ttp_n$)}
-                              \,\mid\, \texttt{not c}\\
-      &&&\,\mid\, \texttt{c and c} \,\mid\,
-                              \texttt{c or c}\smallskip\\
-  \text{Conjunto} & \tts & ::= & \texttt{MapSet.new([x])} \,\mid\, \texttt{MapSet.union($\tts_a$, $\tts_b$)}\smallskip\\
-  \text{Registro} & \ttr & ::= & \texttt{\%\{ k: x \}} \,\mid\, \texttt{Map.put(i,
-                              k, x)}\smallskip\\
-  \end{array} \end{array}\]}
-  \caption{Elementos gerados em Elixir}
-\label{fig:notacao-elixir}
-\end{figure}
+semelhantes à de qualquer ação. Assim, de forma semelhante a uma execução do
+TLC, o gerador de código recebe como parâmetro o nome dessas duas definições
+para que possa identificá-las e aplicar as regras de traduções devidas.
 
 
-\input{cap/rules}
 
 % A Figura \ref{fig:decide-tla} é um recorte da especificação de transações em
 % bancos de dados da Figura \ref{fig:ex2tla} e apresenta um exemplo de definição

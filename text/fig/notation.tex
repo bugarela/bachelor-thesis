@@ -2,16 +2,15 @@
 \begin{figure}[h]
   \centering
   \fbox{\[\begin{array}{l} \begin{array}{lrllll}
-    \text{Identificadores} & I, k & ~~~~
+    \text{Identificadores} & I, C, k\ \subset v& ~~~~
     \text{Valores} & v & ~~~~ \text{Parâmetros} & p \\
     \end{array} \\ \\
     \begin{array}{lrcl}
       \text{Especificação} & Spec & ::= & Module M\\
       &&&\CONSTANTS C_o, \dots, C_n\\
       &&&\VARIABLES\ V_o, \dots, V_n\\
-      &&&NomeAcao_0(p_{00}, \dots, p_{0n}) \triangleq \FANCYA_0\\
-      &&&\vdots\\
-      &&&NomeAcao_n(p_{n0}, \dots, p_{nn}) \triangleq \FANCYA_n\smallskip\\
+      &&&D_0, \dots, D_n\smallskip\\
+  \text{Declaração} & D & ::= & NomeAcao(p_0, \dots, p_n) \triangleq \FANCYA\smallskip\\
   \text{Definição} & \FANCYA & ::= & A \,\mid\, P \,\mid\, \FANCYA \land
                                 \FANCYA \,\mid\, \FANCYA \lor \FANCYA \smallskip\\
   \text{Predicado} & P, Q & ::= & \neg P \,\mid\, P \land P \,\mid\, P \lor P

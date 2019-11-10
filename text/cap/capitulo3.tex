@@ -464,11 +464,12 @@ em tempo de execução.
 
 \subsubsection{Tradução de Predicados}
 
-Os predicados em \TLA são fórmulas sobre o estado atual, e são traduzidos para
-expressões lógicas sobre o estado denominadas condições, e estarão sempre
+Os predicados em \TLA são fórmulas sobre o estado atual, e são traduzidos pelas
+regras $\vdash_p$ para expressões lógicas sobre o estado denominadas condições, e estarão sempre
 associados a execução de uma ação. As traduções são bem diretas e mapeiam os
 operadores de igualdade, desigualdade e pertence para suas representações em
-Elixir.
+Elixir. Os operadores de desigualdade $\lte, \gte, \lt$ e $\gt$ são omitidos das
+regras por serem muito semelhantes às regras (\texttt{PRED-EQ}) e (\texttt{PRED-INEQ}).
 
 \input{fig/pred_act}
 
@@ -664,7 +665,57 @@ usuário.
 
 \subsection{Protocolo de efetivação em duas fases}
 
+\input{fig/protocolo_ex}
+A especificação do protocolo tem elementos mais semelhantes a um modelo real,
+tal qual um conjunto arbitrário de gerenciadores de recurso podendo realizar
+ações em uma alta variedade de ordens. O código gerado a partir dela permite a
+execução de um gerenciador de transações, que executa ações escolhidas por
+gerenciadores de recursos e mantém o banco de dados consistente.
 
+A tradução do módulo é, como sempre, iniciada pela regra (\texttt{MOD}), e
+traduz para um módulo Elixir conforme a Figura \ref{fig:protocolo-ex-mod}. A
+constante $GR$ declarada na especificação é traduzida para \texttt{@gr} e
+declarada no início do módulo com sua função de acessibilidade \texttt{gr}. As
+definições $Mensagens$ e $DFTypeOK$ não tem valor para a execução e são
+manualmente removidas antecipadamente. O
+estado inicial é convertido em parâmetros para a chamada de
+\texttt{EfetivacaoEmDuasFases.main}, mapeando cada valor conforme as traduções
+definidas por $\vdash_v$.
 
+Dentre as traduções de definições, exemplifica-se a tradução para
+$GTEfetiva$ na Figura \ref{fig:protocolo-ex-def1}. As duas primeiras definições
+da conjunção são condições, já que precisam apenas de informações constantes e
+do estado atual para serem avaliadas. Essas duas definições serão traduzidas
+para condições e declaradas em \texttt{gt\_efetiva\_condition}. As outras
+definições são traduzidas na ação que retorna o novo estado. Para as ações com o
+operador \textit{primed}, o novo valor é atribuído; e para a ação \UNCHANGED, o
+valor de cada variável na tupla no estado atual é atribuído no novo estado.
 
+Exemplificando a tradução de uma definição parametrizada, a Figura
+\ref{fig:protocolo-ex-def2} apresenta o código gerado para
+$GRRecebeMsgEfetive(g)$. A condição não depende do parâmetro já que apenas
+verifica a presença de uma mensagem, o que significa que sempre que essa ação
+for ativável, ela será ativável para qualquer valor de $g$. O estado resultante,
+contudo, depende do parâmetro, alterando o valor de $estadoGR$ apenas no valor
+referente ao parâmetro. O tradutor, contudo, gera as declarações das funções com
+os mesmos parâmetros - a omissão de parâmetros não utilizados, como é o caso de
+\texttt{g} em \texttt{gr\_recebe\_msg\_efetive} não se mostrou relevante o
+suficiente para ser implementada, e esses parâmetros podem ser removidos
+posteriormente pelo programador com base em alertas do analisador de código do
+Elixir.
+
+Por fim, a tradução da função de próximo estado $DFNext$ é disposta na Figura
+\ref{fig:protocolo-ex-next}. As informações para as ações $GTEfetiva$ e
+$GTAborta$ são traduzidas de forma semelhante à tradução de $Next$ no problema
+dos Jarros de Água. Já as outras ações são quantificadas sobre os gerenciadores
+em $GR$, e as informações serão geradas com a regra (\texttt{INFO-EX}),
+produzindo a chamada de \texttt{map} que, para cada valor em \texttt{@gr},
+aplicará uma função lambda que aplica a regra (\texttt{INFO-ACT}). A
+identificação de uma ação com parâmetro utiliza interpolação de \textit{string}
+com o operador \texttt{#{}} e a função \texttt{inspect}, que converte as
+estruturas de Elixir para \textit{string}. Isso é necessário para que o oráculo
+identifique completamente aquela ação, e não receba várias cópias de um mesmo
+identificador sem o valor do parâmetro.
+
+\subsubsection{Execução}
 

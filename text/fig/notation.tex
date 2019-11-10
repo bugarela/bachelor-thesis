@@ -41,8 +41,12 @@
   \text{Registro} & \ttr & ::= & \texttt{\%\{ k: x \}} \,\mid\, \texttt{Map.put(i,
                               k, x)}\smallskip\\
   \text{Definição} & \texttt{def} & ::= & \texttt{def nome\_acao(variables,
-                                          $\ttp_0$, ..., $\ttp_n$)}\\
-      &&\,\mid\,& \texttt{def\_decide\_action}\ (\text{\small vide Algoritmo \ref{alg:decide-action}}) \smallskip\\
+                                          $\ttp_0$, . .., $\ttp_n$)}\\
+      &&\,\mid\,& \texttt{def\_decide\_action([info])}\ (\text{\small vide Algoritmo \ref{alg:decide-action}}) \smallskip\\
+  \text{Informação} & \ttinfo & ::= & \texttt{\%\{ action:\ ``Nome'',
+                                          condition:\ c, state:\ a \}}\\
+                &&\,\mid\,& \texttt{Enum.map(x,
+                            f (i) -> [info] end)}\smallskip\\
   \end{array} \end{array}\]}
   \caption{Elementos gerados em Elixir}
 \label{fig:notacao-elixir}

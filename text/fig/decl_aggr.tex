@@ -1,0 +1,124 @@
+\begin{figure}[h]
+	\centering
+  {\fbox{
+      $\begin{array}{c}
+
+         \fbox{$\Gamma\vdash_d \FANCYA \TEq (\overline{c}, \overline{a})$} \\\\
+         \begin{array}{c}
+
+         \begin{minipage}[B]{0.5\textwidth}
+           \infer[\text{\tt (AND)}]{
+               \Gamma\vdash_d
+               \begin{array}{c}
+                 \land\ \FANCYA_0 \\
+                 \vdots \\
+                 \land\ \FANCYA_n
+               \end{array}
+               \TEq (\overline{c_o} \cup \dots \cup \overline{c_n},\ \overline{a_o} \cup \dots \cup \overline{a_n})
+           }
+           {
+             \begin{array}{c}
+               \Gamma\vdash_d \FANCYA_0 \TEq (\overline{c_0},\ \overline{a_0})\\
+               \vdots\\
+               \Gamma\vdash_d \FANCYA_n \TEq (\overline{c_n},\ \overline{a_n})
+             \end{array}
+           }
+         \end{minipage}\vspace{.7cm}\\
+           \begin{minipage}[t]{0.8\textwidth}
+             \infer[\text{\tt (OR)}]{
+                 \begin{array}{l}
+                   \Gamma\vdash_d
+                   \begin{array}{c}
+                     \lor\ \FANCYA_0 \\
+                     \vdots \\
+                     \lor\ \FANCYA_n
+                   \end{array}
+                   \TEq \left(\{\},\ \{
+                   \begin{array}{c}
+                   \progfigmed{
+                     decide\_action(List.flatten[\\
+                     ~~$\ttinfo_0$,\\
+                     ~~...,\\
+                     ~~$\ttinfo_n$\\
+                     ])}\}
+                   \end{array}\right)
+                 \end{array}
+               }
+               {
+                 \begin{array}{c}
+                   \Gamma\vdash_i \FANCYA_0 \TEq \ttinfo_0\\
+                   \vdots\\
+                   \Gamma\vdash_i \FANCYA_n \TEq \ttinfo_n\\
+               \end{array}
+             }
+         \end{minipage}\\
+         \end{array}
+			\end{array}$
+		}}
+		\caption{Tradução intermediária de definições - Agregação}
+		\label{fig:definitions}
+	\end{figure}
+
+\begin{figure}[h]
+	\centering
+  {\fbox{
+      $\begin{array}{c}
+
+         \fbox{$\Gamma\vdash_i \FANCYA \TEq \texttt{info}$} \\\\
+         \begin{array}{c}
+
+           \begin{minipage}[t]{0.8\textwidth}
+             \infer[\text{\tt (INFO-DEF)}]{
+                   \Gamma\vdash_i
+                     \FANCYA 
+                   \TEq
+                   \begin{array}{c}
+                     \progfigmed{
+                     \\\%\{\\
+                     ~~action: show([$a_0, \dots, a_n$])\\
+                     ~~condition: $c_0$\ and\ $\dots$\ and\ $c_n$\\
+                     ~~state: Map.merge($a_0$, Map.merge($\dots$, $a_n$))\\
+                     \},\\
+                     }
+                   \end{array}
+               }
+               {
+                 \begin{array}{c}
+                   \Gamma\vdash_d \FANCYA \TEq (\{c_0, \dots, c_n\},\ \{\ a_0, \dots, a_n\})\\
+               \end{array}
+             }
+         \end{minipage}\\
+
+           \begin{minipage}[B]{0.5\textwidth}
+           \infer[\text{\tt (INFO-EX)}]{
+                 \begin{array}{c}
+               \Gamma\vdash_d
+               \exists I \in v : \FANCYA_0 \lor \dots \lor \FANCYA_n
+               \TEq
+                 \begin{array}{l}
+                   \texttt{\small Enum.map(x, fn (i) -> [}\\
+                   \ \ \ \ \ttinfo_0,\\
+                   \ \ \ \ \texttt{...}\\
+                   \ \ \ \ \ttinfo_n\\
+                   \ \ \texttt{]}\\
+                   \texttt{end}
+                \end{array}
+                \end{array}
+           }
+           {
+             \begin{array}{c}
+               \Gamma\vdash_v v \TEq x\\
+               \Gamma\vdash_i \FANCYA_0 \TEq \ttinfo_0\\
+               \vdots\\
+               \Gamma\vdash_i \FANCYA_n \TEq \ttinfo_n\\
+             \end{array}
+           }
+         \end{minipage}\vspace{.7cm}\\
+
+         \end{array}
+			\end{array}$
+		}}
+		\caption{Organização das informações sobre uma ação}
+		\label{fig:definitions}
+	\end{figure}
+

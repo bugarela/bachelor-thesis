@@ -278,7 +278,7 @@ sua condição de ativação para o estado atual e o próximo estado que sua exe
 \If{tamanho de $estados\_distintos=1$}\Comment{Decisão pura}
 \State \textbf{return} primeiro estado em $estados\_distintos$
 \Else\Comment{Influência Externa}
-\State envie a origem e os rótulos das $acoes\_possiveis$ para o oráculo
+\State envie identificações das $acoes\_possiveis$ para o oráculo
 \State $acao\_escolhida\gets$ resposta do oráculo
 \State \textbf{return} estado resultante de $acao\_escolhida$
 \EndIf
@@ -288,7 +288,7 @@ sua condição de ativação para o estado atual e o próximo estado que sua exe
 
 Se há apenas um próximo estado possível resultante das aplicações das ações
 ativadas, então o algoritmo decide por aquele estado. Caso contrário, ele abre
-uma conexão com o oráculo, enviando a origem e uma identificação das ações
+uma conexão com o oráculo, enviando uma identificação das ações
 possíveis. O algoritmo permanece bloqueado até que o oráculo responda a ação
 escolhida, e então retorna o próximo estado correspondente àquela ação.
 
@@ -409,36 +409,35 @@ dados na Figura \ref{fig:ex2tla} e em nas definições de próximo estado aprese
 $(\texttt{CALL})$, que adiciona a condição e a ação daquela definição às
 respectivas listas, incorporando completamente a definição invocada.
 
+
+\input{fig/declaration}
 \subsubsection{Condicionais}
 
 Estruturas \IF definem ações com base em uma condição, e poderiam ser traduzidas
-para duas definições com suas próprias condições e ações, de forma que uma das
-definições tenha a condição idêntica a condição do \IF e a outra, sua negação.
-Para preservar a semelhança com a especificação, contudo, optou-se por utilizar
-a própria estrutura \texttt{if} da linguagem destino. 
+para a disjunção de duas definições com suas próprias condições e ações, de forma que uma das
+definições tenha a condição idêntica a condicional de \IF e a outra, sua
+negação. A as ações seriam enviadas para o algoritmo de decisão, já que se
+encontram em uma disjunção, mas nunca precisariam de uma escolha uma vez que a
+condicional torna suas condições mutualmente excludentes.
 
-Quando as definições dos blocos \THEN e \textsc{else} não possuem condições de ativação,
-é possível aplicar a regra (\texttt{IF-DIRECT}), que não gera nenhuma condição,
-uma vez que ambas as ações podem ser ativadas, independentemente da avaliação da
-condicional. Essa regra lida com o caso da regra (\texttt{IF-COND}) onde não há
-condições de ativação, porém o resultado para as duas regras é equivalente. A
-regra (\texttt{IF-DIRECT}) tem como função evitar que uma condição de ativação verbosa
-que sempre avalia para verdadeiro seja gerada, melhorando a legibilidade e
-performance.
-
-Em casos onde alguma das definições apresenta uma condição de avaliação, a regra
-(\texttt{IF-COND}) precisa ser aplicada, carregando a condição para fora da
-estrutura \texttt{if}, já que ela representa apenas uma transformação de estado
-dependente de uma condicional - uma vez que a ação contendo essa estrutura for
-invocada, ela precisa retornar um novo estado. Por isso, é necessário avaliar as
-condições antes e não durante a ação. Para essa ação ser ativável, é necessário
+Para não adicionar
+indireções possivelmente confusas e preservar a semelhança com a especificação, contudo, optou-se por utilizar
+a própria estrutura \texttt{if} da linguagem destino. As definições dos blocos
+\IF e \textsc{else} podem conter tanto condições quanto ações, porém essas não
+podem ser mantidas em uma mesma expressão \texttt{if}, já que é necessário
+avaliar as condições antes de aplicar as ações. A expressão obtida da ação deve
+sempre resultar em uma alteração de estado, e no caso do \texttt{if}, a alteração
+dependente de uma condicional. Para que sempre haja o retorno de um novo estado, é necessário avaliar as
+condições antes e não durante a ação, e para uma essa ação \IF ser ativável, é necessário
 atender as condições de ativação da definição em
 \THEN se a condicional for verdadeira, e as condições de ativação de \textsc{else} caso
-a condicional seja falsa.
-
+a condicional seja falsa - ou seja, a condição de ativação também depende da
+condicional. Assim, a regra (\texttt{IF}) gera duas estruturas \texttt{if}, uma
+para as condições e outra para as ações
 
 \subsubsection{Agregação}
 
+\input{fig/decl_aggr}
 Quando as definições são conectadas pelo E lógico ($\land$), aplica-se a regra
 (\texttt{AND}) e as listas de
 condições e ações para cada definição são concatenadas - essas listas serão
@@ -450,12 +449,18 @@ discuto nas Seções \ref{sec:protocolo} e \ref{sec:decisao}. A regra
 em uma única ação que se dá pela invocação da função \texttt{decide\_action},
 que implementa o Algoritmo \ref{alg:decide-action} e retorna a ação que deve ser
 executada. Essa função recebe uma lista com três informações para cada definição conectada
-pelo OU: Uma identificação da definição (gerada por uma função \texttt{show} de
-conversão da estrutura para \texttt{string}); A redução das condições
-encontradas na definição; e a redução das ações.
+pelo OU, que são geradas pelas regras do julgamento $\vdash_i$.
 
-\input{fig/declaration}
-\clearpage
+Dada uma definição, a regra (\texttt{INFO-DEF}) gera uma estrutura \texttt{Map}
+com: Uma identificação da definição (gerada por uma função \texttt{show} de
+conversão da estrutura para \texttt{string}); A redução das condições
+encontradas na definição; e a redução das ações. Entre as definições a serem
+enviadas para o algoritmo de decisão, é possível que haja um quantificador
+existencial, determinando definições com parâmetros dependentes
+de algum valor. Nesse caso, a regra (\texttt{INFO-EX}) define uma chamada para a
+função \texttt{map}, que será capaz de gerar as informações conforme os valores
+em tempo de execução.
+
 
 \subsubsection{Tradução de Predicados}
 

@@ -1,0 +1,70 @@
+\begin{figure}[h]
+	\centering
+  {\fbox{
+      $\begin{array}{c}
+
+         \fbox{$\Gamma\vdash_p P \TEq c$} \\ \\
+
+         \begin{array}{c}
+           
+         \begin{minipage}[t]{0.25\textwidth}
+           \infer[\text{\tt (PRED-EQ)}]{
+               \Gamma\vdash_p v_x = v_y \TEq \texttt{x == y}
+           }
+           {
+             \Gamma\vdash_v v_x \TEq x\hspace*{.4cm}
+             \Gamma\vdash_v v_y \TEq y
+           }
+         \end{minipage}\hspace*{.2cm}
+           
+         \begin{minipage}[t]{0.25\textwidth}
+           \infer[\text{\tt (PRED-NEQ)}]{
+               \Gamma\vdash_p v_x \noteq v_y \TEq \texttt{x != y}
+           }
+           {
+             \Gamma\vdash_v v_x \TEq x\hspace*{.4cm}
+             \Gamma\vdash_v v_y \TEq y
+           }
+         \end{minipage}\vspace*{.7cm}\\
+
+         \begin{minipage}[t]{0.4\textwidth}
+           \infer[\text{\tt (PRED-IN)}]{
+               \Gamma\vdash_p v_e \in v_l \TEq \texttt{Enum.member?($l$,\ $e$)}
+           }
+           {
+             \Gamma\vdash_v v_e \TEq e\hspace*{.4cm}
+             \Gamma\vdash_v v_l \TEq l
+           }
+         \end{minipage}\\
+         \end{array}\vspace*{1cm}\\
+
+         \fbox{$\Gamma\vdash_a A \TEq a$} \\ \\
+
+         \begin{array}{c}
+           
+         \begin{minipage}[t]{0.6\textwidth}
+           \infer[\text{\tt (ACT-UNCH)}]{
+         \begin{array}{c}
+             \Gamma\vdash_a \UNCHANGED \langle I_0, \dots, I_n \rangle \TEq\\
+             \texttt{\%\{ $I_0$:\ variables[:$I_0$]$,\ \dots,\ I_n$:\ variables[:$I_n$] \}}
+         \end{array}
+           }
+           {
+           }
+         \end{minipage}\vspace*{.7cm}\\
+
+         \begin{minipage}[t]{0.4\textwidth}
+           \infer[\text{\tt (ACT-PRIM)}]{
+               \Gamma\vdash_a I' = v \TEq \texttt{\%\{ $I$:\ $x$ \}}
+           }
+           {
+             \Gamma\vdash_v v \TEq x
+           }
+         \end{minipage}\\
+         \end{array}
+			\end{array}$
+		}}
+		\caption{Tradução de predicados e ações}
+		\label{fig:t-pred-act}
+	\end{figure}
+  

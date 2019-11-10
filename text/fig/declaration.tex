@@ -1,0 +1,183 @@
+\begin{figure}[h]
+	\centering
+  {\fbox{
+      $\begin{array}{c}
+
+         \fbox{$\Gamma\vdash_d \FANCYA \TEq (\overline{c}, \overline{a})$} \\\\
+         \begin{array}{c}
+         \begin{minipage}[t]{0.8\textwidth}
+           \infer[\text{\tt (CALL)}]{
+             \begin{array}{c}
+               \Gamma\vdash_d NomeAcao(v_0, \dots, v_n)
+               \TEq\\ (\{\texttt{\small nome\_acao\_condition(variables, $\ttx_0$, ...,
+               $\ttx_n$)}\},\\
+               \{\texttt{\small nome\_acao(variables,
+                 $\ttx_0$, ..., $\ttx_n$)}\})
+             \end{array}
+           }
+           {
+             \begin{array}{c}
+               \Gamma\vdash_v v_0 \TEq x_0\\
+               \vdots\\
+               \Gamma\vdash_v v_n \TEq x_n
+             \end{array}
+           }
+         \end{minipage}\vspace{.7cm}\\
+
+           \begin{minipage}[T]{0.2\textwidth}
+           \infer[\text{\tt (COND)}]{
+             \Gamma\vdash_d P \TEq (\{c\},\ \{\})
+           }
+           {
+             \Gamma\vdash_p P \TEq c
+           }\vspace*{.7cm}
+
+           \infer[\text{\tt (ACT)}]{
+             \Gamma\vdash_d A \TEq (\{\},\ \{a\})
+           }
+           {
+             \Gamma\vdash_a A \TEq a
+           }
+
+         \end{minipage}\hspace*{.7cm}
+
+           \begin{minipage}[B]{0.5\textwidth}
+           \infer[\text{\tt (IF-DIRECT)}]{
+               \Gamma\vdash_d
+             \begin{array}{l}
+               \IF P\\
+               \THEN \FANCYA_t\\
+               \textsc{ else}\ \FANCYA_e
+             \end{array}
+             \TEq (\{\},\ \{action\})
+           }
+           {
+             \begin{array}{c}
+               \Gamma\vdash_p P \TEq c\\
+               \Gamma\vdash_d \FANCYA_t \TEq (\{\},\ \{\texttt{at}_0, \dots, \texttt{at}_n\})\\
+               \vdots\\
+               \Gamma\vdash_d \FANCYA_e \TEq (\{\},\ \{\texttt{ae}_0, \dots, \texttt{ae}_n\})\\
+             \end{array}
+           }
+         \end{minipage}\vspace{.7cm}\\
+
+         \begin{minipage}[t]{0.5\textwidth}
+           \infer[\text{\tt (IF-COND)}]{
+               \Gamma\vdash_d
+             \begin{array}{l}
+               \IF P\\
+               \THEN \FANCYA_t\\
+               \textsc{ else}\ \FANCYA_e
+             \end{array}
+             \TEq (\{condition\},\ \{action\})           }
+           {
+             \begin{array}{c}
+               \Gamma\vdash_p P \TEq c\\
+               \Gamma\vdash_d \FANCYA_t \TEq (\{\texttt{ct}_0, \dots, \texttt{ct}_n\},\ \{\texttt{at}_0, \dots, \texttt{at}_n\})\\
+               \vdots\\
+               \Gamma\vdash_d \FANCYA_t \TEq (\{\texttt{ce}_0, \dots, \texttt{ce}_n\},\ \{\texttt{ae}_0, \dots, \texttt{ae}_n\})\\
+             \end{array}
+           }
+         \end{minipage}\vspace*{-0.5cm}\\
+
+           \begin{minipage}[t]{0.5\textwidth}
+             \hspace*{-2cm}
+             \begin{array}{l}
+               onde\\
+               condition =\\\\\\\\\\\\
+               action =\\\\\\\\
+             \end{array}
+             \progfigmed{\\\\
+               if c do\\
+               ~~$\texttt{ct}_0$ and ... and $\texttt{ct}_n$\\
+               else\\
+               ~~$\texttt{ce}_0$ and ... and $\texttt{ce}_n$\\
+               end\\\\
+                 if c do\\
+                 ~~Map.merge($\texttt{at}_0$, Map.merge(..., $\texttt{at}_n$))\\
+                 else\\
+                 ~~Map.merge($\texttt{ae}_0$, Map.merge(..., $\texttt{ae}_n$))\\
+                 end
+               }
+           \end{minipage}\\
+         \end{array}
+			\end{array}$
+		}}
+		\caption{Tradução intermediária de definições - Geração}
+		\label{fig:definitions}
+	\end{figure}
+
+\begin{figure}[h]
+	\centering
+  {\fbox{
+      $\begin{array}{c}
+
+         \fbox{$\Gamma\vdash_d \FANCYA \TEq (\overline{c}, \overline{a})$} \\\\
+         \begin{array}{c}
+
+         \begin{minipage}[B]{0.5\textwidth}
+           \infer[\text{\tt (AND)}]{
+               \Gamma\vdash_d
+               \begin{array}{c}
+                 \land\ \FANCYA_0 \\
+                 \vdots \\
+                 \land\ \FANCYA_n
+               \end{array}
+               \TEq (\overline{c_o} \cup \dots \cup \overline{c_n},\ \overline{a_o} \cup \dots \cup \overline{a_n})
+           }
+           {
+             \begin{array}{c}
+               \Gamma\vdash_d \FANCYA_0 \TEq (\overline{c_0},\ \overline{a_0})\\
+               \vdots\\
+               \Gamma\vdash_d \FANCYA_n \TEq (\overline{c_n},\ \overline{a_n})
+             \end{array}
+           }
+         \end{minipage}\vspace{.7cm}\\
+           \begin{minipage}[t]{0.8\textwidth}
+             \infer[\text{\tt (OR)}]{
+                 \begin{array}{l}
+                   \Gamma\vdash_d
+                   \begin{array}{c}
+                     \lor\ \FANCYA_0 \\
+                     \vdots \\
+                     \lor\ \FANCYA_n
+                   \end{array}
+                   \TEq (\{\},\ \{\text{\tt decide\_action}(l)\})
+                 \end{array}
+               }
+               {
+                 \begin{array}{c}
+                   \Gamma\vdash_d \FANCYA_0 \TEq (\{c_{00}, \dots, c_{0n}\},\ \{\ a_{00}, \dots, a_{0n}\})\\
+                   \vdots\\
+                   \Gamma\vdash_d \FANCYA_n \TEq (\{c_{n0}, \dots, c_{nn}\},\ \{a_{n0}, \dots, a_{nn}\})\\
+               \end{array}
+             }
+         \end{minipage}\\
+
+           \begin{minipage}[t]{0.8\textwidth}
+             \hspace*{2cm}
+             \progfigmed{
+               $onde\ l =$
+               [\\
+               ~~\%\{\\
+               ~~~~action: show([$a_{00}, \dots, a_{0n}$])\\
+               ~~~~condition: $c_{00}$\ and\ $\dots$\ and\ $c_{0n}$\\
+               ~~~~state: Map.merge($a_{00}$, Map.merge($\dots$, $a_{0n}$))\\
+               ~~\},\\
+               ~~$\dots$,\\
+               ~~\%\{\\
+               ~~~~action: show([$a_{n0}, \dots, a_{nn}$])\\
+               ~~~~condition: $c_{n0}$\ and\ $\dots$\ and\ $c_{nn}$\\
+               ~~~~state: Map.merge($a_{n0}$, Map.merge($\dots$, $a_{nn}$))\\
+               ~~\}\\
+               ]\\
+             }\vspace*{-1cm}
+
+           \end{minipage}
+         \end{array}
+			\end{array}$
+		}}
+		\caption{Tradução intermediária de definições - Agregação}
+		\label{fig:definitions}
+	\end{figure}
+

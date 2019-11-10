@@ -334,6 +334,7 @@ mas pode ter vários comportamentos diferentes devido as possíveis ordens que a
 mensagens dos gerenciadores de recurso chegam.
 
 \section{Regras de Tradução}
+\label{sec:regras}
 
 A partir de especificação escritas em \TLAA conforme a sintaxe da figura
 \ref{fig:notacao-tla}, deseja-se obter um código executável em Elixir com
@@ -344,7 +345,7 @@ especificação completa é traduzida no código pelas regras $\vdash$.
 \input{fig/notation}
 
 Em \TLAA, as definições \FANCYA englobam predicados e ações e, como discutido na
-Seção \ref{sec:condicoes}, deseja-se separá-los em condiçoes \ttc\ e ações sobre
+Seção \ref{sec:condicoes}, deseja-se separá-los em condições \ttc\ e ações sobre
 os estados \tta. Devido a essas definições com misturas de predicados e ações
 serem recursivas, é necessário que haja uma separação recursiva também. Para
 isso, ao traduzir uma definição com as regras $\vdash_d$, utiliza-se uma
@@ -352,10 +353,35 @@ estrutura intermediária na forma de dupla, contendo uma lista das condições
 recursivamente encontradas e traduzidas como primeiro elemento, e das ações como
 segundo.
 
+Além das traduções especificadas nas regras desta seção, o gerador de código
+também carrega os comentários da especificação, transformando comentários que
+antecedem as definições em documentação através das anotações \texttt{@doc} do
+Elixir. Também são omitidas das regras traduções básicas de expressões
+aritméticas e alguns detalhes implementados para melhorar a legibilidade do
+código gerado, como identação e conversão de \textit{casing}. 
+
+A Seção \ref{sec:validacao} apresenta exemplos de aplicação das regras
+apresentadas nesta seção, e por isso é possivelmente um recurso para melhor
+compreendimento do funcionamento do tradutor. Por questão organizacional, as
+regras e exemplos são mantidos em seções distintas, mas recomenda-se a
+referência entre eles no momento da leitura deste capítulo.
+
 \subsection{Tradução de especificações}
 
-A tradução de uma especificação é feita através das regras na Figura
-\ref{fig:t-specification}. As definições são traduzidas pela regra (\texttt{DEF}) que, a partir das duplas
+\input{fig/spec_rules}
+
+A tradução de uma especificação para código Elixir é dada pela regra
+(\texttt{MOD}) na Figura\ref{fig:t-specification}.
+O julgamento $\vdash$ é responsável pelo início da tradução, recebendo a
+especificação completa e traduzindo cada elemento com o julgamento devido.
+A partir dela, um módulo Elixir é obtido, assim como a invocação de sua
+função \texttt{main} com o estado inicial traduzido. Dentro do módulo, o oráculo
+é disparado e referenciado por uma constante, as constantes são declaradas e as
+definições traduzidas formam o restante das funções, juntamente com a função de
+próximo estado e a função \texttt{decide\_action} definida pelo Algoritmo \ref{alg:decide-action}.
+
+As definições declaradas são traduzidas pela regra (\texttt{DEF}) (Figura
+\ref{fig:t-declaration}) que, a partir das duplas
 obtidas recursivamente de uma definição \FANCYA, cria as funções \texttt{nome\_acao\_condition} 
 e \texttt{nome\_acao}, reduzindo as condições com o conector lógico \texttt{and}
 e as ações com a função \texttt{merge}, responsável por unificar duas
@@ -363,20 +389,11 @@ estruturas do tipo \texttt{Map} - usada para representar estados - em uma só.
 
 A declaração de constantes é traduzida pela regra (\texttt{CONST}), que define,
 para cada constante declarada na especificação, um atributo do módulo gerado em
-Elixir, a partir do operador \texttt{@}, assim como uma função para acessá-la de
+Elixir, a partir do operador \texttt{@}, assim como uma função que permite acessá-la de
 fora do módulo. O valor das constantes em \TLA só precisa ser definido para
 executar o TLC, e não está presente na especificação. Assim, o código gerado
 atribui um valor exemplo da forma ``<Value for C>'' a ser substituído pelo programador.
 
-A regra (\texttt{MOD}) é responsável pelo início da tradução, recebendo a
-especificação completa e traduzindo cada elemento com o conjunto de regras
-devido. A partir dela, um módulo Elixir é obtido, assim como a invocação de sua
-função \texttt{main} com o estado inicial traduzido. Dentro do módulo, o oráculo
-é disparado e referenciado por uma constante, as constantes são declaradas e as
-definições traduzidas formam o restante das funções, juntamente com a função de
-próximo estado e a função \texttt{decide\_action} definida pelo Algoritmo \ref{alg:decide-action}.
-
-\input{fig/spec_rules}
 
 \subsection{Tradução das definições}
 
@@ -391,6 +408,36 @@ $podeEfeitvar$ e $naoEfetivado$ na especificação de transações em bancos de
 dados na Figura \ref{fig:ex2tla} e em nas definições de próximo estado apresentadas, aplica-se a regra
 $(\texttt{CALL})$, que adiciona a condição e a ação daquela definição às
 respectivas listas, incorporando completamente a definição invocada.
+
+\subsubsection{Condicionais}
+
+Estruturas \IF definem ações com base em uma condição, e poderiam ser traduzidas
+para duas definições com suas próprias condições e ações, de forma que uma das
+definições tenha a condição idêntica a condição do \IF e a outra, sua negação.
+Para preservar a semelhança com a especificação, contudo, optou-se por utilizar
+a própria estrutura \texttt{if} da linguagem destino. 
+
+Quando as definições dos blocos \THEN e \textsc{else} não possuem condições de ativação,
+é possível aplicar a regra (\texttt{IF-DIRECT}), que não gera nenhuma condição,
+uma vez que ambas as ações podem ser ativadas, independentemente da avaliação da
+condicional. Essa regra lida com o caso da regra (\texttt{IF-COND}) onde não há
+condições de ativação, porém o resultado para as duas regras é equivalente. A
+regra (\texttt{IF-DIRECT}) tem como função evitar que uma condição de ativação verbosa
+que sempre avalia para verdadeiro seja gerada, melhorando a legibilidade e
+performance.
+
+Em casos onde alguma das definições apresenta uma condição de avaliação, a regra
+(\texttt{IF-COND}) precisa ser aplicada, carregando a condição para fora da
+estrutura \texttt{if}, já que ela representa apenas uma transformação de estado
+dependente de uma condicional - uma vez que a ação contendo essa estrutura for
+invocada, ela precisa retornar um novo estado. Por isso, é necessário avaliar as
+condições antes e não durante a ação. Para essa ação ser ativável, é necessário
+atender as condições de ativação da definição em
+\THEN se a condicional for verdadeira, e as condições de ativação de \textsc{else} caso
+a condicional seja falsa.
+
+
+\subsubsection{Agregação}
 
 Quando as definições são conectadas pelo E lógico ($\land$), aplica-se a regra
 (\texttt{AND}) e as listas de
@@ -407,7 +454,8 @@ pelo OU: Uma identificação da definição (gerada por uma função \texttt{sho
 conversão da estrutura para \texttt{string}); A redução das condições
 encontradas na definição; e a redução das ações.
 
-\input{fig/rules}
+\input{fig/declaration}
+\clearpage
 
 \subsubsection{Tradução de Predicados}
 
@@ -416,6 +464,8 @@ expressões lógicas sobre o estado denominadas condições, e estarão sempre
 associados a execução de uma ação. As traduções são bem diretas e mapeiam os
 operadores de igualdade, desigualdade e pertence para suas representações em
 Elixir.
+
+\input{fig/pred_act}
 
 \subsubsection{Tradução de Ações}
 
@@ -442,6 +492,8 @@ representado como \texttt{Map.merge(variables, \%\{ i: 1, j: 2 \})}.
 
 \subsubsection{Tradução de valores}
 
+\input{fig/values}
+
 O mapeamento de valores é a camada mais baixa da tradução, e está bastante
 ligada a sintaxe. Conjuntos são traduzidos pra estruturas do tipo
 \texttt{MapSet}, que armazenam valores únicos em árvores binárias de busca;
@@ -459,7 +511,7 @@ sendo solicitada de uma definição de dentro do módulo ou de fora - como é no
 caso da tradução do estado inicial. Se o contexto não tiver informação do
 módulo, significa que essa tradução vem de dentro do próprio módulo e então a
 constante pode ser acessada como uma constante do módulo, através do prefixo
-\texttt{@}. Caso haja uma indicação de módulo, é necessário traduzí-la para a
+\texttt{@}. Caso haja uma indicação de módulo, é necessário traduzi-la para a
 chamada da função de acesso à constante daquele módulo, através de
 \texttt{NomeDoModulo.constante}.
 
@@ -475,7 +527,7 @@ iniciais possíveis. Essa definição tem a forma de um predicado sobre um estad
 Ao definir o predicado sobre estados iniciais para enviá-lo ao TLC, é
 possivelmente desejável que mais de um estado atenda-o, de forma que o TLC
 inicie a exploração do espaço de estados a partir de mais de um estado. Isso
-traria segurança de que, idependentemente de quais dos estados iniciais definidos o
+traria segurança de que, independentemente de quais dos estados iniciais definidos o
 programa se encontre no momento que inicia, seu comportamento será válido.
 
 No contexto da execução desse programa, considera-se que não há benefício em
@@ -526,17 +578,88 @@ semelhantes à de qualquer ação. Assim, de forma semelhante a uma execução d
 TLC, o gerador de código recebe como parâmetro o nome dessas duas definições
 para que possa identificá-las e aplicar as regras de traduções devidas.
 
+\section{Aplicação da tradução}
+\label{sec:validacao}
+
+Com as regras de tradução definidas na Seção \ref{sec:regras}, é possível
+traduzir as especificações do Capítulo \ref{cap2} em código Elixir executável.
+Esta seção tem como objetivo demonstrar os resultados, exemplificando a tradução
+para os exemplos de especificações dos Jarros de Água (Figura \ref{fig:ex1tla})
+e do protocolo de efetivação em duas fases (Figuras \ref{fig:ex3tlap1} e
+\ref{fig:ex3tlap2})
+
+\subsection{Jarros de Água}
+
+\input{fig/jarros_ex}
+A especificação do sistema de Jarros de Água contém poucos elementos e é ideal
+para exemplificar os mapeamentos mais básicos. A tradução do módulo inicia pela
+aplicação da regra (\texttt{MOD}) demonstrada na Figura \ref{fig:jarros-ex-mod}.
+A especificação não apresenta constantes, descartando a necessidade de aplicar a
+regra (\texttt{CONST}).
+
+A definição $TypeOK$ é uma invariante da especificação e, apesar de apresentar
+um predicado válido, não representa valor algum para a execução e, portanto, foi
+manualmente descartado. O estado inicial definido por $Init$ - conforme identificado como
+parâmetro da tradução - e gera a chamada para \texttt{JarrosDeAgua.main}
+apresentada. Os parâmetros com os quais a função é chamada são resultado da
+aplicação das regras (\texttt{INIT-AND}) e (\texttt{INIT-EQ}), e pela mesma
+agregação de literais feita para ações, que omite chamadas de \texttt{Map.merge}
+e foi exemplificada na Seção \ref{sec:regras}.
+
+No interior do módulo, são listadas as definições. As definições dessa
+especificação se agrupam em duas formas similares: a primeira contendo apenas
+modificações de variáveis, e a segunda apresentando uma expressão \texttt{IF}. A
+Figura \ref{fig:jarros-ex-def1} demonstra o resultado da tradução para
+definições do primeiro grupo, apresentado também na figura.
+
+O segundo grupo de definições traduz para uma condicional de Elixir conforme a
+Figura \ref{fig:jarros-ex-def2}. Destaca-se a diferença entre uma ação com uma
+expressão \texttt{IF} e um predicado, que gera uma condição. A expressão
+$jarro\_grande + jarro\_pequeno \lte 5$ não é uma condição para a execução da
+ação, a ação pode ser ativada a qualquer momento. Essa expressão apenas altera
+os valores a serem atribuídos às variáveis do próximo estado.
+
+Para ambos os grupos de definições, a regra (\texttt{AND}) é usada para agregar
+as condições e ações encontradas para cada linha da definição. Em nenhuma
+definição há condições, resultando portanto em uma lista vazia que será
+compreendida como \texttt{True}. Todas as ações utilizam o operador
+\textit{primed}, e portanto são traduzidas através da regra (\texttt{ACT-PRIM}).
+
+Por fim, a definição de próximo estado por $Next$, assim como $Init$ identificado através
+de um parâmetro do tradutor, é traduzida pela regra (\texttt(Next)) conforme a
+Figura \ref{fig:jarros-ex-next}. A função \texttt{main} é recursiva, sempre
+chamando ela mesma com o próximo estado, sempre imprimindo o estado com que foi
+chamada para que seja possível acompanhar suas alterações. A definição $Next$
+apresenta ações separadas pelo operador $\lor$, e portanto requer uma decisão.
+Como discutido na Seção \ref{sec:decisao}, a decisão é delegada para a função
+\texttt{decide\_action}, que recebe uma lista com informações sobre as possíveis
+ações.
+
+Essa lista de ações é exemplificada com as informações para as duas primeiras
+ações disponíveis, onde a chave \texttt{action} tem como valor uma identificação
+daquela ação, \texttt{condition} chama a função de condição que irá retornar se
+ela está satisfeita, e \texttt{state} informa qual o novo estado caso a decisão
+seja aquela ação.
+
+\subsubsection{Execução}
+
+Devido à ausência de condições, cada mudança de estado - isto é, cada chamada da
+função \texttt{main} - exige uma escolha, de forma que a maior parte do
+funcionamento do código gerado dependerá da implementação do oráculo. Supondo um
+oráculo que escolha sempre uma ação aleatória entre as enviadas a ele, a
+execução dos jarros de água se dará pela alteração aleatória de quantidade de
+água nos jarros, porém sempre respeitando as mudanças especificadas.
+
+Outra implementação possível para o oráculo é a leitura de alguma entrada que
+determine a ação a ser tomada. Com essa implementação, o resultado da execução
+pode ser entendido como um jogo ou simulação, onde algum usuário determina uma
+ação e observa um resultado, de forma que as restrições impostas pela
+especificação funcionem como regras que limitam as operações a serem feitas pelo
+usuário.
+
+\subsection{Protocolo de efetivação em duas fases}
 
 
-% A Figura \ref{fig:decide-tla} é um recorte da especificação de transações em
-% bancos de dados da Figura \ref{fig:ex2tla} e apresenta um exemplo de definição
-% com expressões de estado e de ação.
 
-% % Primeiro dar exemplo do protocolo e dps vejo o do Decide que é mais complexo
 
-% \begin{figure}[h]
-%   \centering
-%   \includegraphics[width=0.8\textwidth]{Decide.png}
-%   \caption{Especificação de $Decide$ das Transações em bancos de dados}
-%   \label{fig:decide-tla}
-% \end{figure}
+

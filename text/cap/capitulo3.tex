@@ -718,4 +718,80 @@ identifique completamente aquela ação, e não receba várias cópias de um mes
 identificador sem o valor do parâmetro.
 
 \subsubsection{Execução}
+Para permitir a execução do modelo, é necessário definir valores para as
+constantes. O protocolo depende da constante $GR$ que é o conjunto de
+gerenciadores de recurso que poderão efetivar ou abortar durante a execução.
+Define-se então um conjunto simples de dois identificadores representando dois
+gerenciadores com \texttt{@gr MapSet.new([``g1'', ``g2'']}.
+
+Cada passo da execução do protocolo exigirá uma escolha, delegada ao oráculo.
+Com o intuito de validar o modelo gerado para esse exemplo, uma implementação
+mais realística do oráculo foi explorada, e o resultado é fornecido como exemplo
+junto à implementação do tradutor. Este oráculo funciona como um gerenciador de
+transações (GT) do protocolo, se comunicando com os gerenciadores de recurso
+(GRs). Os GRs também são implementados com o propósito de validação, e fazem
+parte da influência no processo de escolha.
+
+Todos os gerenciadores, GRs e GT, são processos que processam input do usuário
+no terminal, ao mesmo tempo que trocam mensagens sobre as ações a serem
+escolhidas. O GT, que recebe as mensagens do modelo (por ser essencialmente o
+oráculo), divide as possíveis ações em três grupos: as relacionadas a ele mesmo
+(como $GTAborta$), as relacionadas ao gerenciador g1 (como $GRPrepara(``g1'')$)
+e as relacionadas ao gerenciador g2. Cada grupo de ações é enviado para o
+processo correspondente, de forma a serem exibidos para o usuário que decidirá,
+dentre as ações do grupo, qual será escolhida.
+
+Quando uma entrada é lida em algum dos processos, a ação escolhida é enviada de
+volta ao oráculo, que por sua vez a envia para o modelo e espera por novas
+ações. Assim, é possível simular execuções, como por exemplo através dos passos:
+
+\begin{enumerate}
+\item Início\\
+  \textbf{Estado do Modelo:} \texttt{\small \\
+    estado\_gr:\ \%\{``g1'' =\textgreater{} ``trabalhando'', ``g2'' =\textgreater{}
+    ``trabalhando''\},\\
+    estado\_gt:\ ``inicio'',\\
+    g\_rs\_preparados:\ \#MapSet\textless{}[]\textgreater{},\\
+    msgs:\ \#MapSet\textless{}[]\textgreater{}\\\\}
+  \textbf{Ações possíveis:}\\\texttt{
+    \textbf{[GT]:}\ GTAborta\\
+    \textbf{[GR1]:}\ GRPrepara(``g1''), GREscolheAbortar(``g1'')\\
+    \textbf{[GR2]:}\ GRPrepara(``g2''), GREscolheAbortar(``g2'')\\\\}
+\item GR1 escolhe \texttt{GRPrepara(``g1'')}\\
+  \textbf{Estado do Modelo:} \texttt{\small \\
+    estado\_gr:\ \%\{``g1'' =\textgreater{} ``preparado'', ``g2'' =\textgreater{}
+    ``trabalhando''\},\\
+    estado\_gt:\ ``inicio'',\\
+    g\_rs\_preparados:\ \#MapSet\textless{}[]\textgreater{},\\
+    msgs:\ \#MapSet\textless{}[\%\{gr:\ ``g1'', tipo:\ ``EstouPreparado'' \}]\textgreater{}\\\\}
+  \textbf{Ações possíveis:}\\\texttt{
+    \textbf{[GT]:}\ GTAborta, GTRecebePrepara(``g1'')\\
+    \textbf{[GR1]:}\ \\
+    \textbf{[GR2]:}\ GRPrepara(``g2''), GREscolheAbortar(``g2'')\\\\}
+\item GR2 escolhe \texttt{GREscolheAbortar(``g2'')}\\
+  \textbf{Estado do Modelo:} \texttt{\small \\
+    estado\_gr:\ \%\{``g1'' =\textgreater{} ``preparado'', ``g2'' =\textgreater{}
+    ``abortado''\},\\
+    estado\_gt:\ ``inicio'',\\
+    g\_rs\_preparados:\ \#MapSet\textless{}[]\textgreater{},\\
+    msgs:\ \#MapSet\textless{}[\%\{gr:\ ``g1'', tipo:\ ``EstouPreparado'' \}]\textgreater{}\\\\}
+  \textbf{Ações possíveis:}\\\texttt{
+    \textbf{[GT]:}\ GTAborta, GTRecebePrepara(``g1'')\\
+    \textbf{[GR1]:}\ \\
+    \textbf{[GR2]:}\ \\\\}
+\item GT escolhe \texttt{GTAborta}\\
+  \textbf{Estado do Modelo:} \texttt{\small \\
+    estado\_gr:\ \%\{``g1'' =\textgreater{} ``preparado'', ``g2'' =\textgreater{}
+    ``abortado''\},\\
+    estado\_gt:\ ``termino'',\\
+    g\_rs\_preparados:\ \#MapSet\textless{}[]\textgreater{},\\
+    msgs:\ \#MapSet\textless{}[\%\{tipo:\ ``Aborte'' \}\%\{gr:\ ``g1'', tipo:\
+    ``EstouPreparado'' \}]\textgreater{}\\\\}
+  \textbf{Ações possíveis:}\\\texttt{
+    \textbf{[GT]:}\\
+    \textbf{[GR1]:}\ GRRecebeMsgAborte(``g1'')\\
+    \textbf{[GR2]:}\ GRRecebeMsgAborte(``g2'')\\\\}
+
+
+\end{enumerate}
 

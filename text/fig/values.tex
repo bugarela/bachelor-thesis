@@ -93,6 +93,20 @@
              \Gamma\vdash_v I \TEq i
            }
          \end{minipage}\vspace*{.7cm}\\
+           \begin{minipage}[t]{0.4\textwidth}
+             \infer[\text{\tt (REC-EX)}]{
+               \begin{array}{c}
+                 \Gamma\vdash_v [I \in v_r -> v_v,\ \overline{k -> v}] \TEq\\
+                 \ttx_r\ \texttt{|\textgreater\ Enum.map(fn i -> \{i, $\ttx_v$\} end)
+                 |\textgreater{} Enum.into($\ttx_l$)}
+                 \end{array}
+           }
+           {
+             \Gamma\vdash_v[\overline{k -> v}] \TEq \ttx_l\hspace*{.45cm}
+             \Gamma\vdash_v v_r \TEq \ttx_r\hspace*{.45cm}
+             \Gamma\vdash_v v_v \TEq \ttx_v\hspace*{.1cm}
+           }
+         \end{minipage}
          \end{array}
 			\end{array}$
 		}}

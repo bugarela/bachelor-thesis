@@ -303,7 +303,9 @@ concorrentes usualmente apresentam muitos comportamentos distintos, e \TLA
 permite especificar um modelo que aceite vários desses comportamentos.
 
 Assim, o modelo em si e sua tradução são sequenciais, e se comportam como uma troca
-sucessiva de estados. A ordem das transições que alteram esses estados é
+sucessiva de estados - ele é representado em uma lógica temporal, e por isso
+pode ser entendido como um conjunto de estados e transições, e estas são
+intrinsecamente lineares. A ordem de execução dessas transições, contudo, é
 possivelmente determinada por uma influência externa - e esta, sim, pode possuir
 elementos concorrentes.
 
@@ -469,7 +471,12 @@ regras $\vdash_p$ para expressões lógicas sobre o estado denominadas condiçõ
 associados a execução de uma ação. As traduções são bem diretas e mapeiam os
 operadores de igualdade, desigualdade e pertence para suas representações em
 Elixir. Os operadores de desigualdade $\lte, \gte, \lt$ e $\gt$ são omitidos das
-regras por serem muito semelhantes às regras (\texttt{PRED-EQ}) e (\texttt{PRED-INEQ}).
+regras por serem muito semelhantes às regras (\texttt{PRED-EQ}) e
+(\texttt{PRED-INEQ}).
+
+$\ENABLED \FANCYA$ é um predicado que tem valor verdadeiro se e somente
+$\FANCYA$ é ativável, isto é, se suas condições de ativação são verdadeiras.
+Assim, a sua tradução, feita pela regra (\texttt{PRED-EN}) é a avaliação das condições de $\FANCYA$.
 
 \input{fig/pred_act}
 
@@ -503,11 +510,15 @@ representado como \texttt{Map.merge(variables, \%\{ i: 1, j: 2 \})}.
 O mapeamento de valores é a camada mais baixa da tradução, e está bastante
 ligada a sintaxe. Conjuntos são traduzidos pra estruturas do tipo
 \texttt{MapSet}, que armazenam valores únicos em árvores binárias de busca;
-Registros são traduzidos para estruturas chave-valor \texttt{Map}, variáveis
-são acessadas pelo estado disponível no parâmetro \texttt{variables} e
-constantes pelo atributo do módulo.
+Registros são traduzidos para estruturas chave-valor \texttt{Map}, e registros
+quantificados sobre um valor são traduzidos pela regra (\texttt{REC-EX}) para
+uma composição das funções \texttt{map} e \texttt{into}, que irão iterar sobre o
+valor sobre qual a quantificação é feita para gerar vários pares chave-valor, e
+incluí-los na estrutura \texttt{Map} gerada pelo restante do registro.
 
-Para decidir como traduzir um identificador, que pode representar uma variável,
+Variáveis são acessadas pelo estado disponível no parâmetro \texttt{variables} e
+constantes pelo atributo do módulo. Para decidir como traduzir um identificador,
+que pode representar uma variável,
 uma constante ou um parâmetro da de definição, utiliza-se o contexto $\Gamma$.
 Se o contexto indicar que um identificador é um parâmetro, ele é traduzido sem
 modificação.
@@ -756,7 +767,7 @@ ações. Assim, é possível simular execuções, como por exemplo através dos 
   \textbf{Ações possíveis:}\\\texttt{
     \textbf{[GT]:}\ GTAborta\\
     \textbf{[GR1]:}\ GRPrepara(``g1''), GREscolheAbortar(``g1'')\\
-    \textbf{[GR2]:}\ GRPrepara(``g2''), GREscolheAbortar(``g2'')\\\\}
+    \textbf{[GR2]:}\ GRPrepara(``g2''), GREscolheAbortar(``g2'')\\}
 \item GR1 escolhe \texttt{GRPrepara(``g1'')}\\
   \textbf{Estado do Modelo:} \texttt{\small \\
     estado\_gr:\ \%\{``g1'' =\textgreater{} ``preparado'', ``g2'' =\textgreater{}
@@ -767,7 +778,7 @@ ações. Assim, é possível simular execuções, como por exemplo através dos 
   \textbf{Ações possíveis:}\\\texttt{
     \textbf{[GT]:}\ GTAborta, GTRecebePrepara(``g1'')\\
     \textbf{[GR1]:}\ \\
-    \textbf{[GR2]:}\ GRPrepara(``g2''), GREscolheAbortar(``g2'')\\\\}
+    \textbf{[GR2]:}\ GRPrepara(``g2''), GREscolheAbortar(``g2'')\\}
 \item GR2 escolhe \texttt{GREscolheAbortar(``g2'')}\\
   \textbf{Estado do Modelo:} \texttt{\small \\
     estado\_gr:\ \%\{``g1'' =\textgreater{} ``preparado'', ``g2'' =\textgreater{}
@@ -778,7 +789,7 @@ ações. Assim, é possível simular execuções, como por exemplo através dos 
   \textbf{Ações possíveis:}\\\texttt{
     \textbf{[GT]:}\ GTAborta, GTRecebePrepara(``g1'')\\
     \textbf{[GR1]:}\ \\
-    \textbf{[GR2]:}\ \\\\}
+    \textbf{[GR2]:}\ \\}
 \item GT escolhe \texttt{GTAborta}\\
   \textbf{Estado do Modelo:} \texttt{\small \\
     estado\_gr:\ \%\{``g1'' =\textgreater{} ``preparado'', ``g2'' =\textgreater{}
@@ -790,8 +801,12 @@ ações. Assim, é possível simular execuções, como por exemplo através dos 
   \textbf{Ações possíveis:}\\\texttt{
     \textbf{[GT]:}\\
     \textbf{[GR1]:}\ GRRecebeMsgAborte(``g1'')\\
-    \textbf{[GR2]:}\ GRRecebeMsgAborte(``g2'')\\\\}
-
-
+    \textbf{[GR2]:}\ GRRecebeMsgAborte(``g2'')}
 \end{enumerate}
 
+Com esse exemplo, é demonstrada uma possível forma de influenciar o modelo
+quando são necessárias escolhas. Caso não faça sentido para o modelo que algo
+externo influencie ele em uma determinada decisão, como uma decisão que é
+indiferente para todo o sistema, a decisão pode ser forçada na especificação
+através de condições mais restritas. Uma sugestão é que se use predicados do
+tipo $\NEG\ENABLED\FANCYA$ em definições menos prioritárias que $\FANCYA$.

@@ -35,7 +35,24 @@
              \Gamma\vdash_v v_e \TEq e\hspace*{.4cm}
              \Gamma\vdash_v v_l \TEq l
            }
+         \end{minipage}\vspace*{.7cm}\\
+         \begin{minipage}[t]{0.4\textwidth}
+           \infer[\text{\tt (PRED-NOT)}]{
+               \Gamma\vdash_p \neg P \TEq \texttt{not c}
+           }
+           {
+             \Gamma\vdash_p P \TEq c
+           }
+         \end{minipage}\vspace*{.7cm}\\
+         \begin{minipage}[t]{0.4\textwidth}
+           \infer[\text{\tt (PRED-EN)}]{
+               \Gamma\vdash_p \ENABLED \FANCYA \TEq \ttc_0\texttt{ and ... and }\ttc_n
+           }
+           {
+             \Gamma\vdash_d \FANCYA \TEq (\ttc_0, ..., \ttc_n,\ \overline{\tta})
+           }
          \end{minipage}\\
+
          \end{array}\vspace*{1cm}\\
 
          \fbox{$\Gamma\vdash_a A \TEq a$} \\ \\

@@ -1,70 +1,114 @@
 \chapter{Considerações}
 
-A etapa inicial do desenvolvimento deste trabalho envolveu, na maior parte, revisão do material bibliográfico e didático disponível sobre TLA e \TLAA. O conhecimento obtido a partir desse estudo foi exposto no Capítulo \ref{cap2}. É esperado que novos conceitos sejam encontrados na continuação do trabalho, o que se transformará em atualizações e adições em tal capítulo. Deseja-se também, com a evolução do conhecimento sobre o assunto, tornar a descrição dos conceitos mais didática e organizada.
+% protótipo, divulgação
 
-Além da apresentação dos conceitos necessários para o entendimento da lógica TLA e da linguagem de especificação \TLAA, foram expostos dois exemplos com a intenção de esclarecer o funcionamento das especificações na linguagem. Esses exemplos são resgatados no Capítulo \ref{cap3} na demonstração de uma instância do objetivo deste trabalho, isto é, numa tradução de especificação para código. Essa demonstração assegura a viabilidade do trabalho, apesar de tratar um escopo restrito do problema. Com o desenvolvimento de mais mapeamentos para compor o tradutor, deseja-se apresentar mais exemplos como o incluso na Seção \ref{mapeamentos}.
+Com a conclusão deste trabalho, consideram-se algumas contribuições previstas e
+não previstas, bem como um conjunto de ideias para continuações e melhorias
+da ferramenta implementada que ficaram de fora do escopo deste trabalho.
 
-Para o exemplo de especificação apresentado na Seção \ref{exemplo2}, deseja-se definir uma outra especificação para exemplificar o conceito de implementação, apresentando um protocolo implementado sobre a especificação apresentada - assim como Lamport demonstra implementação em \cite{video-protocol}. Com esse último exemplo devidamente explicado, é considerado que o Capítulo \ref{cap2} é suficiente para um entendimento dos fundamentos e da aplicação de \TLAA.
+O desenvolvimento se dividiu em duas grandes etapas bastante distintas. A
+primeira etapa envolveu, na maior parte, revisão do material bibliográfico e
+didático disponível sobre TLA e \TLAA. O conhecimento obtido a partir desse
+estudo foi exposto no Capítulo \ref{cap2}. Tal agregação de conhecimento e
+sumarização de conceitos é deixada como contribuição didática, e espera-se
+também que ajude na divulgação de \TLAA, especialmente no Brasil.
 
-Foram justificadas, no Capítulo \ref{cap3}, as escolhas das linguagens Elixir, para o código gerado, e Haskell, para a implementação do tradutor, respectivamente na Seção \ref{elixir} e na Seção \ref{traducao}. Esse mesmo capítulo explica como será composto o tradutor, mostrando a possibilidade de descrevê-lo, neste trabalho e na implementação, através de mapeamentos. O processo de busca por mapeamentos se encontra em um estágio inicial, e deseja-se encontrar mapeamentos que permitam traduzir o maior subconjunto possível de especificações para linguagens, sendo o cenário ideal aquele em que são encontrados mapeamentos suficientes para traduzir corretamente qualquer especificação escrita em \TLAA.
+Essa etapa constrói a base de todo o trabalho - tanto para o texto apresentado,
+quanto para o desenvolvimento da segunda etapa. Entender os conceitos de forma
+precisa possibilitou a confiança necessária para as decisões de estruturação do
+código gerado. A maior dificuldade no processo de aplicar esses conhecimentos,
+que não estava prevista, foi o grau de interpretação necessário para estabelecer
+um valor computacional em alguns aspectos da especificação, como foi
+estabelecido o conceito de escolhas para estados onde mais de um próximo estado
+satisfaz as ações possíveis.
 
-A etapa de implementação do tradutor ainda não foi iniciada. Durante a revisão bibliográfica, contudo, foi encontrada a definição completa da gramática de \TLAA, em \cite{specifying-systems}. Esse artefato facilitará a implementação do \textit{parser}, disponibilizando mais tempo do que o previsto para a implementação dos mapeamentos em si.
+A segunda etapa se deu pela definição dos mapeamentos através de regras de
+tradução, assim como da implementação destas regras e validação através da
+geração de código para os exemplos de especificações apresentados. Os resultados
+obtidos são considerados suficientes para atender os objetivos no Capítulo
+\ref{introducao}, não só mostrando a viabilidade da geração de código, mas
+também entregando um tradutor automático e demonstrando o valor da execução do
+código gerado.
 
-Com essas considerações, é evidenciado o progresso deste trabalho durante sua primeira fase, assim como sua viabilidade de conclusão no prazo previsto e a relevância de suas contribuições.
+Entende-se que o tradutor e as regras de tradução oferecidas também podem ter
+valor didático, no sentido de que observar o código gerado pode ajudar no
+entendimento do significado da estrutura que o gerou. O principal valor do
+gerador de código é, contudo, visto como a capacidade de gerar protótipos de
+validação e eventualmente bases iniciais para o desenvolvimento ou módulos a
+serem acoplados 
 
-\section{Cronograma}
-\label{cronograma}
+Apesar de as regras de tradução apresentadas cobrirem todos os elementos
+principais de \TLAA, o conjunto de especificações aceito por ele é bastante
+restrito, já que a gramática de \TLA é muito vasta. Prevê-se que as
+regras necessárias para traduzir o restante da linguagem sejam numerosas, porém
+não muito complexas. Algumas traduções que já podem ser feitas a partir da
+representação intermediária utilizada no tradutor não são feitas para todas suas
+versões na linguagem de especificação, uma vez que \TLA possui vários açúcares
+sintáticos e representa mais de um valor, predicado ou ação de várias maneiras
+diferentes. Aceitar essas outras maneiras, para alguns casos, requer apenas
+adições ao \textit{parser}.
 
-As etapas para este trabalho foram estabelecidas conforme a lista:
+No planejamento deste trabalho, esperava-se fornecer garantias para os
+mapeamentos encontrados. Isso deixou de fazer sentido durante a execução por
+considerar-se que o valor computacional de uma especificação é passível de
+interpretação, e o código é gerado a partir da interpretação feita. Dessa forma,
+o que mais se aproxima de uma garantia são evidências de que o código gerado
+apresenta o valor resultante da interpretação, como feito ao mostrar o processo
+de tradução e execução do código gerado para especificações.
 
+A escolha da linguagem Elixir se mostrou muito benéfica, uma vez que ela permite
+a comunicação do modelo com o oráculo e quaisquer outros processos de forma
+simples e transparente. O código gerado pode se comunicar com um oráculo em
+outra máquina, o que demostra a real possibilidade de usar o modelo gerado em um
+sistema distribuído.
+
+\section{Trabalhos futuros}
+
+A continuação evidente deste trabalho é a adição de novos mapeamentos para que
+um conjunto maior de especificações em \TLA seja traduzível. Outros caminhos de
+exploração também foram observados, e julga-se que este trabalho possa receber
+muitos complementos interessantes. Algumas reflexões são:
 \begin{enumerate}
-  \item Etapa 1 - Revisão bibliográfica sobre TLA+: Inclui leitura de textos e tutoriais, busca de exemplos e outras fontes de conhecimento sobre a linguagem, como o curso em vídeo ensinado pelo criador da linguagem.
-  \item Etapa 2 - Traduções manuais: Se dá por tentativas de codificação de exemplos de modelos obtidos na Etapa 1. Essa codificação será em uma linguagem de programação funcional com concorrência, maximizando a proximidade com o modelo - possivelmente Elixir.
-  \item Etapa 3 - Estabelecimento de mapeamentos: Uma observação das traduções manuais ao lado do código, com objetivo de enumerar mapeamentos feitos no processo manual. Dessa etapa, se espera uma lista de possíveis correspondências a serem avaliadas na Etapa 4 e 5.
-  \item Etapa 4 - Escolha de mapeamentos: Dentre os possíveis mapeamentos, serão escolhidos aqueles que apresentam maior correspondência entre as definições, conforme estudos sobre os significados dos construtores utilizados nas duas linguagens.
-  \item Etapa 5 - Encontrar garantias para os mapeamentos: O processo de conjecturar, evidenciar ou provar a correspondência entre uma especificação formal qualquer e o código gerado a partir dela com os mapeamentos escolhidos na Etapa 4.
-  \item Etapa 6 - Implementação do gerador de código: Consiste em implementar um programa capaz de fazer o \textit{parsing} da linguagem TLA+ e escrever um arquivo com o código na linguagem de programação.
-  \item Etapa 7 - Análise de melhorias do ambiente: É o estudo da capacidade de testes para o código gerado manterem a correspondência perante modificações no mesmo. Será feito atráves da implementação de testes e exploração de quais mudanças teriam potencial de tornar o código incoerente com a especificação e passariam nos testes.
+  \item Passos balbuciantes não são levados em conta durante toda a execução do
+    modelo, não permitindo que uma ação que não altera o estado do modelo seja
+    tomada. Esse tipo de ação tem o valor de uma espera, e acontece sempre que
+    há uma situação de escolha, já que a escolha pode ser adiada por qualquer
+    período de tempo. Quando o modelo é capaz de decidir a próxima ação, ele não
+    oferece a oportunidade de alguma influência gerar um passo balbuciante, e
+    irá alterar o estado imediatamente. Com o tradutor atual, seria possível
+    definir um passo balbuciante como uma ação qualquer sem condição, fazendo
+    com que uma escolha sempre seja necessária e
+    todos os passos possam ser influenciados. Todavia, se julga interessante que
+    houvessem formas de interromper o modelo a partir da interpretação de passos
+    balbuciantes.
+
+  \item No gerador proposto, se uma ação não definir o valor de uma variável no
+    próximo estado - o que, na especificação, significaria que qualquer valor
+    para aquela variável é válido - o estado será replicado sem aquela variável,
+    o que geralmente resultará em erro em alguma ação futura. Uma melhoria para
+    essa situação seria permitir que influências externas definam o valor dessa
+    variável no próximo estado, já que ele pode ser qualquer.
+
+  \item Muitas informações da especificação que não definem predicados ou ações
+    são ignoradas ou precisam ser manualmente retiradas para o funcionamento do
+    tradutor. Uma melhoria para a ferramenta seria a capacidade de interpretar
+    essas informações e descartar adequadamente o que não tem valor para
+    execução.
+
+  \item Em vários exemplos de especificações, uma das invariantes checada é
+    sobre os tipos das variáveis. Um trabalho bastante relevante seria a
+    tradução dessas invariantes para assinaturas de tipo, de forma que o
+    checador de tipos de Elixir mantenha as garantias de tipos, tornando as
+    alterações de código mais seguras. Esse mesmo efeito pode ser obtido
+    através da tradução de outras invariantes para grupos de testes
+    compartilhados, de forma que o programador possa verificar essas invariantes
+    em todos os testes que escrever - isto é, nos estados obtidos durante a
+    execução dos testes implementados pelo programador.
+
+  \item A especificação dos jarros de água estende a especificação dos inteiros,
+    disponível por padrão na IDE de \TLAA. Essas especificações base poderiam
+    ser traduzidas e, seus códigos gerados, disponibilizados juntamente com a
+    ferramenta de tradução, de forma que ela carregue o código de uma
+    especificação base sempre que ela for estendida por alguma outra
+    implementação.
 \end{enumerate}
-
-\begin{table}[h]
-  \centering
-  \begin{tabular}{|c||c|c|c|c|c|c|c|c|c|c|c|c|}
-  \hline
-  \multirow{2}{*}{\textbf{\small{Etapas}}} & \multicolumn{12}{|c||}{\textbf{\small{2019}}} \\
-  \cline{2-13}
-   & \textbf{J} & \textbf{F} & \textbf{M} & \textbf{A} & \textbf{M} & \textbf{J} & \textbf{J} & \textbf{A} & \textbf{S} & \textbf{O} & \textbf{N} & \textbf{D} \\
-  \hline \hline
-  \textbf{\small{1}} & & & \cellcolor{gray} & \cellcolor{gray} & \cellcolor{gray} & & & & & & & \\ \hline
-  \textbf{\small{2}} & & & & \cellcolor{gray} & & & & & & & & \\ \hline
-  \textbf{\small{3}} & & & &  & \cellcolor{gray} & & & & & & & \\ \hline
-  \textbf{\small{4}} & & & &  & \cellcolor{gray} & \cellcolor{gray} & \cellcolor{gray} & & & & & \\ \hline
-  \textbf{\small{5}} & & & & & & \cellcolor{gray} & \cellcolor{gray} & \cellcolor{gray} & \cellcolor{gray} & & & \\ \hline
-  \textbf{\small{6}} & & & & & & \cellcolor{gray} & \cellcolor{gray} & \cellcolor{gray} & \cellcolor{gray} & \cellcolor{gray} & & \\ \hline
-  \textbf{\small{7}} & & & & & & & & & \cellcolor{gray} & \cellcolor{gray} & \cellcolor{gray} & \\ \hline
-  \end{tabular}
-  \caption{Cronograma Proposto}
-  \label{tab:cronograma}
-\end{table}
-
-O cronograma proposto encontra-se na Tabela \ref{tab:cronograma}. Na primeira fase deste trabalho, contudo, foram finalizadas as etapas 1 e 2, e a etapa 3 está em andamento, juntamente com a 4 e a 5. Assim, o novo cronograma é proposto na Tabela \ref{tab:novo-cronograma}.
-
-\begin{table}[h]
-  \centering
-  \begin{tabular}{|c||c|c|c|c|c|c|c|c|c|c|c|c|}
-  \hline
-  \multirow{2}{*}{\textbf{\small{Etapas}}} & \multicolumn{12}{|c||}{\textbf{\small{2019}}} \\
-  \cline{2-13}
-   & \textbf{J} & \textbf{F} & \textbf{M} & \textbf{A} & \textbf{M} & \textbf{J} & \textbf{J} & \textbf{A} & \textbf{S} & \textbf{O} & \textbf{N} & \textbf{D} \\
-  \hline \hline
-  \textbf{\small{1}} & & & \cellcolor{gray} & \cellcolor{gray} & \cellcolor{gray} & & & & & & & \\ \hline
-  \textbf{\small{2}} & & & & \cellcolor{gray} & & & & & & & & \\ \hline
-  \textbf{\small{3}} & & & & & \cellcolor{gray} & \cellcolor{gray} & \cellcolor{gray} & & & & & \\ \hline
-  \textbf{\small{4}} & & & & & \cellcolor{gray} & \cellcolor{gray} & \cellcolor{gray} & \cellcolor{gray} & & & & \\ \hline
-  \textbf{\small{5}} & & & & & & \cellcolor{gray} & \cellcolor{gray} & \cellcolor{gray} & \cellcolor{gray} & & & \\ \hline
-  \textbf{\small{6}} & & & & & & & \cellcolor{gray} & \cellcolor{gray} & \cellcolor{gray} & \cellcolor{gray} & & \\ \hline
-  \textbf{\small{7}} & & & & & & & & & \cellcolor{gray} & \cellcolor{gray} & \cellcolor{gray} & \\ \hline
-  \end{tabular}
-  \caption{Cronograma Atualizado}
-  \label{tab:novo-cronograma}
-\end{table}

@@ -67,7 +67,11 @@
 
          \progfig{
          def pequeno\_para\_grande\_condition(variables) do\\
-         ~~True\\
+         ~~if variables[:jarro\_grande] + variables[:jarro\_pequeno] \textless{}= 5 do\\
+         ~~~~True\\
+         ~~else\\
+         ~~~~True\\
+         ~~end\\
          end\\
          \\
          def pequeno\_para\_grande(variables) do\\

@@ -11,7 +11,7 @@ Para esse propósito, a linguagem de programação escolhida para o código trad
 \begin{enumerate}
   \item A concorrência é facilitada por ter seu código traduzido para \textit{bytecode} da máquina virtual do Erlang (BEAM). Suporte a concorrência é de extrema importância, já que \TLA foi criado para facilitar a especificação de sistemas concorrentes. É necessário que o código gerado seja capaz de refletir o sistema também nesse quesito.
 
-  \item Uma linguagem funcional tende a se(setq mouse-wheel-scroll-amount '(1 ((shift) . 1) ((control) . nil)))  aproximar mais de definições matemáticas do que linguagens de outros paradigmas. Uma vez que a estrutura de \TLA foi construída principalmente no âmbito da matemática, a complexidade das traduções tende a ser menor para uma linguagem funcional.
+  \item Uma linguagem funcional tende a se aproximar mais de definições matemáticas do que linguagens de outros paradigmas. Uma vez que a estrutura de \TLA foi construída principalmente no âmbito da matemática, a complexidade das traduções tende a ser menor para uma linguagem funcional.
 
   \item O alto nível de abstração da sintaxe de Elixir, que se inspira em Ruby e sua busca por código facilmente entendível, faz com o programador que trabalhar com o código gerado possa entendê-lo de forma mais simples e rápida do que seria com uma linguagem de baixo nível. Com isso, otimizações podem ser feitas com mais segurança, e a manutenabilidade do código é favorecida.
 
@@ -126,19 +126,17 @@ matemáticas de \TLA e as estruturas do paradigma funcional presentes em Elixir.
 Entretanto, o disparo de múltiplos processos contemplando todos os caminhos
 possíveis do sistema não é viável dada a explosão de estados nem possui
 aplicação prática de muito valor. Assim, se apresenta a maior dificuldade
-encontrada durante o desenvolvimento deste trabalho: como traduzir
-especificações intermediárias que não descrevem uma implementação e sim um
-sistema ou protocolo.
+encontrada durante o desenvolvimento deste trabalho: como traduzir de forma que
+o código gerado permita todos os caminhos e ordens possíveis sem que haja
+explosão de estados.
 
-A tradução da especificação completa de uma implementação não resultaria no
-disparo de múltiplos processos pela definição $Next$ porque, ao especificar uma
-implementação, são definidas quais condições levam a execução de cada ação. Isso
-é evidenciado pela comparação das especificações do sistema (Figura
-\ref{fig:ex2tla}), do protocolo e da implementação no Capítulo \ref{cap2}. Como o
-intuito do gerador de código é fornecer um protótipo funcional e viável, e não
-um disparador de processos interminável, são necessárias condições bem definidas
-para a decisão de que ação deve ser tomada. A Seção \ref{sec:condicoes}
-descreve como a exigência dessas condições é feita.
+Dentre as soluções, ponderou-se exigir que a especificação determinasse
+condições suficientemente restritivas para que o caminho seja sempre
+determinístico. Em uma segunda reflexão, isso se mostrou uma péssima abordagem,
+já que o valor da especificação é, em muitas vezes, relacionado ao não
+determinismo do comportamento. Essa solução foi descartada juntamente com a
+primeira abordagem de disparar vários processos, e uma nova abordagem definindo
+escolhas foi implementada, e é desenvolvida na Seção \ref{sec:decisao} 
 
 \subsection{Condições e Ações}
 \label{sec:condicoes}
@@ -159,7 +157,7 @@ aqueles pares de estado que respeitam a condição por ela determinada. Com essa
 perspectiva, as expressões de ação também são condições.
 
 Contudo, no contexto de um programa executável viável, os estados são obtidos de
-maneira incremental. No código gerado, o estado inicial é obtido pela definicão
+maneira incremental. No código gerado, o estado inicial é obtido pela definição
 do estado inicial da especificação, e os próximos estados são obtidos a partir
 da sucessiva aplicação de funções - que representam ações - nesse estado.
 
@@ -361,6 +359,12 @@ antecedem as definições em documentação através das anotações \texttt{@do
 Elixir. Também são omitidas das regras traduções básicas de expressões
 aritméticas e alguns detalhes implementados para melhorar a legibilidade do
 código gerado, como identação e conversão de \textit{casing}. 
+
+A implementação dessas regras, assim como o \textit{parser} e alguns exemplos de
+oráculos são disponibilizados em
+\url{https://github.com/GabrielaMafra/tla-transmutation}. O repositório é
+nomeado como uma referência simbólica a Elixir, que assim como a transmutação,
+faz parte da prática ancestral da alquimia.
 
 A Seção \ref{sec:validacao} apresenta exemplos de aplicação das regras
 apresentadas nesta seção, e por isso é possivelmente um recurso para melhor
@@ -639,11 +643,12 @@ os valores a serem atribuídos às variáveis do próximo estado.
 Para ambos os grupos de definições, a regra (\texttt{AND}) é usada para agregar
 as condições e ações encontradas para cada linha da definição. Em nenhuma
 definição há condições, resultando portanto em uma lista vazia que será
-compreendida como \texttt{True}. Todas as ações utilizam o operador
+compreendida como \texttt{True} - ou uma expressão que sempre avalia para
+\texttt{True} como no caso das definições \IF. Todas as ações utilizam o operador
 \textit{primed}, e portanto são traduzidas através da regra (\texttt{ACT-PRIM}).
 
 Por fim, a definição de próximo estado por $Next$, assim como $Init$ identificado através
-de um parâmetro do tradutor, é traduzida pela regra (\texttt(Next)) conforme a
+de um parâmetro do tradutor, é traduzida pela regra (\texttt{NEXT}) conforme a
 Figura \ref{fig:jarros-ex-next}. A função \texttt{main} é recursiva, sempre
 chamando ela mesma com o próximo estado, sempre imprimindo o estado com que foi
 chamada para que seja possível acompanhar suas alterações. A definição $Next$

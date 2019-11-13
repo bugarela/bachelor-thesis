@@ -17,7 +17,7 @@
             
          \begin{minipage}[t]{0.25\textwidth}
            \infer[\text{\tt (VAL-VAR)}]{
-               \Gamma\vdash_v I \TEq \texttt{variables[:$I$]}
+               \Gamma\vdash_v I \TEq \texttt{variables[:I]}
            }
            {
              \{I : param\} \notin \Gamma\hspace*{.6cm}
@@ -50,7 +50,7 @@
          \end{minipage}\vspace*{.7cm}\\
          \begin{minipage}[t]{0.4\textwidth}
            \infer[\text{\tt (SET-LIT)}]{
-             \Gamma\vdash_v \{v_0, \dots, v_n\} \TEq \texttt{MapSet.new([$x_0, \dots, x_n$])}
+             \Gamma\vdash_v \{v_0, \dots, v_n\} \TEq \texttt{MapSet.new([$\ttx_0, \dots, \ttx_n$])}
            }
            {
              \Gamma\vdash_v v_0 \TEq x_o\ \dots\ \Gamma\vdash_v v_n \TEq x_n
@@ -59,7 +59,7 @@
            
           \begin{minipage}[t]{0.4\textwidth}
            \infer[\text{\tt (SET-UNION)}]{
-             \Gamma\vdash_v S_{a} \cup S_{b} \TEq \texttt{MapSet.union($s_a$,\ $s_b$)}
+             \Gamma\vdash_v S_{a} \cup S_{b} \TEq \texttt{MapSet.union($\tts_a$,\ $\tts_b$)}
            }
            {
              \Gamma\vdash_v S_{a} \TEq s_a\hspace*{.4cm}
@@ -69,7 +69,7 @@
          \begin{minipage}[t]{0.4\textwidth}
            \infer[\text{\tt (REC-LIT)}]{
              \Gamma\vdash_v [k_0 \mapsto v_{o}, \dots, k_n \mapsto v_{n}] \TEq
-             \texttt{\%\{ $k_0$:\ $x_0, \dots, k_n$:\ $x_n$ \}}
+             \texttt{\%\{ $k_0$:\ $\ttx_0, \dots, \ttk_n$:\ $\ttx_n$ \}}
            }
            {
              \Gamma\vdash_v v_0 \TEq x_o\ \dots\ \Gamma\vdash_v v_n \TEq x_n
@@ -77,20 +77,20 @@
          \end{minipage}\vspace*{.7cm}\\
          \begin{minipage}[t]{0.4\textwidth}
            \infer[\text{\tt (REC-EXCEPT)}]{
-             \Gamma\vdash_v [I \EXCEPT ![k] = v] \TEq
-             \texttt{Map.put($i, k, x$)}
+             \Gamma\vdash_v [v_i \EXCEPT ![k] = v_v] \TEq
+             \texttt{Map.put(i, k, x)}
            }
            {
-             \Gamma\vdash_v v \TEq x\hspace*{.4cm}
-             \Gamma\vdash_v I \TEq i
+             \Gamma\vdash_v v_v \TEq \ttx\hspace*{.4cm}
+             \Gamma\vdash_v v_i \TEq \tti
            }
          \end{minipage}\vspace*{.7cm}\\
            \begin{minipage}[t]{0.4\textwidth}
            \infer[\text{\tt (REC-INDEX)}]{
-             \Gamma\vdash_v I[k] \TEq \texttt{$i$[$k$]}
+             \Gamma\vdash_v v[k] \TEq \texttt{x[k]}
            }
            {
-             \Gamma\vdash_v I \TEq i
+             \Gamma\vdash_v v \TEq x
            }
          \end{minipage}\vspace*{.7cm}\\
            \begin{minipage}[t]{0.4\textwidth}

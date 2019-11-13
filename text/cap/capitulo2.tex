@@ -258,14 +258,14 @@ recurso para que efetivem.
 A Figura \ref{fig:ex3tlap1} apresenta a primeira
 parte da especificação desse protocolo, onde são definidas as ações para o
 gerenciador de transações. A ação $GTRecebePrepara$ acontece quando uma mensagem
-``EstouPreparado'' é recebida e colocao gerenciador de recurso $g$ que enviou a
+``EstouPreparado'' é recebida e coloca o gerenciador de recurso $g$ que enviou a
 mensagem no conjunto de gerenciadores preparados $GRsPreparados$. Quando todos
 os gerenciadores estão preparados, a ação $GTEfetiva$ se torna ativável, podendo
 enviar o comando ``Efetive'' para os gerenciadores.
 
 Adicionalmente, o gerenciador de transações pode abortar espontaneamente. Essa
 característica é definida por $GTAborta$, que pode ocorrer a qualquer momento em
-que o gerenciador esteja ativo, isto é, $estadoGT = ``inicio''$.
+que o gerenciador esteja ativo, isto é, $estadoGT = ``inicio"$.
 
 \begin{figure}[hb]
   \centering
@@ -284,13 +284,13 @@ que o gerenciador esteja ativo, isto é, $estadoGT = ``inicio''$.
 A parte 2 da especificação, na Figura \ref{fig:ex3tlap2}, contém as definições
 de ações para os gerenciadores de recurso. Elas são semelhantes àquelas da
 especificação do sistema de transações, na Figura \ref{fig:ex1tla}, exceto que
-nessa especificação o $estadoGR$ só alterado se uma mesagem de abortar ou
+nessa especificação o $estadoGR$ só alterado se uma mensagem de abortar ou
 efetivar for recebida, e não diretamente após o gerenciador escolher abortar ou efetivar.
 
 $DFNext$ que qualquer ação para qualquer gerenciador de recurso pode acontecer a
 qualquer momento, e $DFSpec$ obedece o mesmo formato das especificações
 apresentadas até então. O teorema $\THEOREM DFSpec \implies \square DFTypeOK$
-define o predicado sobre tipos comoo uma invariante, e com as declarações
+define o predicado sobre tipos como uma invariante, e com as declarações
 \[\INSTANCE TransacoesBD\]
 \[\THEOREM DFSpec \implies TBDSpec\]
 
@@ -304,7 +304,7 @@ palavras, $DFSpec$ implementa $TBDSpec$.
 
 O conjunto $msgs$ dessa especificação contém todas as mensagens que em algum
 momento foram enviadas, uma vez que em nenhum momento uma mensagem é retirada do
-conjunto. Isso significa que uma mesagem pode ser recebida qualquer número de
+conjunto. Isso significa que uma mensagem pode ser recebida qualquer número de
 vezes e, no contexto dessa especificação, isso não é um problema, já que a ação
 executada ao receber mensagens pode ser feita uma ou infinitas vezes sem alterar
 o resultado.

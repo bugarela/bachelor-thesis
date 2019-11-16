@@ -377,8 +377,7 @@ referência entre eles no momento da leitura deste capítulo.
 \input{fig/spec_rules}
 
 A tradução de uma especificação para código Elixir é dada pela regra
-(\texttt{MOD}) na Figura\ref{fig:t-specification}.
-O julgamento $\vdash$ é responsável pelo início da tradução, recebendo a
+(\texttt{MOD}) na Figura \ref{fig:t-specification}. O julgamento $\vdash$ é responsável pelo início da tradução, recebendo a
 especificação completa e traduzindo cada elemento com o julgamento devido.
 A partir dela, um módulo Elixir é obtido, assim como a invocação de sua
 função \texttt{main} com o estado inicial traduzido. Dentro do módulo, o oráculo
@@ -388,7 +387,7 @@ próximo estado e a função \texttt{decide\_action} definida pelo Algoritmo \re
 
 As definições declaradas são traduzidas pela regra (\texttt{DEF}) (Figura
 \ref{fig:t-declaration}) que, a partir das duplas
-obtidas recursivamente de uma definição \FANCYA, cria as funções \texttt{nome\_acao\_condition} 
+obtidas recursivamente de uma definição \FANCYAA, cria as funções \texttt{nome\_acao\_condition} 
 e \texttt{nome\_acao}, reduzindo as condições com o conector lógico \texttt{and}
 e as ações com a função \texttt{merge}, responsável por unificar duas
 estruturas do tipo \texttt{Map} - usada para representar estados - em uma só.
@@ -406,7 +405,7 @@ atribui um valor exemplo da forma ``<Value for C>'' a ser substituído pelo prog
 As definições de ações e predicados é recursivamente agregada em uma dupla de
 listas. Os predicados encontrados são traduzidos para condições com pelas regras
 $\vdash_P$ em (\texttt{COND}) e agregados na primeira lista da dupla, enquanto as ações são
-traduzidas em funções sobre o estado pelas regras $vdash_a$ em (\texttt{ACT}) e agregadas na
+traduzidas em funções sobre o estado pelas regras $\vdash_a$ em (\texttt{ACT}) e agregadas na
 segunda lista.
 
 Quando uma definição é invocada dentro de outra definição, como acontece com
@@ -474,7 +473,7 @@ Os predicados em \TLA são fórmulas sobre o estado atual, e são traduzidos pel
 regras $\vdash_p$ para expressões lógicas sobre o estado denominadas condições, e estarão sempre
 associados a execução de uma ação. As traduções são bem diretas e mapeiam os
 operadores de igualdade, desigualdade e pertence para suas representações em
-Elixir. Os operadores de desigualdade $\lte, \gte, \lt$ e $\gt$ são omitidos das
+Elixir. Os operadores de desigualdade $\leq, \geq, <$ e $>$ são omitidos das
 regras por serem muito semelhantes às regras (\texttt{PRED-EQ}) e
 (\texttt{PRED-INEQ}).
 

@@ -50,7 +50,7 @@
 }
 
 \begin{document}
-  \date{24 de Junho de 2019}
+  \date{22 de Novembro de 2019}
   \begin{frame}
       \titlepage
   \end{frame}
@@ -94,7 +94,7 @@
 
   Problemas da tradução manual:
   \begin{itemize}
-    \item Sucetível a erro - causando a perda de propriedades verificadas.
+    \item Suscetível a erro - causando a perda de propriedades verificadas.
     \item Custosa
   \end{itemize}\medskip
 
@@ -141,110 +141,27 @@
 
 \end{frame}
 
-\begin{frame}
-  \frametitle{Exemplo: Problema dos Jarros de Água}
-
-  \begin{itemize}
-    \item Jarro de 3 litros
-    \item Jarro de 5 litros
-    \item Fonte infinita de água
-    \item Local para descarte
-  \end{itemize}\medskip
-
-  Como conseguir um jarro com exatos 4 litros de água?\medskip
-
-  Primeiro é definido o sistema e, só então, um programa que atua sobre ele.
-
-\end{frame}
-
-\begin{frame}
-  \frametitle{Especificação: Sistema Jarros de Água (1/4)}
-  {\EXTENDS} Integers\\
-  \vspace{8.0pt}
-  \VARIABLES\ $jarro\_pequeno$,\, $jarro\_grande$\\
-  \vspace{8.0pt}
-  $TypeOK \defeq \land\ jarro\_pequeno \in 0 \dotdot 3$\\
-  ~~~~~~~~~~~~~~~~\,$\land\ jarro\_grande \in 0 \dotdot 5$\\
-  \vspace{8.0pt}
-  $Init \defeq \land\ jarro\_grande = 0$\\
-  ~~~~~~~~~~$\land\ jarro\_pequeno = 0$
-  \vspace{8.0pt}%
-\end{frame}
-
-\begin{frame}
-  \frametitle{Especificação: Sistema Jarros de Água (2/4)}
-  \includegraphics[scale=0.25]{img/jarros_1.png}
-\end{frame}
-
-\begin{frame}
-  \frametitle{Especificação: Sistema Jarros de Água (3/4)}
-  \hspace*{-10mm}
-  \includegraphics[scale=0.29]{img/jarros_2.png}
-\end{frame}
-
-\begin{frame}
-  \frametitle{Especificação: Sistema Jarros de Água (4/4)}
-
-  $Next \defeq \lor\ EnchePequeno$\\
-  ~~~~~~~~~~~~$\lor\ EncheGrande$\\
-  ~~~~~~~~~~~~$\lor\ EsvaziaPequeno$\\
-  ~~~~~~~~~~~~$\lor\ EsvaziaGrande$\\
-  ~~~~~~~~~~~~$\lor\ PequenoParaGrande$\\
-  ~~~~~~~~~~~~$\lor\ GrandeParaPequeno$\\\bigskip
-
-  Com essas fórmulas, a especificação do sistema é definida por
-
-  \[Spec \defeq Init \land \square [Next]_{vars}\]
-\end{frame}
-
-\begin{frame}
-  \frametitle{Propriedades}
-
-  $TypeOK$ é um predicado para a consistência dos tipos. Um predicado pode ser definido como uma invariante do sistema com o teorema:
-
-  \[\THEOREM Spec \implies \square (TypeOK)\]\medskip
-
-  É possível verificar que o sistema permite, a partir da condição inicial definida, que o estado desejado seja alcançado:
-
-  \[\THEOREM Spec \implies \square (TypeOK \land jarro\_grande\ \backslash= 4)\]
-\end{frame}
-
 \section{Gerador de código}
 
 \begin{frame}
   \frametitle{Tradução}
-  O método de tradução é descrito através de \textbf{mapeamentos}. Alguns mapeamentos já definidos são:
+  O método de tradução é descrito através de \textbf{mapeamentos}. Os primeiros mapeamentos definidos foram:
   \begin{itemize}
     \item Ações $\mapsto$ Funções
     \item Estado $\mapsto$ Hash mapeando as variáveis aos seus valores
-    \item Ação $\lor$ Ação $\mapsto$ Disparo de novo processo
-    \item $\dots$
+    \item Ação $\lor$ Ação $\mapsto$ \textbf{Disparo de novo processo}
   \end{itemize}
 
-
-
+  \begin{center}
+    \Large{Ação $\lor$ Ação}
+  \end{center}
+    
 \end{frame}
 
 \begin{frame}
-  \frametitle{Exemplo: Tradução de uma ação}
-  $EsvaziaPequeno \defeq \land\ jarro\_pequeno' = 0$\\
-  ~~~~~~~~~~~~~~~~~~~~~~~~~~$\land\ jarro\_grande' = jarro\_grande$\\\medskip
-
+  \frametitle{Proposta inicial para tradução da disjunção}
+  \hspace{-7mm}
   $\progfig{
-  ~~def esvazia\_pequeno(variaveis) do\\
-  ~~~~\%\{\\
-  ~~~~~~jarro\_pequeno: 0,\\
-  ~~~~~~jarro\_grande: variaveis[:jarro\_grande]\\
-  ~~~~\}\\
-  ~~end
-  }$
-\end{frame}
-
-\begin{frame}
-  \frametitle{Tradução do sistema}
-  \[Spec \defeq Init \land \square [Next]_{vars}\]
-  \hspace{-10mm}
-  $\progfigbig{
   ~def main(variaveis) do\\
   ~~~spawn\_link JarrosDeAgua, :main, [grande\_para\_pequeno(variaveis)]\\
   ~~~spawn\_link JarrosDeAgua, :main, [pequeno\_para\_grande(variaveis)]\\
@@ -257,6 +174,61 @@
   ~JarrosDeAgua.main(\%\{\ grande: 0, pequeno: 0 \})
   }$
 \end{frame}
+
+\begin{frame}
+  \frametitle{Condições e Ações}
+  $Sacar(qtd) \defeq \land\ saldo\ \geq qtd$\\
+  ~~~~~~~~~~~~~~~~~~~~$\land\ saldo' = saldo - qtd$\\\bigskip
+  
+  \textbf{Condição de ativação}: $saldo\ \geq qtd$\\
+  \textbf{Ação}: $saldo' = saldo - qtd$\\\bigskip\pause
+  
+  $Next \defeq \lor\ Sacar(10)$\\
+  ~~~~~~~~~~~~$\lor\ Sacar(50)$\\\bigskip
+  
+  Se $saldo = 30$, é possível decidir a próxima ação.\\
+  Mas se $saldo = 60$, é necessária uma escolha (não determinismo)\\
+\end{frame}
+
+\begin{frame}
+  \frametitle{Condições e Ações: Tradução}
+  $\progfig{
+  ~~def sacar\_condition(variaveis, qtd) do\\
+  ~~~~variaveis[:saldo] >= qtd\\
+  ~~end\\\\
+  ~~def sacar(variaveis, qtd) do\\
+  ~~~~\%\{\\
+  ~~~~~~saldo: variaveis[:saldo] - qtd,\\
+  ~~~~\}\\
+  ~~end
+  }$
+\end{frame}
+
+\begin{frame}
+  \frametitle{Banco com problemas de concorrência}
+  \includegraphics[scale=0.15]{img/bank1.png}
+\end{frame}  
+
+\begin{frame}
+  \frametitle{Banco modelado em \TLA}
+
+  \begin{minipage}{0.6\textwidth}
+  \includegraphics[scale=0.12]{img/bank2.png}
+  \end{minipage}
+  \hfill
+  \begin{minipage}{0.3\textwidth}\centering
+    Modelos são sequenciais.\\\medskip
+    Ordem das ações pode ser não determinística\\\medskip
+  \end{minipage}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Não determinismo centralizado em um oráculo}
+  \includegraphics[scale=0.18]{img/diagram.png}\\
+  Quando o modelo não é capaz de decidir o próximo estado (como no caso de
+  $saldo = 60$), é delegada uma escolha ao oráculo, que centraliza toda a
+  influência externa no modelo.
+\end{frame}  
 
 \begin{frame}
   \frametitle{Por que Elixir?}
@@ -318,3 +290,4 @@
 \end{frame}
 
 \end{document}
+

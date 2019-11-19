@@ -13,6 +13,9 @@
 \usepackage{dirtree}
 \usepackage{listings}
 \usepackage{lmodern}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{proof}
 
 \definecolor{green-hl}{RGB}{54,88,65}
 \newcommand{\hl}[1]{{\color{white}\colorbox{green-hl}{#1}}}
@@ -205,6 +208,26 @@
 \end{frame}
 
 \begin{frame}
+  \frametitle{Determinando a próxima ação}
+  \begin{algorithm}[H]
+    \caption{Decisão da próxima ação}\label{alg:decide-action}
+    \begin{algorithmic}[1]
+      \Procedure{DecideAção}{ações}
+      \State $acoes\_possiveis\gets$ ações com condição satisfeita
+      \State $estados\_distintos\gets$ estados únicos resultantes de $acoes\_possiveis$
+      \If{tamanho de $estados\_distintos=1$}\Comment{Decisão pura}
+      \State \textbf{return} primeiro estado em $estados\_distintos$
+      \Else\Comment{Influência Externa}
+      \State envie identificações das $acoes\_possiveis$ para o oráculo
+      \State $acao\_escolhida\gets$ resposta do oráculo
+      \State \textbf{return} estado resultante de $acao\_escolhida$
+      \EndIf
+      \EndProcedure
+    \end{algorithmic}
+  \end{algorithm}
+\end{frame}
+
+\begin{frame}
   \frametitle{Banco com problemas de concorrência}
   \includegraphics[scale=0.15]{img/bank1.png}
 \end{frame}  
@@ -231,18 +254,18 @@
 \end{frame}  
 
 \begin{frame}
-  \frametitle{Por que Elixir?}
+  \frametitle{Tradução}
 
   \begin{enumerate}
-    \item Concorrência: gera \textit{bytecode} da máquina virtual do Erlang (BEAM).
+    \item Estrutura do módulo e declarações
 
-    \item Paradigma funcional: se aproxima de definições matemáticas, proporcionando um complexidade menor para as traduções.
+    \item Para cada definição, suas condições e suas ações
 
-    \item Expressividade: código entendível, permitindo alta manutenabilidade.
+    \item Função de próximo estado: \texttt{main} em loop
 
-    \item Transparência de plataforma
+    \item Estado inicial: equações do predicado $Init$ como atribuições
 
-    \item Open Source
+    \item Comentários: documentação ou comentários comuns
 
   \end{enumerate}
 \end{frame}
@@ -252,31 +275,33 @@
 \begin{frame}
   \frametitle{Considerações}
 
-  Até aqui:
-  \begin{itemize}
-    \item Estudo dos construtores de \TLA e entendimento da lógica.
-    \item Validação da estrutura inicial do código traduzido.
-    \item Início da listagem de mapeamentos.
-  \end{itemize}
+  Principais contribuições
+  \begin{enumerate}
+    \item Levantamento e sumarização dos conceitos de \TLAA, que apresenta valor
+      didático e potencialmente divulga a linguagem de especificação.
+    \item Gerador de código funcional
+      \begin{itemize}
+        \item Protótipos ou ponto de partida para nova aplicação
+        \item Escopo reduzido - apenas principais elementos foram mapeados
+      \end{itemize}
+  \end{enumerate}
 
 \end{frame}
 
 \begin{frame}
-  \frametitle{Próximos passos}
-
-  A continuidade do trabalho será feita em duas frentes paralelas:
-  \begin{itemize}
-    \item Busca por mais mapeamentos
-    \item Implementação do tradutor (em Haskell)
-  \end{itemize}\medskip\pause
-
-  \begin{block}{Exploração}
+  \frametitle{Trabalhos Futuros}
+  \begin{enumerate}
+    \item Diversas melhorias no tradutor
     \begin{itemize}
-      \item Fornecimento de garantias para os mapeamentos
-      \item Gerar complementos para melhorar o ambiente de desenvolvimento (e.g. testes unitários)
-    \end{itemize}
-  \end{block}
-
+        \item Permitir interrupções ou esperas em qualquer passo
+        \item Modularizar extensões
+        \item Ignorar definições não alcançáveis
+        \end{itemize}
+    \item Permitir que valores não definidos de variáveis sejam escolhidos
+      pelo oráculo
+    \item Traduzir definições de invariantes para testes ou assinaturas para o
+      verificador de tipos.
+  \end{enumerate}
 \end{frame}
 
 \begin{frame}
@@ -285,7 +310,10 @@
   {\Huge Fim :D}\bigskip
 
   Gabriela Moreira Mafra\\\smallskip
-  {\url{gabrielamoreiramafra@gmail.com}}
+  {\url{gabrielamoreiramafra@gmail.com}}\\\bigskip
+
+  \textbf{Repositório:}\\
+  {\url{https://github.com/GabrielaMafra/tla-transmutation}}
 
 \end{frame}
 

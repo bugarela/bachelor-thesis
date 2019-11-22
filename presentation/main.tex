@@ -67,10 +67,10 @@
 
     \textbf{Especificar Software}
     \begin{itemize}
-    \item Permite verificações e fornece garantias
-    \item Serve como base para consulta
-    \item Mais fácil de modificar do que a implementação
-    \item Vem antes do desenvolvimento, na etapa de desenho
+    \item Permite verificações e fornece garantias;
+    \item Serve como base para consulta;
+    \item Mais fácil de modificar do que a implementação;
+    \item Vem antes do desenvolvimento, na etapa de desenho.
     \end{itemize}
     \begin{block}{Sistemas Concorrentes}
       Muitas ordens (comportamentos) possíveis.\\
@@ -85,8 +85,8 @@
 
   Problemas da tradução manual:
   \begin{itemize}
-    \item Suscetível a erro - causando a perda de propriedades verificadas.
-    \item Custosa
+    \item Suscetível a erro - causando a perda de propriedades verificadas;
+    \item Custosa.
   \end{itemize}\medskip
 
   Z, B-Method e ASM (\textit{Abstract State Machine}) tem geradores de código.\medskip
@@ -98,17 +98,17 @@
 
   Linguagem de especificação baseada na lógica TLA.
   \begin{itemize}
-    \item Sintaxe matemática
-    \item Ideal para especificar sistemas concorrentes
+    \item Sintaxe matemática;
+    \item Ideal para especificar sistemas concorrentes.
   \end{itemize}\medskip
 
   Não é disponibilizado um gerador de código.\medskip\pause
 
   \begin{block}{Objetivo}
-    Elaborar um método para gerar código a partir de especificações em \TLA
+    Elaborar um método para gerar código a partir de especificações em \TLA.
     \begin{itemize}
-      \item Encontrar mapeamentos
-      \item Implementar um tradutor, aplicando os mapeamentos e gerando código Elixir
+      \item Encontrar mapeamentos;
+      \item Implementar um tradutor, aplicando os mapeamentos e gerando código Elixir.
     \end{itemize}
   \end{block}
 \end{frame}
@@ -138,15 +138,15 @@
   \frametitle{Tradução}
   O método de tradução é descrito através de \textbf{mapeamentos}. Os primeiros mapeamentos definidos foram:
   \begin{itemize}
-    \item Ações $\mapsto$ Funções
-    \item Estado $\mapsto$ Hash mapeando as variáveis aos seus valores
-    \item Ação $\lor$ Ação $\mapsto$ \textbf{Disparo de novo processo}
+    \item Ações $\mapsto$ Funções;
+    \item Estado $\mapsto$ Hash mapeando as variáveis aos seus valores;
+    \item Ação $\lor$ Ação $\mapsto$ \textbf{Disparo de novo processo}.
   \end{itemize}
 
   \begin{center}
     \Large{Ação $\lor$ Ação}
   \end{center}
-    
+
 \end{frame}
 
 \begin{frame}
@@ -178,7 +178,7 @@
   ~~~~~~~~~~~~$\lor\ Sacar(50)$\\\bigskip
   
   Se $saldo = 30$, é possível decidir a próxima ação.\\
-  Mas se $saldo = 60$, é necessária uma escolha (não determinismo)\\
+  Mas se $saldo = 60$, é necessária uma escolha (não determinismo).\\
 \end{frame}
 
 \begin{frame}
@@ -215,11 +215,6 @@
   \end{algorithm}
 \end{frame}
 
-% \begin{frame}
-%   \frametitle{Banco com problemas de concorrência}
-%   \includegraphics[scale=0.15]{img/bank1.png}
-% \end{frame}  
-
 \begin{frame}
   \frametitle{Banco modelado em \TLA}
 
@@ -229,7 +224,7 @@
   \hfill
   \begin{minipage}{0.3\textwidth}\centering
     Modelos são sequenciais.\\\medskip
-    Ordem das ações pode ser não determinística\\\medskip
+    Ordem das ações pode ser não determinística.\\\medskip
   \end{minipage}
 \end{frame}
 
@@ -239,28 +234,34 @@
   Quando o modelo não é capaz de decidir o próximo estado (como no caso de
   $saldo = 60$), é delegada uma escolha ao oráculo, que centraliza toda a
   influência externa no modelo.
-\end{frame}  
+\end{frame}
 
 \begin{frame}
   \frametitle{Tradução}
 
   \begin{enumerate}
-    \item Estrutura do módulo e declarações
+    \item Estrutura do módulo e declarações;
 
-    \item Para cada definição, suas condições e suas ações
+    \item Para cada definição, suas condições e suas ações;
 
-    \item Função de próximo estado: \texttt{main} em loop
+    \item Função de próximo estado: \texttt{main} em loop;
 
-    \item Estado inicial: equações do predicado $Init$ como atribuições
+    \item Estado inicial: equações do predicado $Init$ como atribuições;
 
-    \item Comentários: documentação ou comentários comuns
+    \item Comentários: documentação ou comentários comuns.
 
   \end{enumerate}
 \end{frame}
 
 \begin{frame}
   \frametitle{Efetivação em Duas Fases}
-  Demonstração
+  \begin{block}{\Large Demonstração}\\
+    \begin{itemize}
+      \item Código gerado a partir da especificação do protocolo de efetivação em duas fases;\\
+    \item
+      Oráculo implementado manualmente, simulando um gerenciador de transações que se comunica com gerenciadores de recurso.
+    \end{itemize}
+  \end{block}
 \end{frame}
 
 \section{Considerações}
@@ -274,8 +275,8 @@
       didático e potencialmente divulga a linguagem de especificação.
     \item Gerador de código funcional
       \begin{itemize}
-        \item Protótipos ou ponto de partida para nova aplicação
-        \item Escopo reduzido - apenas principais elementos foram mapeados
+        \item Protótipos ou ponto de partida para nova aplicação;
+        \item Escopo reduzido - apenas principais elementos foram mapeados.
       \end{itemize}
   \end{enumerate}
 
@@ -284,16 +285,11 @@
 \begin{frame}
   \frametitle{Trabalhos Futuros}
   \begin{enumerate}
-    \item Diversas melhorias no tradutor
-    \begin{itemize}
-        \item Permitir interrupções ou esperas em qualquer passo
-        \item Modularizar extensões
-        \item Ignorar definições não alcançáveis
-        \end{itemize}
     \item Permitir que valores não definidos de variáveis sejam escolhidos
-      pelo oráculo
+      pelo oráculo;
     \item Traduzir definições de invariantes para testes ou assinaturas para o
-      verificador de tipos.
+      verificador de tipos;
+    \item Diversas melhorias no tradutor.
   \end{enumerate}
 \end{frame}
 

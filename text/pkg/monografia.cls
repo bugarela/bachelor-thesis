@@ -1177,10 +1177,10 @@ Este Trabalho de Conclus\~{a}o de Curso foi julgado adequado para a obten\c{c}\~
     \parindent 1em%
     \noindent
     \hb@xt@1.8em{\hss\@makefnmark}#1}
-\newcommand\contentsname{Contents}
-\newcommand\listfigurename{List of Figures}
-\newcommand\listtablename{List of Tables}
-\newcommand\bibname{Bibliography}
+\newcommand\contentsname{Conte\'udo}
+\newcommand\listfigurename{Lista de Figuras}
+\newcommand\listtablename{Lista de Tabelas}
+\newcommand\bibname{Bibliografia}
 \newcommand\indexname{Index}
 \newcommand\figurename{Figura}
 \newcommand\tablename{Table}

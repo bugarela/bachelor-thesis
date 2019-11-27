@@ -5,11 +5,11 @@
 
 As especificações são descritas em fórmulas lógicas, com pequenas adaptações de sintaxe. Para facilitar a curva de aprendizado para engenheiros, foi criada a linguagem PlusCal \cite{pluscal}, com uma sintaxe semelhante a linguagens de programação imperativas, e que traduz seus programas para \TLAA. A linguagem PlusCal não permite especificar sistemas tão complexos quanto os que podem ser escritos diretamente em \TLAA, mas, devido à tradução para a linguagem original, aproveita completamente as capacidades dela de verificação de propriedades.
 
-O método de especificação é baseado em máquinas de estados \cite{tlahistory} e, sendo assim, a descrição de um modelo é composta por uma condição inicial, que determina os possíveis estados inciais, e por uma relação de transições, que determina os possíveis estados que podem suceder cada estado em uma execução. Dessa forma, o conjunto de comportamentos especificado é composto por todos os comportamentos cujo estado inicial satisfaz a condição inicial e todas as transições fazem parte da relação.
+O método de especificação é baseado em máquinas de estados \cite{tlahistory} e, sendo assim, a descrição de um modelo é composta por uma condição inicial, que determina os possíveis estados iniciais, e por uma relação de transições, que determina os possíveis estados que podem suceder cada estado em uma execução. Dessa forma, o conjunto de comportamentos especificado é composto por todos os comportamentos cujo estado inicial satisfaz a condição inicial e todas as transições fazem parte da relação.
 
 Lamport destaca \cite{hyperbook} que as especificações deveriam ser sobre modelos de uma abstração do sistema, e não algo retirado do próprio sistema. Semelhante à planta de um edifício, a especificação pode ser consultada para obter informações sobre o edifício (ou programa) de forma mais conveniente, além de ser capaz de facilitar uma série de verificações e perceber problemas enquanto a mudança ainda não é inviavelmente custosa.
 
-Sendo assim, uma especificação em \TLA pode ser sobre comportamentos do ambiente no qual o programa funciona - como ao especificar um sistema e verificar possíveis comportamentos indesejáveis, entendendo aonde o programa deve atuar - des\-crevendo as operações existentes daquele sistema. Contudo, não limitada a definição de um sistema, uma especificação pode incluir comportamentos do programa em si, compostas por operações existentes do sistema e novas operações definidas pelo programa. Em seu livro \cite{specifying-systems}, Lamport define um sistema de memória linear e, então, propõe uma implementação de um programa de escrita através de \textit{cache} que atua sobre um sistema de memória linear. Assim, ele verifica que a especificação da implementação dele satisfaz a especificação do sistema e prova a implementação. Nos exemplos deste capítulo, serão explicadas especificações de sistemas e de implementações.
+Sendo assim, uma especificação em \TLA pode ser sobre comportamentos do ambiente no qual o programa funciona - como ao especificar um sistema e verificar possíveis comportamentos indesejáveis, entendendo aonde o programa deve atuar - des\-crevendo as operações existentes daquele sistema. Contudo, não limitada à definição de um sistema, uma especificação pode incluir comportamentos do programa em si, compostas por operações existentes do sistema e novas operações definidas pelo programa. Em seu livro \cite{specifying-systems}, Lamport define um sistema de memória linear e, então, propõe uma implementação de um programa de escrita através de \textit{cache} que atua sobre um sistema de memória linear. Assim, ele verifica que a especificação da implementação dele satisfaz a especificação do sistema e prova a implementação. Nos exemplos deste capítulo, serão explicadas especificações de sistemas e de implementações.
 
 \section{Lógica Temporal das Ações}
 \label{sec:tla}
@@ -23,7 +23,11 @@ Os operadores são classificados em constantes e não constantes. Os constantes 
   \item \textbf{Expressões constantes} são expressões com apenas constantes declaradas e o\-pe\-ra\-do\-res constantes. Pela definição de operador constante, o valor de uma expressão constante depende apenas do valor das constantes contidas nela.
   \item \textbf{Expressões de estado} contém expressões constantes e variáveis declaradas. O valor de uma expressão de estado depende do estado, já que os valores das variáveis são definidos em um estado. Quando não são fórmulas, ou seja, sua valoração não é booleana, são chamadas também de funções de estado.
   \item \textbf{Expressões de ação} contém expressões de estado e operadores não constantes. O seu valor depende de um passo - um par de estados. Esse tipo de definição sobre ações dá o nome \textit{actions} a TLA, e pode ser chamado simplesmente de ação.
-  \item \textbf{Expressões temporais} são permitidas apenas com valoração booleana em \TLAA, sendo assim, chamadas sempre de fórmulas temporais. Elas contém expressões de ação e operadores $\square$ e $\Diamond$ da lógica temporal (definidos posteriormente neste capítulo). O valor de uma fórmula temporal depende de uma sequência de passos - um comportamento.
+  \item \textbf{Expressões temporais} são permitidas apenas com valoração
+    booleana em \TLAA, sendo assim, chamadas sempre de fórmulas temporais. Elas
+    contém expressões de ação e operadores $\square$ e $\Diamond$ da lógica
+    temporal (definidos posteriormente neste capítulo). O valor de uma fórmula
+    temporal depende de uma sequência de passos, a que dá-se a denominação de comportamento.
 \end{itemize}
 
 Com essa estrutura, define-se a sintaxe na Figura \ref{fig:sintaxe-tla}. A hierarquia permite que toda a complexidade das definições em uma especificação esteja nas fórmulas de ações, e os operadores temporais sejam usados somente no momento de verificar propriedades de segurança, vivacidade e razoabilidade (\textit{fairness}).
@@ -40,7 +44,7 @@ Com essa estrutura, define-se a sintaxe na Figura \ref{fig:sintaxe-tla}. A hiera
     \begin{array}{lrcl}
   \text{Ação} & \FANCYA & ::= & c \,\mid\, v \,\mid\, v' \,\mid\, \neg \FANCYA \,\mid\, \FANCYA \land \FANCYA \smallskip\\
   \text{Predicado} & P, Q & ::= & c \,\mid\, v \,\mid\, \neg P \,\mid\, P \land P \,\mid\, \ENABLED \FANCYA\smallskip\\
-  \text{Fórmula Simples} & F & ::= & P \,\mid\, \square[\FANCYA]_f  \mid\, \square\langle\FANCYA\rangle_f \,\mid\,  \neg F \,\mid\,  F \land F  \,\mid\, \square F \smallskip\\
+  \text{Fórmula Simples} & F & ::= & P \,\mid\, [\FANCYA]_f  \mid\, \langle\FANCYA\rangle_f \,\mid\,  \neg F \,\mid\,  F \land F  \,\mid\, \square F \smallskip\\
   \text{Fórmula Geral} & G & ::= & F \,\mid\, \EE x : G  \,\mid\, \neg G \,\mid\,  G \land G \mid\, G \implies G \smallskip\\
   \end{array} \end{array}$}
   \caption{Sintaxe da linguagem de TLA}
@@ -49,30 +53,35 @@ Com essa estrutura, define-se a sintaxe na Figura \ref{fig:sintaxe-tla}. A hiera
 
 Uma fórmula temporal em TLA é verdadeira ou falsa em um comportamento, que é definido por uma sequência infinita de estados. Uma fórmula é dita válida se e somente se ela é verdadeira para todos os comportamentos. Assim, a especificação de um sistema é dada por uma fórmula geral $G$ e representa um sistema cujo conjunto de comportamentos permitidos é igual ao conjunto de comportamentos que satisfazem $G$.
 
-Implementação é representada através de implicação. Uma especificação dada pela fórmula $G_1$ implementa outra especificação dada por $G_0$ se e somente se qualquer sistema cujo conjunto de comportamentos satisfaz $G_1$ também satisfaz $G_0$, ou seja, a fórmula $G_0 \implies G_1$ é válida.
+Implementação é representada através de implicação. Uma especificação dada pela fórmula $G_0$ implementa outra especificação dada por $G_1$ se e somente se qualquer sistema cujo conjunto de comportamentos satisfaz $G_0$ também satisfaz $G_1$, ou seja, a fórmula $G_0 \implies G_1$ é válida.
 
 Em \cite{tlaformalization}, são definidas também notações auxiliares. A lista abaixo apresenta a definição e atribui um possível significado a possíveis operadores para fórmulas temporais:
 \begin{itemize}
   \item $\square F$ ($F$ é sempre verdadeiro) para uma fórmula temporal $F$ é satisfeito por um comportamento se e somente se $F$ é verdadeiro para todos os sufixos (primeiro estado em um passo) do comportamento.
 
-  \item $\Diamond F$ (Eventualmente F) é definido como $\neg \square \neg F$.
+  \item $\Diamond F$ (Eventualmente $F$) é definido como $\neg \square \neg F$. Ou
+    seja, não é sempre que $F$ será falso.
 
   \item $F_0 \leadsto F_1$ (Em qualquer momento em que $F_0$ for verdadeiro, $F_1$ eventualmente será) é definido como $\square(F_0 \implies \Diamond F_1)$
 
   % \item $F \stackrel{+}\rightarrow G$ para fórmulas temporais $F$ e $G$ é verdadeiro para um comportamento se e somente se $G$ é verdadeiro, pelo menos, enquanto $F$ é.
 
-  \item \EE $x : F$ para uma variável $x$ e uma fórmula temporal $F$ é satisfeito por comportamento se e somente se existem alguns valores a serem atribuídos a $x$ que produzem um comportamento que satisfaz $F$. Esse operador é uma especialização do quantificador existencial comum $\E$ porque ele asserte a existência de uma sequência infinita de valores para $x$, e não um único valor.
+  \item \EE $x : F$, para uma variável $x$ e uma fórmula temporal $F$, é satisfeito por comportamento se e somente se existem alguns valores a serem atribuídos a $x$ que produzem um comportamento que satisfaz $F$. Esse operador é uma especialização do quantificador existencial comum $\E$ porque ele asserte a existência de uma sequência infinita de valores para $x$, e não um único valor.
 
 \end{itemize}
 
 Para ações, são definidos ainda outros operadores:
 
 \begin{itemize}
-  \item $f'$ (f \textit{primed}) para uma função de estado $f$ é o valor de $f$ no final de um passo. Em outras palavras, para um passo composto pelo par ordenado de estados $s$ e $t$, $f'$ é o valor de $f$ para $t$. De forma semelhante, $P'$ para um predicado $P$ é o valor de $P$ para o estado final de um passo. Assim, na avaliação da valoração de uma ação para um passo, predicados e variáveis sem o operador \textit{primed} se referem aos seus respectivos valores no primeiro estado do passo, e sempre que forem marcados com o operador, fazem referência aos valores no segundo estado do passo.
+  \item $f'$ (f \textit{primed}) para uma função de estado $f$ é o valor de $f$
+    no final de um passo. Em outras palavras, para um passo composto por uma
+    dupla de estados $<s, t>$, $f'$ é o valor de $f$ para $t$. De forma semelhante, $P'$ para um predicado $P$ é o valor de $P$ para o estado final de um passo. Assim, na avaliação da valoração de uma ação para um passo, predicados e variáveis sem o operador \textit{primed} se referem aos seus respectivos valores no primeiro estado do passo, e sempre que forem marcados com o operador, fazem referência aos valores no segundo estado do passo.
 
-  \item A fórmula $\square [\FANCYA]_f$ para uma ação $\FANCYA$ e uma função de estado $f$ é satisfeita por um comportamento se e somente se cada passo do comportamento satisfaz \FANCYA ou mantém o valor de $f$ - ou seja, $\FANCYA \lor (f = f')$.
+  \item A fórmula $[\FANCYA]_f$ para uma ação $\FANCYA$ e uma função de estado
+    $f$ é satisfeita por um  passo que satisfaz \FANCYA ou mantém o valor de $f$ - ou seja, $\FANCYA \lor (f = f')$.
 
-  \item A fórmula $\square \langle\FANCYA\rangle_f$ para uma ação $\FANCYA$ e uma função de estado $f$ é satisfeita por um comportamento se e somente se cada passo do comportamento satisfaz \FANCYA e altera o valor de $f$ - ou seja, $\FANCYA \land (f \neq f')$.
+  \item A fórmula $\langle\FANCYA\rangle_f$ para uma ação $\FANCYA$ e uma função
+    de estado $f$ é satisfeita por um passo que satisfaz \FANCYA e altera o valor de $f$ - ou seja, $\FANCYA \land (f \neq f')$.
 
   \item \ENABLED \FANCYA (\FANCYA é ativável) para uma ação \FANCYA é um predicado cujo valor é verdadeiro para um estado $s$ se e somente se é possível fazer um passo \FANCYA partindo de $s$. Isto é, existe um estado $t$ tal que o passo formado pelo par $s$ e $t$ satisfaz \FANCYA.
 
@@ -122,7 +131,7 @@ Então é possível usar o operador $\square [\FANCYA]_f$ definido, com $f = var
 
 \[\THEOREM Spec \implies \square [\FANCYA]_{vars}\]
 
-o que, se verificado, garante que cada passo de um comportamento satisfeito por $Spec$ satisfaz a ação \FANCYA ou é um passo balbuciante e mantém os valores das variáveis em $vars$. Isso é importante porque possibilita que nem todos os passos do sistema sejam especificados - seria muito complexo definir tudo o que pode ocorrer durante sua execução. Assim, definem-se apenas os passos relevantes para o sistema, e todos os outros passos - aqueles que não alteram as variáveis definidas - são permitidos. Um comportamento que passa a ter infinitos passos balbuciantes pode significar uma execução do sistema que finalizou. Com a definição de passos balbuciantes, é possível definir as propriedades apresentadas na Seção \ref{propriedades}.
+\noindent o que, se verificado, garante que cada passo de um comportamento satisfeito por $Spec$ satisfaz a ação \FANCYA ou é um passo balbuciante e mantém os valores das variáveis em $vars$. Isso é importante porque possibilita que nem todos os passos do sistema sejam especificados - seria muito complexo definir tudo o que pode ocorrer durante sua execução. Assim, definem-se apenas os passos relevantes para o sistema, e todos os outros passos - aqueles que não alteram as variáveis definidas - são permitidos. Um comportamento que passa a ter infinitos passos balbuciantes pode significar uma execução do sistema que finalizou. Com a definição de passos balbuciantes, é possível definir as propriedades apresentadas na Seção \ref{propriedades}.
 
 \section{Propriedades}
 \label{propriedades}
@@ -151,7 +160,7 @@ A conjunção com $(f' \neq f)$, expressada com a notação $\langle\FANCYA\rang
 
 A razoabilidade fraca recebe a denominação "fraca" porque exige que uma ação permaneça continuamente ativável para garantir a ocorrência de um passo satisfazendo-a. Se um comportamento repetidamente tornar a ação ativável e em seguida não ativável, a razoabilidade fraca não garante nada sobre a ocorrência da ação neste comportamento. Para tal, é necessário garantir a propriedade de razoabilidade forte (\textit{strong fairness}).
 
-A razoabilidade forte para uma fórmula de estado $f$ e uma ação \FANCYA é escrita como $SF_f (\FANCYA)$ . Ela é satisfeita por um comportamento se e somente se \FANCYA $\land (f' \neq f)$ ocorre finitas vezes ou infinitos passos \FANCYA $\land (f' \neq f)$ ocorrem. Essa propriedade garante que \FANCYA não possa ser repetidamente ativável para sempre sem que um passo \FANCYA ocorra. Uma forma equivalente de representar essa condição é
+A razoabilidade forte para uma fórmula de estado $f$ e uma ação \FANCYA é escrita como $SF_f (\FANCYA)$. Ela é satisfeita por um comportamento se e somente se \FANCYA $\land (f' \neq f)$ ocorre finitas vezes ou infinitos passos \FANCYA $\land (f' \neq f)$ ocorrem. Essa propriedade garante que \FANCYA não possa ser repetidamente ativável para sempre sem que um passo \FANCYA ocorra. Uma forma equivalente de representar essa condição é
 
 \[\square \Diamond \ENABLED \FANCYA \implies \square \Diamond\langle\FANCYA\rangle_f\]
 
@@ -160,7 +169,8 @@ que pode ser lida como "se sempre \FANCYA for eventualmente ativável, então se
 \section{Exemplo 1 - Jarros de Água}
 \label{exemplo1}
 
-Para exemplificar uma especificação de um sistema, é possível definir um problema combinatório simples como o dos jarros de água. Nesse problema, são fornecidos dois jarros inicialmente vazios, um com capacidade de 3 litros e outro com capacidade de 5 litros, assim como uma fonte inesgotável de água. Sendo assim, é possível despejar a água dos jarros no chão, transferir a água de um jarro ao outro ou encher um jarro com a fonte de água.
+Para exemplificar uma especificação de um sistema, é possível definir um
+problema combinatório simples como o dos jarros de água, como Lamport faz em \cite{video-protocol}. Nesse problema, são fornecidos dois jarros inicialmente vazios, um com capacidade de 3 litros e outro com capacidade de 5 litros, assim como uma fonte inesgotável de água. Sendo assim, é possível despejar a água dos jarros no chão, transferir a água de um jarro ao outro ou encher um jarro com a fonte de água.
 
 O objetivo do problema é ter exatamente 4 litros de água em um dos jarros. Isso é, dada uma máquina de estados, é necessário encontrar uma sequência de transições que leva a algum estado onde o jarro maior tem exatamente 4 litros de água. No entanto, para esse exemplo, deseja-se apenas especificar os comportamentos do sistema em si, e não de um possível programa que buscaria atingir esse objetivo. Uma possível especificação em \TLA para esse sistema se encontra na Figura \ref{fig:ex1tla}.
 
@@ -191,7 +201,11 @@ A definição $TypeOK$ na especificação apresentada pode ser utilizada para ve
 
 \[\THEOREM Spec \implies \square (TypeOK)\]
 
-Outra propriedade interessante de ser verificada para esse problema antes da implementação de um programa para resolvê-lo é a possibilidade de resolução, isto é, se é possível alcançar um estado onde onde o jarro maior contém 4 litros de água. Para isso, define-se uma invariante para o predicado $jarro\_grande\ \backslash= 4$, que não será satisfeita. Como esse predicado é verdadeiro para o estado inicial, o fato de ele não ser satisfeito significa que, em algum momento da execução, o predicado foi falso, ou seja, $jarro\_grande = 4$. Adicionando essa invariante, um possível teorema seria:
+Outra propriedade interessante de ser verificada para esse problema antes da
+implementação de um programa para resolvê-lo é a possibilidade de resolução,
+isto é, se é possível alcançar um estado onde onde o jarro maior contém 4 litros
+de água. Para isso, define-se uma invariante para o predicado $jarro\_grande\
+\backslash= 4$ (onde $\backslash=$ é operador da diferença), que não será satisfeita. Como esse predicado é verdadeiro para o estado inicial, o fato de ele não ser satisfeito significa que, em algum momento da execução, o predicado foi falso, ou seja, $jarro\_grande = 4$. Adicionando essa invariante, um possível teorema seria:
 
 \[\THEOREM Spec \implies \square (TypeOK \land jarro\_grande\ \backslash= 4)\]
 
@@ -202,7 +216,9 @@ Esse exemplo é apresentado com o intuito de demonstrar a estrutura da especific
 \section{Exemplo 2 - Transações em Bancos de Dados}
 \label{exemplo2}
 
-Já tratando de um contexto de um problema real de sistemas concorrentes, define-se uma especificação para o problema da consistência das transações em bancos de dados. Esse é um problema clássico onde, dado um conjunto de gerenciadores de recursos fazendo operações sobre um mesmo banco, um gerenciador só pode efetivar (fazer a ação \textit{commit}) se todos os outros gerenciadores estiverem preparados para efetivar; e se algum gerenciador quiser abortar, então todos devem abortar. Ou seja, em nenhum momento pode haver um gerenciador abortado e outro cometido.
+Já tratando de um contexto de um problema real de sistemas concorrentes,
+define-se uma especificação para o problema da consistência das transações em
+bancos de dados \cite{video-protocol}. Esse é um problema clássico onde, dado um conjunto de gerenciadores de recursos fazendo operações sobre um mesmo banco, um gerenciador só pode efetivar (fazer a ação \textit{commit}) se todos os outros gerenciadores estiverem preparados para efetivar; e se algum gerenciador quiser abortar, então todos devem abortar. Ou seja, em nenhum momento pode haver um gerenciador abortado e outro cometido.
 
 \subsection{O sistema}
 
@@ -281,7 +297,7 @@ que o gerenciador esteja ativo, isto é, $estadoGT = ``inicio"$.
 \label{fig:ex3tlap2}
 \end{figure}
 
-A parte 2 da especificação, na Figura \ref{fig:ex3tlap2}, contém as definições
+A Parte 2 da especificação, na Figura \ref{fig:ex3tlap2}, contém as definições
 de ações para os gerenciadores de recurso. Elas são semelhantes àquelas da
 especificação do sistema de transações, na Figura \ref{fig:ex1tla}, exceto que
 nessa especificação o $estadoGR$ só alterado se uma mensagem de abortar ou
@@ -296,7 +312,7 @@ define o predicado sobre tipos como uma invariante, e com as declarações
 
 as definições da especificação do sistema são importadas e, ao verificar que
 $DFSpec \implies TBDSpec$, garante-se que as ações do protocolo respeitam as
-propriedades exigidas por $TBDSpec$ - a especificação so sistema. Em outras
+propriedades exigidas por $TBDSpec$ - a especificação do sistema. Em outras
 palavras, $DFSpec$ implementa $TBDSpec$.
 
 
@@ -350,8 +366,6 @@ gerenciador de recurso preparar ($GRPrepara(g)$) ou abortar ($GREscolheAbortar(g
 Escolhas não estão definidas pela especificação, e nesse caso poderia ser dada pelo
 resultado de uma etapa da transação de um gerenciador de recursos, onde ele pode
 escolher preparar (se o resultado foi sucesso) ou abortar (caso o resultado
-tenha sido fracasso); ou então poderia ser dada por um fator aleatório, isso não
+tenha sido fracasso); ou então poderia ser dada por um fator aleatório; isso não
 é relevante para o modelo especificado - qualquer escolha é válida.
-
-
 

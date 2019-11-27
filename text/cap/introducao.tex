@@ -1,7 +1,9 @@
 \chapter{Introdução}
 \label{introducao}
 
-Desde a década de 60, com os trabalhos de Floyd e Hoare, são feitas as primeiras propostas de especificar software formalmente. Com especificações, o grau de confiança na correção do programa aumenta, e se torna possível provar formalmente algumas propriedades, com base na semântica da especificação.
+Desde a década de 60, com os trabalhos de Floyd e Hoare, são feitas as primeiras
+propostas de se especificar software formalmente. Com especificações, o grau de
+confiança em aspectos do programa aumenta, e se torna possível provar formalmente algumas propriedades, com base na semântica da especificação.
 
 Para especificar sistemas concorrentes, contudo, são necessários formalismos diferentes daqueles direcionados a programas sequenciais. Nessa área, surgem as primeiras ideias com a proposta das redes de Petri, por Carl Adam Petri em \cite{petri}. Mais tarde, Milner, Parrow e Walker propõem o cálculo pi em \cite{picalculus}. Lamport apresenta suas primeiras ideias para um modelo de especificação em \cite{first-lamport}, e apresenta a versão completa de \TLA em seu livro \cite{specifying-systems}.
 
@@ -13,7 +15,12 @@ Com essa abordagem, é possível verificar propriedades sobre um sistema especif
 
 Baseando-se na lógica definida como TLA, Lamport propõe a linguagem de especificação formal \TLA (\textit{Temporal Logic of Actions\textsuperscript{+}}), com o objetivo de escrever provas formais para sistemas concorrentes da maneira mais simples possível~\cite{tlahistory}. Nessa linguagem são incluídos, além dos operadores de TLA, elementos da teoria de conjuntos e alguns açúcares sintáticos para fórmulas temporais como cláusulas \IF e \textsc{case}.
 
-No viés de permitir verificações de propriedades, surge o \textit{model checker} TLC. Um \textit{model checker} busca todos os estados atingíveis de um modelo, de forma que todos os comportamentos possíveis são verificados. O TLC recebe uma especificação e uma configuração, e verifica se as fórmulas temporais dadas são válidas para a especificação. Se nenhuma fórmula temporal for dada, o TLC checará a presença de erros na semântica de \TLA e de situações de \textit{deadlock}. A checagem de \textit{deadlock} pode ser desativada, já que pode significar terminação em alguns sistemas.
+No viés de permitir verificações de propriedades, surge o \textit{model checker}
+TLC. Um \textit{model checker} busca todos os estados atingíveis de um modelo,
+de forma que todos os comportamentos possíveis são verificados. O TLC recebe uma
+especificação e uma configuração, e verifica se as fórmulas temporais dadas são
+válidas para a especificação. Se nenhuma fórmula temporal for dada, o TLC
+checará a presença de expressões inválidas (que não tem significado semântico) em \TLA e de situações de \textit{deadlock}. A checagem de \textit{deadlock} pode ser desativada, já que pode significar terminação em alguns sistemas.
 
 Mais recentemente, outra ferramenta para verificar propriedades de uma especificação está em desenvolvimento: o sistema de provas TLAPS (\textit{TLA Proof System}) \cite{tlaps2010}. Esse sistema permite checar mecanicamente algumas provas, semelhantemente a Coq e Isabelle, mas ainda está incompleto.
 
@@ -25,14 +32,14 @@ Observações sobre os benefícios da geração de código a partir de modelos d
 
 A motivação para automatizar esse processo é mitigar erros humanos na tra\-du\-ção de um desenho formalmente verificado para um código em linguagem de programação. Com o programa especificado, validado e traduzido, é possível aplicá-lo diretamente em casos reais com uma garantia de correspondência maior, assegurando as propriedades verificadas. A partir deste código gerado, ainda são permitidas modificações, como para melhorar a implementação em busca de uma versão mais otimizada. Essa nova versão estará partindo de uma base verificada e recebendo possivelmente novos comportamentos que não foram verificados - nesse caso, a garantia é reduzida, já que as mudanças não estavam representadas no modelo original.
 
-A linguagem de programação escolhida para o código gerado é Elixir. Essa escolha se justifica pela proximidade do paradigma funcional, que a linguagem adota, com as representações matemáticas de uma especificação em \TLAA; assim como seu suporte à concorrência, que condiz com a motivação de criação de \TLAA, inclinada a seu uso em sistemas concorrentes.
-
 \section{Objetivos}
 
 Esse trabalho é feito com a intenção de elaborar um método de tradução, através do mapeamento de estruturas e construtores, de especificações formais descritas em \TLA para código em linguagem de programação com possibilidade de ser executado e modificado; assim como implementar um tradutor que aplique esse método.
 
+A linguagem de programação escolhida para o código gerado é Elixir. Essa escolha se justifica pela proximidade do paradigma funcional, que a linguagem adota, com as representações matemáticas de uma especificação em \TLAA; assim como seu suporte à concorrência, que condiz com a motivação de criação de \TLAA, inclinada a seu uso em sistemas concorrentes.
+
 \subsection{Objetivos Específicos}
 \begin{itemize}
-  \item Encontrar mapeamentos entre as estruturas de especificação em \TLA e estruturas de linguagens de programação
+  \item Encontrar mapeamentos entre as estruturas de especificação em \TLA e estruturas de linguagens de programação;
   \item Implementar um gerador de código Elixir, com capacidade de fazer \textit{parsing} de especificações em \TLA e aplicar os mapeamentos necessários.
 \end{itemize}

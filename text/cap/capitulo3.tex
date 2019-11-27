@@ -15,7 +15,7 @@ Para esse propósito, a linguagem de programação escolhida para o código trad
 
   \item O alto nível de abstração da sintaxe de Elixir, que se inspira em Ruby e sua busca por código facilmente entendível, faz com o programador que trabalhar com o código gerado possa entendê-lo de forma mais simples e rápida do que seria com uma linguagem de baixo nível. Com isso, otimizações podem ser feitas com mais segurança, e a manutenabilidade do código é favorecida.
 
-  \item A transparência de plataforma provida pela máquina virtual BEAM maximiza o número de ambientes aonde o código pode ser executado. Não seria de muito uso gerar um código para um ambiente específico, e uma máquina virtual permite que o código gerado seja \textit{cross plataform}.
+  \item A transparência de plataforma provida pela máquina virtual BEAM maximiza o número de ambientes aonde o código pode ser executado. Não seria de muito uso gerar um código para um ambiente específico, e uma máquina virtual permite que o código gerado seja multiplataforma.
 
   \item O seu código é aberto sobre a licença Apache 2.0, permitindo que o funcionamento de suas estruturas possa ser verificado a qualquer momento. Não seria possível garantir nenhuma correspondência do código gerado com a especificação se não fosse conhecida a execução gerada pelos operadores usados no código.
 
@@ -26,7 +26,7 @@ Essa escolha vem de encontro com a finalidade de proporcionar um código modific
 \section{A tradução}
 \label{traducao}
 
-A geração de código para uma especificação se dá pela tradução das estruturas de \TLA para Elixir. Esta tradução será feita de forma automática por uma ferramenta escrita em Haskell, implementada durante o corrente trabalho. A ferramenta será responsável pelo \textit{parsing} do aquivo da especificação, no formato \texttt{.tla}, para estruturas internas e, então, transformação dessas estruturas internas em código Elixir.
+A geração de código para uma especificação se dá pela tradução das estruturas de \TLA para Elixir. Esta tradução é feita de forma automática por uma ferramenta escrita em Haskell, implementada durante o corrente trabalho. A ferramenta é responsável pelo \textit{parsing} do aquivo da especificação, no formato \texttt{.tla}, para estruturas internas e, então, transformação dessas estruturas internas em código Elixir.
 
 A escolha da linguagem Haskell para implementação do gerador de código é motivada pela possibilidade da definição de tipos algébricos, que facilitam na representação das estruturas, e na tipagem forte, que ajuda a garantir consistência das relações entre estruturas definidas durante o processo, minimizando a possibilidade de erros no desenvolvimento. Haskell também conta com a biblioteca de \textit{parsing} Parsec, que abstrai a complexidade de analisar sintaticamente um arquivo.
 
@@ -35,11 +35,11 @@ O escopo da tradução se limita à especificação definida, sendo suficiente p
 \subsection{Mapeamentos}
 \label{mapeamentos}
 
-A tradução funciona como um grande mapeamento do conjunto de todas as especificações para um conjunto de programas em Elixir. Para viabilizar esse mapeamento, são definidos sub-mapeamentos que traduzem frações de uma especificação. Encontrar sub-mapeamentos suficientes para atender todo o domínio de especificações é suficiente para definir o processo de tradução.
+A tradução funciona como um grande mapeamento do conjunto de um conjunto de especificações para um conjunto de programas em Elixir. Para viabilizar esse mapeamento, são definidos sub-mapeamentos que traduzem frações de uma especificação. Encontrar sub-mapeamentos suficientes para atender todo o domínio de especificações é suficiente para definir o processo de tradução.
 
-Os primeiros mapeamentos definidos envolvem fórmulas transicionais e variáveis. Para cada fórmula transicional da especificação, é definida uma função, declarada com a sintaxe \texttt{def nome(parametros) do ... end}, que recebe as variáveis como parâmetro. O conjunto de variáveis do sistema é representado em uma Hash - estrutura de dados chave-valor de Elixir, equivalente a um dicionário - representada no padrão \texttt{variaveis = \%\{ variavel1: valor1, variavel2: valor2 \}} e podendo ser acessada com \texttt{variaveis[:variavel1]} para obter \texttt{valor1}.
+Os primeiros mapeamentos definidos envolvem fórmulas transicionais e va\-ri\-á\-veis. Para cada fórmula transicional da especificação, é definida uma função, declarada com a sintaxe \texttt{def nome(parametros) do ... end}, que recebe as variáveis como parâmetro. O conjunto de variáveis do sistema é representado em uma hash - estrutura de dados chave-valor de Elixir, equivalente a um dicionário - representada no padrão \texttt{variaveis = \%\{ variavel1: valor1, variavel2: valor2 \}} e podendo ser acessada com \texttt{variaveis[:variavel1]} para obter \texttt{valor1}.
 
-Cada função mapeada de uma ação recebe uma hash representando o estado atual e retorna outra hash representando o novo estado. O retorno, em Elixir, não exige uma palavra chave - a função retorna aquilo que a última linha retornou, sendo, para as funções geradas, a hash resultante da chamada do seu construtor.
+Cada função mapeada de uma ação recebe uma hash representando o estado atual e retorna outra hash representando o novo estado. O retorno em Elixir não exige uma palavra chave - a função retorna aquilo que a última linha retornou, sendo, para as funções geradas, a hash resultante da chamada do seu construtor.
 
 A Figura \ref{fig:esvaziapequeno-elixir} contém a função mapeada da fórmula $EsvaziaPequeno$ definida na Figura \ref{fig:ex1tla}.
 
@@ -80,9 +80,18 @@ Alguns operadores de \TLA permitem mapeamentos ainda mais diretos, como \IF e \C
 \label{fig:pequenoparagrande-elixir}
 \end{figure}
 
-Com o conjunto inicial de mapeamentos apresentado, é possível definir todas as fórmulas transicionais do sistema definido na Seção \ref{exemplo1}. Ao traduzir as definições $Init$ e $Next$, é possível executar concorrentemente todos os comportamentos permitidos pela especificação. A definição $Next$ é traduzida para a função \texttt{main}, que recebe as variáveis para o estado atual e dispara um processo para cada passo permitido por $Next$. Como $Next$ é uma disjunção de todas as ações, é disparado um novo processo com o resultado de cada função traduzida.
+Com o conjunto inicial de mapeamentos apresentado, é possível definir todas as
+fórmulas transicionais do sistema definido na Seção \ref{exemplo1}. Ao traduzir
+as definições $Init$ e $Next$, é possível executar concorrentemente todos os
+comportamentos permitidos pela especificação. A definição $Next$ é traduzida
+para a função \texttt{main}, que recebe as variáveis para o estado atual e chama
+ela mesma com o novo estado obtido.
 
-Para disparar processos, é chamada a função da biblioteca padrão de Elixir responsável por executar processos ligados: \texttt{spawn\_link}. Essa função é chamada com três parâmetros: o módulo que receberá a chamada, a função a ser executada e uma lista contendo seus parâmetros. Para a tradução de $Next$, o módulo é sempre o módulo do arquivo gerado (\texttt{JarrosDeAgua}), a função é sempre \texttt{main} e os parâmetros são o resultado da aplicação de um dos passos permitidos. O último disparo corresponde à aplicação de um passo balbuciante. A definição dessa função encontra-se na Figura \ref{fig:main-ex1}.
+A proposta inicial de tradução para a definição $Next$ do \ref{exemplo1},
+durante a exploração com traduções manuais, se deu
+pelo disparo de um processo para cada passo permitido por $Next$. Como $Next$ é uma disjunção de todas as ações, foi disparado um novo processo com o resultado de cada função traduzida.
+
+Para disparar processos, utilizou-se a função da biblioteca padrão de Elixir responsável por executar processos ligados: \texttt{spawn\_link}. Essa função foi chamada com três parâmetros: o módulo que receberá a chamada, a função a ser executada e uma lista contendo seus parâmetros. Para a tradução de $Next$, o módulo é sempre o módulo do arquivo gerado (\texttt{JarrosDeAgua}), a função é sempre \texttt{main} e os parâmetros são o resultado da aplicação de um dos passos permitidos. O último disparo corresponde à aplicação de um passo balbuciante. A definição dessa função encontra-se na Figura \ref{fig:main-ex1}.
 
 \begin{figure}[h]
   \centering
@@ -102,7 +111,7 @@ Para disparar processos, é chamada a função da biblioteca padrão de Elixir r
 \label{fig:main-ex1}
 \end{figure}
 
-A chamada \texttt{JarrosDeAgua.main(\%\{grande: 0, pequeno: 0\})} é a tradução de $Init$. Como esse sistema permite um único estado inicial, apenas uma chamada a \texttt{main} é necessária. Com ela, todos os passos dados para iniciar novos processos terão iniciado com o valor para variáveis que satisfaz a condição inicial. Através da definição de \texttt{main}, é também garantido que todos os passos satisfazem $\square [Next]_{vars}$. Assim, todos os comportamentos iniciados com essa chamada são permitidos por $Spec$, conforme definida na Seção \ref{exemplo1}.
+A chamada \texttt{JarrosDeAgua.main(\%\{grande: 0, pequeno: 0\})} é a tradução de $Init$. Como esse sistema permite um único estado inicial, apenas uma chamada a \texttt{main} é necessária. Com ela, todos os passos dados para iniciar novos processos terão iniciado com o valor para variáveis que satisfaz a condição inicial. Através da definição de \texttt{main} é também garantido que todos os passos satisfazem $\square [Next]_{vars}$. Assim, todos os comportamentos iniciados com essa chamada são permitidos por $Spec$, conforme definida na Seção \ref{exemplo1}.
 
 O código gerado para esse sistema não permite, por si só, a solução do problema - uma vez que a especificação não tratava de uma solução. Entretanto, verificou-se que a invariante $jarro\_grande\ \backslash= 4$ não é satisfeita, e portanto um comportamento que leva à solução é permitido por esse sistema. É possível, apenas para fins exploratórios, encontrar os processos disparados pelo código que correspondem a esses comportamentos. Para isso, uma chamada que encerra o programa é invocada se o predicado da invariante for insatisfeito. Essa verificação é feita em todos os passos do comportamento, e portanto é definida como uma condição na função \texttt{main} como na Figura \ref{fig:invariant-ex1}, que imprime os valores das variáveis com \texttt{IO.puts} e encerra o programa com um código de sucesso através de \texttt{:ok}.
 
@@ -141,15 +150,15 @@ escolhas foi implementada, e é desenvolvida na Seção \ref{sec:decisao}
 \subsection{Condições e Ações}
 \label{sec:condicoes}
 
-Na definição de uma ação em \TLAA, existem expressões de estado e expressões de
-ação (descritas na seção \ref{sec:tla}). As expressões de estado em uma ação
+Na definição de uma ação em \TLAA existem expressões de estado e expressões de
+ação (descritas na Seção \ref{sec:tla}). As expressões de estado em uma ação
 \FANCYA são predicados que terão valoração verdadeira se e somente se o estado em que \FANCYA
 será executada - ou seja, o primeiro estado do passo - seja um estado onde
 \FANCYA é permitido. Essas expressões, quando dentro da definição de uma ação,
 podem ser interpretadas como condições de ativação dessa ação. A ação só pode ser ativada
 se suas condições de ativação forem satisfeitas.
 
-Já uma expressão de ação envolve ambos os estados de um passo - o estado atual e
+Já uma expressão de ação envolve ambos os estados de um passo: o estado atual e
 o próximo estado. Se tratada puramente como uma especificação, esse próximo
 estado pode ser entendido como qualquer estado possível especificado, de forma
 que, de todos os estados possíveis, a expressão de ação só será verdadeira para
@@ -184,7 +193,7 @@ de \TLAA.
 \begin{figure}[h]
   \centering
   \includegraphics[width=0.8\textwidth]{fig/GRRecebeMsgEfetive.png}
-  \caption{Ação para o recebimendo da mensagem ``Efetive'' por um gerenciador de
+  \caption{Ação para o recebimento da mensagem ``Efetive'' por um gerenciador de
   recurso}
   \label{fig:recebe-efetive-tla}
 \end{figure}
@@ -310,19 +319,19 @@ elementos concorrentes.
 Considerando o sistema dos Jarros de Água do Capítulo \ref{cap2}, cada passo da
 execução exige uma escolha, já que nenhuma ação tem condição de ativação. Uma
 forma de fazer essa escolha é através do disparo de vários processos onde cada
-um seleciona uma das possíveis ações - esses processos podem ser representados
+um seleciona uma das possíveis ações. Esses processos podem ser representados
 como pessoas com intenções diferentes de resolver o problema dos jarros. Não é
 possível permitir que mais de uma pessoa (ou processo) altere o estado dos
 jarros ao mesmo tempo. É possível, contudo, a partir de uma fila ou de uma
 escolha aleatória de pessoas, estabelecer uma ordem de ações sobre os jarros.
 
 Algumas operações computacionais, como a escrita em um endereço de memória,
-serializam ações - já que não podem ser feitos concorrentemente. Isso não
+sequenciam ações, já que não podem ser feitos concorrentemente. Isso não
 significa que essas operações não precisam ser levadas em conta quando usadas em
 um sistema concorrente. Elas são justamente o ponto onde podem ocorrer problemas
 nesse tipo de sistema, nos momentos onde processos paralelos precisam de um
 recurso compartilhado e a ordem em que eles o obtém influencia o resultado
-final. Por isso, um procedimento de serialização como a ordem de obtenção de um
+final. Por isso, um procedimento de sequenciamento como a ordem de obtenção de um
 recurso compartilhado pode acontecer de várias maneiras diferentes, e em razão
 disso sua especificação é importante.
 
@@ -336,7 +345,7 @@ mensagens dos gerenciadores de recurso chegam.
 \section{Regras de Tradução}
 \label{sec:regras}
 
-A partir de especificação escritas em \TLAA conforme a sintaxe da figura
+A partir de especificação escritas em \TLAA conforme a sintaxe da Figura
 \ref{fig:notacao-tla}, deseja-se obter um código executável em Elixir com
 elementos da Figura \ref{fig:notacao-elixir}. As regras de tradução são
 divididas em camadas conforme a recursão das definições, de forma que a
@@ -513,7 +522,7 @@ representado como \texttt{Map.merge(variables, \%\{ i: 1, j: 2 \})}.
 O mapeamento de valores é a camada mais baixa da tradução, e está bastante
 ligada a sintaxe. Conjuntos são traduzidos pra estruturas do tipo
 \texttt{MapSet}, que armazenam valores únicos em árvores binárias de busca;
-Registros são traduzidos para estruturas chave-valor \texttt{Map}, e registros
+registros são traduzidos para estruturas chave-valor \texttt{Map}, e registros
 quantificados sobre um valor são traduzidos pela regra (\texttt{REC-EX}) para
 uma composição das funções \texttt{map} e \texttt{into}, que irão iterar sobre o
 valor sobre qual a quantificação é feita para gerar vários pares chave-valor, e
@@ -737,7 +746,7 @@ Para permitir a execução do modelo, é necessário definir valores para as
 constantes. O protocolo depende da constante $GR$ que é o conjunto de
 gerenciadores de recurso que poderão efetivar ou abortar durante a execução.
 Define-se então um conjunto simples de dois identificadores representando dois
-gerenciadores com \texttt{@gr MapSet.new([``g1'', ``g2'']}.
+gerenciadores com \texttt{@gr MapSet.new([``g1'', ``g2''])}.
 
 Cada passo da execução do protocolo exigirá uma escolha, delegada ao oráculo.
 Com o intuito de validar o modelo gerado para esse exemplo, uma implementação

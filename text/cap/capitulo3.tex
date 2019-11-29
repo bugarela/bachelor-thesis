@@ -2,7 +2,16 @@
 \chapter{O gerador de código}
 \label{cap3}
 
-Dada uma especificação na linguagem \TLAA, contendo elementos da lógica TLA e da teoria de conjuntos, além de elementos sintáticos próprios, deseja-se obter uma definição equivalente em linguagem de programação. Equivalência para esse propósito é definida pela igualdade do conjunto de comportamentos permitidos. Isto é, todo comportamento especificado deve ser permitido na execução do código, e todo comportamento permitido pela execução do código deve ter sido especificado.
+Dada uma especificação na linguagem \TLAA, contendo elementos da lógica TLA e da
+teoria de conjuntos, além de elementos sintáticos próprios, deseja-se obter uma
+definição equivalente em linguagem de programação. Equivalência para esse
+propósito é definida pela igualdade do conjunto de comportamentos permitidos.
+Isto é, todo comportamento especificado deve ser permitido na execução do
+código, e todo comportamento permitido pela execução do código deve ter sido
+especificado. Para isso, são feitos mapeamentos de subconjuntos dessas classes
+(especificações e códigos),
+que combinados mapeiam um subconjunto maior e, potencialmente, todas as
+especificações possíveis. 
 
 \section{Elixir}
 \label{elixir}
@@ -144,8 +153,9 @@ condições suficientemente restritivas para que o caminho seja sempre
 determinístico. Em uma segunda reflexão, isso se mostrou uma péssima abordagem,
 já que o valor da especificação é, em muitas vezes, relacionado ao não
 determinismo do comportamento. Essa solução foi descartada juntamente com a
-primeira abordagem de disparar vários processos, e uma nova abordagem definindo
-escolhas foi implementada, e é desenvolvida na Seção \ref{sec:decisao} 
+primeira abordagem de disparar vários processos, e uma nova abordagem menos
+restritiva definindo
+escolhas foi implementada, e é desenvolvida na Seção \ref{sec:decisao}. 
 
 \subsection{Condições e Ações}
 \label{sec:condicoes}

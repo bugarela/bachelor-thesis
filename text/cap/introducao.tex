@@ -30,13 +30,31 @@ As especificações formais escritas, contudo, não possuem nenhum vínculo com 
 
 Observações sobre os benefícios da geração de código a partir de modelos de especificação formal já foram verificadas em trabalhos como o estudo de caso em \cite{Leonard2008}. Práticas da engenharia de software vem tentado buscar maneiras de minimizar a geração de \textit{bugs} por erro humano. Técnicas de revisão de código, programação em pares e examinadores automáticos de código são formas de detectar erros e quebra de certas propriedades. Práticas como essa são precedidas de uma fase de desenho de solução, onde podem ser feitos documentos e protótipos antes de uma implementação em linguagem de programação. Atualmente, a fase de desenho poderia ser feita formalmente, descrevendo a solução em \TLAA. Já a minimização de erros não teria benefícios, uma vez que a tradução do desenho para o código ainda seria feita por um humano e estaria sujeita a erros.
 
-A motivação para automatizar esse processo é mitigar erros humanos na tra\-du\-ção de um desenho formalmente verificado para um código em linguagem de programação. Com o programa especificado, validado e traduzido, é possível aplicá-lo diretamente em casos reais com uma garantia de correspondência maior, assegurando as propriedades verificadas. A partir deste código gerado, ainda são permitidas modificações, como para melhorar a implementação em busca de uma versão mais otimizada. Essa nova versão estará partindo de uma base verificada e recebendo possivelmente novos comportamentos que não foram verificados - nesse caso, a garantia é reduzida, já que as mudanças não estavam representadas no modelo original.
+A motivação para automatizar esse processo é mitigar erros humanos na
+tra\-du\-ção de um desenho formalmente verificado para um código em linguagem de
+programação. Com o programa especificado, validado e traduzido, é possível
+aplicá-lo diretamente em casos reais com uma garantia de correspondência maior,
+assegurando as propriedades verificadas. A partir deste código gerado, ainda são
+permitidas modificações, como para melhorar a implementação em busca de uma
+versão mais otimizada. Essa nova versão estará partindo de uma base verificada e
+recebendo possivelmente novos comportamentos que não foram verificados - nesse
+caso, a garantia é reduzida, já que as mudanças não estavam representadas no
+modelo original.
 
 \section{Objetivos}
 
 Esse trabalho é feito com a intenção de elaborar um método de tradução, através do mapeamento de estruturas e construtores, de especificações formais descritas em \TLA para código em linguagem de programação com possibilidade de ser executado e modificado; assim como implementar um tradutor que aplique esse método.
 
-A linguagem de programação escolhida para o código gerado é Elixir. Essa escolha se justifica pela proximidade do paradigma funcional, que a linguagem adota, com as representações matemáticas de uma especificação em \TLAA; assim como seu suporte à concorrência, que condiz com a motivação de criação de \TLAA, inclinada a seu uso em sistemas concorrentes.
+A linguagem de programação escolhida para o código gerado é Elixir. Essa escolha
+se justifica pela proximidade do paradigma funcional, que a linguagem adota, com
+as representações matemáticas de uma especificação em \TLAA; assim como seu
+suporte à concorrência, que condiz com a motivação de criação de \TLAA,
+inclinada a seu uso em sistemas concorrentes.
+
+No escopo desse trabalho, não se espera oferecer provas sobre a correspondência
+do código gerado com o modelo especificado, dada sua a complexidade. Espera-se
+mostrar essa correspondência de forma empírica, gerando código para um conjunto
+de especificações e analisando sua execução em comparação com a definição do modelo.
 
 \subsection{Objetivos Específicos}
 \begin{itemize}

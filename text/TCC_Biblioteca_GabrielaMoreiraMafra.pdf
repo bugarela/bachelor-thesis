@@ -1,0 +1,216 @@
+\relax 
+\AC@reset@newl@bel
+\providecommand \oddpage@label [2]{}
+\@writefile{loc}{\contentsline {chapter}{Agradecimentos}{1}}
+\@writefile{loc}{\contentsline {chapter}{Resumo}{3}}
+\@writefile{loc}{\contentsline {chapter}{Abstract}{4}}
+\@writefile{toc}{\contentsline {chapter}{Lista de Figuras}{7}}
+\citation{petri}
+\citation{picalculus}
+\citation{first-lamport}
+\citation{specifying-systems}
+\@writefile{toc}{\contentsline {chapter}{\numberline {1}Introdu\IeC {\c c}\IeC {\~a}o}{9}}
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\newlabel{introducao}{{1}{9}}
+\citation{tlahistory}
+\citation{tlaps2010}
+\citation{amazon}
+\citation{Leonard2008}
+\@writefile{toc}{\contentsline {section}{\numberline {1.1}Objetivos}{11}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.1.1}Objetivos Espec\IeC {\'\i }ficos}{12}}
+\citation{tlahistory}
+\citation{pluscal}
+\citation{tlahistory}
+\citation{hyperbook}
+\citation{specifying-systems}
+\@writefile{toc}{\contentsline {chapter}{\numberline {2}TLA\textsuperscript  {+} }{13}}
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\newlabel{cap2}{{2}{13}}
+\citation{tlaformalization}
+\citation{merzlogic}
+\citation{proofsystem}
+\@writefile{toc}{\contentsline {section}{\numberline {2.1}L\IeC {\'o}gica Temporal das A\IeC {\c c}\IeC {\~o}es}{14}}
+\newlabel{sec:tla}{{2.1}{14}}
+\citation{tlaformalization}
+\@writefile{lof}{\contentsline {figure}{\numberline {2.1}{\ignorespaces Sintaxe da linguagem de TLA\relax }}{15}}
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{fig:sintaxe-tla}{{2.1}{15}}
+\citation{specifying-systems}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1.1}Passos balbuciantes}{17}}
+\@writefile{toc}{\contentsline {section}{\numberline {2.2}Propriedades}{18}}
+\newlabel{propriedades}{{2.2}{18}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2.1}Propriedades de Seguran\IeC {\c c}a}{18}}
+\citation{specifying-systems}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2.2}Propriedades de Vivacidade}{19}}
+\citation{video-protocol}
+\@writefile{toc}{\contentsline {section}{\numberline {2.3}Exemplo 1 - Jarros de \IeC {\'A}gua}{20}}
+\newlabel{exemplo1}{{2.3}{20}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2.2}{\ignorespaces Especifica\IeC {\c c}\IeC {\~a}o do problema dos Jarros de \IeC {\'A}gua\relax }}{21}}
+\newlabel{fig:ex1tla}{{2.2}{21}}
+\citation{video-protocol}
+\@writefile{toc}{\contentsline {section}{\numberline {2.4}Exemplo 2 - Transa\IeC {\c c}\IeC {\~o}es em Bancos de Dados}{24}}
+\newlabel{exemplo2}{{2.4}{24}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4.1}O sistema}{24}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2.3}{\ignorespaces Especifica\IeC {\c c}\IeC {\~a}o de um sistema de transa\IeC {\c c}\IeC {\~o}es em bancos de dados\relax }}{25}}
+\newlabel{fig:ex2tla}{{2.3}{25}}
+\citation{video-protocol}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4.2}O protocolo}{26}}
+\newlabel{sec:protocolo}{{2.4.2}{26}}
+\@writefile{toc}{\contentsline {subsubsection}{Troca de mensagens}{27}}
+\@writefile{toc}{\contentsline {subsubsection}{Escolhas}{28}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2.4}{\ignorespaces Especifica\IeC {\c c}\IeC {\~a}o do protocolo de efetiva\IeC {\c c}\IeC {\~a}o em duas fases - Parte 1\relax }}{30}}
+\newlabel{fig:ex3tlap1}{{2.4}{30}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2.5}{\ignorespaces Especifica\IeC {\c c}\IeC {\~a}o do protocolo de efetiva\IeC {\c c}\IeC {\~a}o em duas fases - Parte 2\relax }}{31}}
+\newlabel{fig:ex3tlap2}{{2.5}{31}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {3}O gerador de c\IeC {\'o}digo}{32}}
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\newlabel{cap3}{{3}{32}}
+\@writefile{toc}{\contentsline {section}{\numberline {3.1}Elixir}{32}}
+\newlabel{elixir}{{3.1}{32}}
+\@writefile{toc}{\contentsline {section}{\numberline {3.2}A tradu\IeC {\c c}\IeC {\~a}o}{33}}
+\newlabel{traducao}{{3.2}{33}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.1}Mapeamentos}{34}}
+\newlabel{mapeamentos}{{3.2.1}{34}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.1}{\ignorespaces F\IeC {\'o}rmula transicional $EsvaziaPequeno$ como uma fun\IeC {\c c}\IeC {\~a}o em Elixir\relax }}{34}}
+\newlabel{fig:esvaziapequeno-elixir}{{3.1}{34}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.2}{\ignorespaces F\IeC {\'o}rmula transicional $PequenoParaGrande$ como uma fun\IeC {\c c}\IeC {\~a}o em Elixir\relax }}{35}}
+\newlabel{fig:pequenoparagrande-elixir}{{3.2}{35}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.3}{\ignorespaces Disparo de processos para o sistema de Jarros de \IeC {\'A}gua\relax }}{36}}
+\newlabel{fig:main-ex1}{{3.3}{36}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.4}{\ignorespaces Explora\IeC {\c c}\IeC {\~a}o de invariantes no c\IeC {\'o}digo gerado\relax }}{36}}
+\newlabel{fig:invariant-ex1}{{3.4}{36}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.2}Condi\IeC {\c c}\IeC {\~o}es e A\IeC {\c c}\IeC {\~o}es}{37}}
+\newlabel{sec:condicoes}{{3.2.2}{37}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.5}{\ignorespaces A\IeC {\c c}\IeC {\~a}o para o recebimento da mensagem ``Efetive'' por um gerenciador de recurso\relax }}{38}}
+\newlabel{fig:recebe-efetive-tla}{{3.5}{38}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.6}{\ignorespaces C\IeC {\'o}digo gerado para a a\IeC {\c c}\IeC {\~a}o $GRRecebeMsgEfetive(g)$\relax }}{38}}
+\newlabel{fig:recebe-efetive-elixir}{{3.6}{38}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.3}Determinando a pr\IeC {\'o}xima a\IeC {\c c}\IeC {\~a}o}{39}}
+\newlabel{sec:decisao}{{3.2.3}{39}}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {1}{\ignorespaces Decis\IeC {\~a}o da pr\IeC {\'o}xima a\IeC {\c c}\IeC {\~a}o\relax }}{40}}
+\newlabel{alg:decide-action}{{1}{40}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.4}Concorr\IeC {\^e}ncia}{40}}
+\@writefile{toc}{\contentsline {section}{\numberline {3.3}Regras de Tradu\IeC {\c c}\IeC {\~a}o}{41}}
+\newlabel{sec:regras}{{3.3}{41}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.7}{\ignorespaces Sintaxe aceita para TLA\textsuperscript  {+} \relax }}{42}}
+\newlabel{fig:notacao-tla}{{3.7}{42}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.8}{\ignorespaces Elementos gerados em Elixir\relax }}{42}}
+\newlabel{fig:notacao-elixir}{{3.8}{42}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.1}Tradu\IeC {\c c}\IeC {\~a}o de especifica\IeC {\c c}\IeC {\~o}es}{43}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.9}{\ignorespaces Tradu\IeC {\c c}\IeC {\~a}o da especifica\IeC {\c c}\IeC {\~a}o\relax }}{43}}
+\newlabel{fig:t-specification}{{3.9}{43}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.10}{\ignorespaces Tradu\IeC {\c c}\IeC {\~a}o de declara\IeC {\c c}\IeC {\~o}es de constantes e defini\IeC {\c c}\IeC {\~o}es\relax }}{44}}
+\newlabel{fig:t-declaration}{{3.10}{44}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.2}Tradu\IeC {\c c}\IeC {\~a}o das defini\IeC {\c c}\IeC {\~o}es}{45}}
+\@writefile{toc}{\contentsline {subsubsection}{Condicionais}{45}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.11}{\ignorespaces Tradu\IeC {\c c}\IeC {\~a}o intermedi\IeC {\'a}ria de defini\IeC {\c c}\IeC {\~o}es - Gera\IeC {\c c}\IeC {\~a}o\relax }}{46}}
+\newlabel{fig:definitions}{{3.11}{46}}
+\@writefile{toc}{\contentsline {subsubsection}{Agrega\IeC {\c c}\IeC {\~a}o}{46}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.12}{\ignorespaces Tradu\IeC {\c c}\IeC {\~a}o intermedi\IeC {\'a}ria de defini\IeC {\c c}\IeC {\~o}es - Agrega\IeC {\c c}\IeC {\~a}o\relax }}{47}}
+\newlabel{fig:definitions}{{3.12}{47}}
+\@writefile{toc}{\contentsline {subsubsection}{Tradu\IeC {\c c}\IeC {\~a}o de Predicados}{47}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.13}{\ignorespaces Organiza\IeC {\c c}\IeC {\~a}o das informa\IeC {\c c}\IeC {\~o}es sobre uma a\IeC {\c c}\IeC {\~a}o\relax }}{48}}
+\newlabel{fig:definitions}{{3.13}{48}}
+\@writefile{toc}{\contentsline {subsubsection}{Tradu\IeC {\c c}\IeC {\~a}o de A\IeC {\c c}\IeC {\~o}es}{48}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.14}{\ignorespaces Tradu\IeC {\c c}\IeC {\~a}o de predicados e a\IeC {\c c}\IeC {\~o}es\relax }}{49}}
+\newlabel{fig:t-pred-act}{{3.14}{49}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.15}{\ignorespaces Tradu\IeC {\c c}\IeC {\~a}o de valores\relax }}{50}}
+\newlabel{fig:t-specification}{{3.15}{50}}
+\@writefile{toc}{\contentsline {subsubsection}{Tradu\IeC {\c c}\IeC {\~a}o de valores}{50}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.3}Estado Inicial}{51}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.4}Fun\IeC {\c c}\IeC {\~a}o de pr\IeC {\'o}ximo estado}{52}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.16}{\ignorespaces Tradu\IeC {\c c}\IeC {\~a}o do Estado Incial de da fun\IeC {\c c}\IeC {\~a}o de pr\IeC {\'o}ximo estado\relax }}{53}}
+\newlabel{fig:t-init-next}{{3.16}{53}}
+\@writefile{toc}{\contentsline {section}{\numberline {3.4}Aplica\IeC {\c c}\IeC {\~a}o da tradu\IeC {\c c}\IeC {\~a}o}{53}}
+\newlabel{sec:validacao}{{3.4}{53}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4.1}Jarros de \IeC {\'A}gua}{53}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.17}{\ignorespaces Tradu\IeC {\c c}\IeC {\~a}o do m\IeC {\'o}dulo Jarros de \IeC {\'A}gua\relax }}{54}}
+\newlabel{fig:jarros-ex-mod}{{3.17}{54}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.18}{\ignorespaces Tradu\IeC {\c c}\IeC {\~a}o das defini\IeC {\c c}\IeC {\~o}es simples dos Jarros de \IeC {\'A}gua\relax }}{55}}
+\newlabel{fig:jarros-ex-def1}{{3.18}{55}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.19}{\ignorespaces Tradu\IeC {\c c}\IeC {\~a}o das defini\IeC {\c c}\IeC {\~o}es com condicionais dos Jarros de \IeC {\'A}gua\relax }}{56}}
+\newlabel{fig:jarros-ex-def2}{{3.19}{56}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.20}{\ignorespaces Tradu\IeC {\c c}\IeC {\~a}o da fun\IeC {\c c}\IeC {\~a}o de pr\IeC {\'o}ximo estado para os Jarros de \IeC {\'A}gua\relax }}{57}}
+\newlabel{fig:jarros-ex-next}{{3.20}{57}}
+\@writefile{toc}{\contentsline {subsubsection}{Execu\IeC {\c c}\IeC {\~a}o}{57}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4.2}Protocolo de efetiva\IeC {\c c}\IeC {\~a}o em duas fases}{58}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.21}{\ignorespaces Tradu\IeC {\c c}\IeC {\~a}o do m\IeC {\'o}dulo Efetiva\IeC {\c c}\IeC {\~a}o em Duas Fases\relax }}{58}}
+\newlabel{fig:protocolo-ex-mod}{{3.21}{58}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.22}{\ignorespaces Tradu\IeC {\c c}\IeC {\~a}o da defini\IeC {\c c}\IeC {\~a}o $GTEfetiva$ do protocolo\relax }}{59}}
+\newlabel{fig:protocolo-ex-def1}{{3.22}{59}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.23}{\ignorespaces Tradu\IeC {\c c}\IeC {\~a}o da defini\IeC {\c c}\IeC {\~a}o $GRRecebeMsgEfetive$ do protocolo\relax }}{60}}
+\newlabel{fig:protocolo-ex-def2}{{3.23}{60}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.24}{\ignorespaces Tradu\IeC {\c c}\IeC {\~a}o da fun\IeC {\c c}\IeC {\~a}o de pr\IeC {\'o}ximo estado para o protocolo\relax }}{61}}
+\newlabel{fig:protocolo-ex-next}{{3.24}{61}}
+\@writefile{toc}{\contentsline {subsubsection}{Execu\IeC {\c c}\IeC {\~a}o}{61}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {4}Considera\IeC {\c c}\IeC {\~o}es}{65}}
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\@writefile{toc}{\contentsline {section}{\numberline {4.1}Trabalhos futuros}{66}}
+\bibstyle{pkg/abnt-alf}
+\citation{*}
+\bibdata{tccudesc}
+\bibcite{proofsystem}{Chaudhuri et al. 2008}
+\bibcite{proofsystem++EXPL}{Chaudhuri et al.}
+\bibcite{proofsystem++IMPL}{CHAUDHURI et al.}
+\bibcite{proofsystem++YEAR}{2008}
+\bibcite{tlaps2010}{Chaudhuri et al. 2010}
+\bibcite{tlaps2010++EXPL}{Chaudhuri et al.}
+\bibcite{tlaps2010++IMPL}{CHAUDHURI et al.}
+\bibcite{tlaps2010++YEAR}{2010}
+\bibcite{first-lamport}{Lamport 1983}
+\bibcite{first-lamport++EXPL}{Lamport}
+\bibcite{first-lamport++IMPL}{LAMPORT}
+\bibcite{first-lamport++YEAR}{1983}
+\bibcite{tlaformalization}{Lamport 1994}
+\bibcite{tlaformalization++EXPL}{Lamport}
+\bibcite{tlaformalization++IMPL}{LAMPORT}
+\bibcite{tlaformalization++YEAR}{1994}
+\bibcite{specifying-systems}{Lamport 2002}
+\bibcite{specifying-systems++EXPL}{Lamport}
+\bibcite{specifying-systems++IMPL}{LAMPORT}
+\bibcite{specifying-systems++YEAR}{2002}
+\bibcite{tlahistory}{Lamport 2008}
+\bibcite{tlahistory++EXPL}{Lamport}
+\bibcite{tlahistory++IMPL}{LAMPORT}
+\bibcite{tlahistory++YEAR}{2008}
+\bibcite{pluscal}{Lamport 2009}
+\bibcite{pluscal++EXPL}{Lamport}
+\bibcite{pluscal++IMPL}{LAMPORT}
+\bibcite{pluscal++YEAR}{2009}
+\bibcite{hyperbook}{Lamport 2015}
+\bibcite{hyperbook++EXPL}{Lamport}
+\bibcite{hyperbook++IMPL}{LAMPORT}
+\bibcite{hyperbook++YEAR}{2015}
+\bibcite{video-protocol}{Lamport 2017}
+\bibcite{video-protocol++EXPL}{Lamport}
+\bibcite{video-protocol++IMPL}{LAMPORT}
+\bibcite{video-protocol++YEAR}{2017}
+\bibcite{Leonard2008}{Leonard e Heitmeyer 2008}
+\bibcite{Leonard2008++EXPL}{Leonard e Heitmeyer}
+\bibcite{Leonard2008++IMPL}{LEONARD; HEITMEYER}
+\bibcite{Leonard2008++YEAR}{2008}
+\bibcite{merzlogic}{Merz 2003}
+\bibcite{merzlogic++EXPL}{Merz}
+\bibcite{merzlogic++IMPL}{MERZ}
+\bibcite{merzlogic++YEAR}{2003}
+\bibcite{picalculus}{Milner, Parrow e Walker 1992}
+\bibcite{picalculus++EXPL}{Milner, Parrow e Walker}
+\bibcite{picalculus++IMPL}{MILNER; PARROW; WALKER}
+\bibcite{picalculus++YEAR}{1992}
+\bibcite{Najafi2013}{Najafi e Haghighi 2013}
+\bibcite{Najafi2013++EXPL}{Najafi e Haghighi}
+\bibcite{Najafi2013++IMPL}{NAJAFI; HAGHIGHI}
+\bibcite{Najafi2013++YEAR}{2013}
+\bibcite{amazon}{Newcombe et al. 2015}
+\bibcite{amazon++EXPL}{Newcombe et al.}
+\bibcite{amazon++IMPL}{NEWCOMBE et al.}
+\bibcite{amazon++YEAR}{2015}
+\@writefile{toc}{\contentsline {chapter}{Bibliografia}{68}}
+\bibcite{petri}{Petri 1962}
+\bibcite{petri++EXPL}{Petri}
+\bibcite{petri++IMPL}{PETRI}
+\bibcite{petri++YEAR}{1962}
